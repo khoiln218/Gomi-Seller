@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.utils;
 
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import vn.gomicorp.seller.BuildConfig;
+import vn.gomicorp.seller.EappsApplication;
 
 public final class Utils {
 
@@ -85,10 +87,10 @@ public final class Utils {
     }
 
     public static String getDeviceToken() {
-        return "12345678";
+        return EappsApplication.getPreferences().getDeviceToken();
     }
 
     public static String getDeviceVersion() {
-        return "27";
+        return String.format("Android %s, API %d", Build.VERSION.RELEASE, Build.VERSION.SDK_INT);
     }
 }

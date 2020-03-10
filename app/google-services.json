@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "439705524264",
+    "firebase_url": "https://eapps-7c1d7.firebaseio.com",
+    "project_id": "eapps-7c1d7",
+    "storage_bucket": "eapps-7c1d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439705524264:android:d55875282bbb4af24b3d1d",
+        "android_client_info": {
+          "package_name": "vn.gomicorp.seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439705524264-lbb98q88eg966vvp5tmue3qj2etfutpm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFY_hsluUh09bmEuxLU_T8lOwMXxk-Dj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439705524264-lbb98q88eg966vvp5tmue3qj2etfutpm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
