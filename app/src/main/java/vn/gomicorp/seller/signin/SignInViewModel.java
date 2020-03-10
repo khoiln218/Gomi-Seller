@@ -27,19 +27,20 @@ public class SignInViewModel extends ViewModel {
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<Integer> loadding = new MutableLiveData<>();
 
+    private final SingleLiveEvent<Void> mSignInCommand = new SingleLiveEvent<>();
     private final SingleLiveEvent<Void> mSignUpCommand = new SingleLiveEvent<>();
-
     private final SingleLiveEvent<Void> mForgetPasswordCommand = new SingleLiveEvent<>();
 
     public void signIn() {
-        Log.e(TAG, "signIn: ");
         loadding.setValue(View.VISIBLE);
-        //TODO: make request
+        signInRequest.setUserName(userName.getValue());
+        signInRequest.setPassword(password.getValue());
+        signInRequest.setDeviceToken(Utils.getDeviceToken());
+        signInRequest.setDeviceVersion(Utils.getDeviceVersion());
         requestSignIn(signInRequest);
     }
 
     public void forgetPassword() {
-        Log.d(TAG, "forgetPassword: ");
         gotoForgetPassword();
     }
 
@@ -51,8 +52,16 @@ public class SignInViewModel extends ViewModel {
         gotoSignUp();
     }
 
+    public void gotoSignIn() {
+        mSignInCommand.call();
+    }
+
     public void gotoSignUp() {
         mSignUpCommand.call();
+    }
+
+    public SingleLiveEvent<Void> getSignInCommand() {
+        return mSignInCommand;
     }
 
     public SingleLiveEvent<Void> getSignUpCommand() {
@@ -72,6 +81,11 @@ public class SignInViewModel extends ViewModel {
             public void onResponse(Call<ResponseData<AccountInfo>> call, Response<ResponseData<AccountInfo>> response) {
                 ResponseData<AccountInfo> body = response.body();
                 Log.d(TAG, "onResponse: " + new Gson().toJson(body.getResult()));
+                if (body.getStatus()) {
+                    Log.d(TAG, "login succsess");
+                    gotoSignIn();
+                } else
+                    Log.d(TAG, body.getMessage());
             }
 
             @Override

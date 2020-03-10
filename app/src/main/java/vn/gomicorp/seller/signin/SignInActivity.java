@@ -2,6 +2,7 @@ package vn.gomicorp.seller.signin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private void subscribeToNavigationChanges(SignInViewModel viewModel) {
         // The activity observes the navigation commands in the ViewModel
+        viewModel.getSignInCommand().observe(this, new Observer<Void>() {
+            @Override
+            public void onChanged(@Nullable Void _) {
+                SignInActivity.this.loginSuccess();
+            }
+        });
         viewModel.getSignUpCommand().observe(this, new Observer<Void>() {
             @Override
             public void onChanged(@Nullable Void _) {
@@ -50,6 +57,10 @@ public class SignInActivity extends AppCompatActivity {
                 SignInActivity.this.onStartForgetPassword();
             }
         });
+    }
+
+    private void loginSuccess() {
+        Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
     }
 
     private void onStartForgetPassword() {
