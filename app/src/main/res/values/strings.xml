@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">eapps</string>
+
+    <!-- TODO: Account -->
+    <string name="hint_email">Email</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="login">Log In</string>
+    <string name="no_have_account">Add new account</string>
 </resources>

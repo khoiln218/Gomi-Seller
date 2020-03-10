@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import vn.gomicorp.seller.signin.SignInActivity;
 import vn.gomicorp.seller.signup.SignUpActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getDeviceToken();
+//        startSigUp();
+        startSigIn();
+    }
+
+    private void startSigIn() {
+        startActivity(new Intent(this, SignInActivity.class));
+    }
+
+    private void startSigUp() {
         startActivity(new Intent(this, SignUpActivity.class));
     }
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Standard -->
+    <dimen name="padding_xsmall">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">36dp</dimen>
+
+
+    <!-- Icon -->
+    <dimen name="icon_size_standard">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">48dp</dimen>
+
+    <dimen name="avatar_size">96dp</dimen>
+    <dimen name="avatar_radius">48dp</dimen>
+
+    <!-- Button -->
+    <dimen name="button_radius_standard">24dp</dimen>
+    <dimen name="button_height_standard">48dp</dimen>
+    <dimen name="button_height_small">36dp</dimen>
+    <dimen name="button_width_180">180dp</dimen>
+    <dimen name="button_width_108">108dp</dimen>
+
+    <!-- Text -->
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_xlarge">30sp</dimen>
+</resources>

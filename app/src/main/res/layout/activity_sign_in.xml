@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="signInViewModel"
+            type="vn.gomicorp.seller.signin.SignInViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".signin.SignInActivity">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <!--TODO: Banner Image-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_login_banner" />
+
+                <!--TODO: Login Form-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_xlarge">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_layout_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/input_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_email"
+                            android:inputType="textEmailAddress"
+                            android:singleLine="true"
+                            android:text="@={signInViewModel.userName}"
+                            android:textAppearance="?android:textAppearance" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_layout_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        app:passwordToggleEnabled="true">
+
+                        <EditText
+                            android:id="@+id/input_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:singleLine="true"
+                            android:text="@={signInViewModel.password}"
+                            android:textAppearance="?android:textAppearance" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btn_forget_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:background="@null"
+                        android:onClick="@{()->signInViewModel.forgetPassword()}"
+                        android:text="@string/forget_password"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorPrimaryText" />
+
+                    <Button
+                        android:id="@+id/btn_login"
+                        style="@style/AppTheme.ButtonPrimary"
+                        android:layout_width="@dimen/button_width_180"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/padding_medium"
+                        android:onClick="@{()->signInViewModel.signIn()}"
+                        android:text="@string/login" />
+
+                    <Button
+                        android:id="@+id/btn_sign_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/padding_small"
+                        android:background="@null"
+                        android:onClick="@{()->signInViewModel.signUp()}"
+                        android:text="@string/no_have_account"
+                        android:textColor="@color/colorAccent"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_large"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorHighlight"
+                    android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{signInViewModel.loadding, default=invisible}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
