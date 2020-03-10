@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.signup.views;
+package vn.gomicorp.seller.signup;
 
 import android.os.Bundle;
 
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
-import vn.gomicorp.seller.signup.viewmodels.SignUpViewModel;
 
 public class SignUpActivity extends AppCompatActivity {
 

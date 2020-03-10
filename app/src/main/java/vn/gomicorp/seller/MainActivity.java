@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.gomicorp.seller.signup.views.SignUpActivity;
+import vn.gomicorp.seller.signup.SignUpActivity;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,6 +1,10 @@
-package vn.gomicorp.seller.signup.models;
+package vn.gomicorp.seller.signup;
 
-public class UserInfo {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SignUpRequest {
     private String Email;
     private String FullName;
     private byte Gender;
@@ -12,6 +16,7 @@ public class UserInfo {
     private String DeviceToken;
     private String DeviceVersion;
 
+    @JsonProperty("Email")
     public String getEmail() {
         return Email;
     }
@@ -20,6 +25,7 @@ public class UserInfo {
         Email = email;
     }
 
+    @JsonProperty("FullName")
     public String getFullName() {
         return FullName;
     }
@@ -28,6 +34,7 @@ public class UserInfo {
         FullName = fullName;
     }
 
+    @JsonProperty("Gender")
     public byte getGender() {
         return Gender;
     }
@@ -36,6 +43,7 @@ public class UserInfo {
         Gender = gender;
     }
 
+    @JsonProperty("BirthDay")
     public String getBirthDay() {
         return BirthDay;
     }
@@ -44,6 +52,7 @@ public class UserInfo {
         BirthDay = birthDay;
     }
 
+    @JsonProperty("PhoneNumber")
     public String getPhoneNumber() {
         return PhoneNumber;
     }
@@ -52,6 +61,7 @@ public class UserInfo {
         PhoneNumber = phoneNumber;
     }
 
+    @JsonProperty("CountryId")
     public int getCountryId() {
         return CountryId;
     }
@@ -60,6 +70,7 @@ public class UserInfo {
         CountryId = countryId;
     }
 
+    @JsonProperty("Password")
     public String getPassword() {
         return Password;
     }
@@ -68,6 +79,7 @@ public class UserInfo {
         Password = password;
     }
 
+    @JsonProperty("DeviceToken")
     public String getDeviceToken() {
         return DeviceToken;
     }
@@ -76,6 +88,7 @@ public class UserInfo {
         DeviceToken = deviceToken;
     }
 
+    @JsonProperty("DeviceVersion")
     public String getDeviceVersion() {
         return DeviceVersion;
     }

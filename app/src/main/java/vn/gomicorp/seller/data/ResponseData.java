@@ -3,59 +3,56 @@ package vn.gomicorp.seller.data;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import java.io.Serializable;
 
-/**
- * Created by Sóc Nhí on 7/4/2016.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseData<T> {
+public class ResponseData<T> implements Serializable {
 
-    private int status;
-    private String message;
-    private T data = null;
-    private List<String> errors;
+    /**
+     * Result : {}
+     * "Status":true,
+     * "Message":null,
+     * "TotalRows":0
+     */
 
-    public int getStatus() {
-        return status;
+    T Result;
+    boolean Status;
+    String Message;
+    int TotalRows;
+
+    @JsonProperty("Result")
+    public T getResult() {
+        return Result;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setResult(T result) {
+        Result = result;
     }
 
+    @JsonProperty("Status")
+    public boolean getStatus() {
+        return Status;
+    }
+
+    public void setStatus(boolean status) {
+        Status = status;
+    }
+
+    @JsonProperty("Message")
     public String getMessage() {
-        return message;
+        return Message;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        Message = message;
     }
 
-    public T getData() {
-        return data;
+    @JsonProperty("TotalRows")
+    public int getTotalRows() {
+        return TotalRows;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @JsonProperty("errors")
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    @JsonProperty("errors")
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "status='" + status + '\'' + "\n" +
-                ", data=" + data + "\n" +
-                ", errors=" + getErrors() + "\n" +
-                '}';
+    public void setTotalRows(int totalRows) {
+        TotalRows = totalRows;
     }
 }

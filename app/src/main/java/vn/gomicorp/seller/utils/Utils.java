@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import vn.gomicorp.seller.BuildConfig;
 
 public final class Utils {
 
@@ -37,9 +38,20 @@ public final class Utils {
     }
 
     public static Retrofit createRetrofit(final String baseUrl) {
+        if (BuildConfig.DEBUG) {
+            return createLoggingRetrofit(baseUrl);
+        }
 
         return new Retrofit.Builder()
                 .client(Utils.createHttpClient())
+                .baseUrl(baseUrl)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+    }
+
+    public static final Retrofit createLoggingRetrofit(final String baseUrl) {
+        return new Retrofit.Builder()
+                .client(Utils.createHttpLoggingClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -73,10 +85,10 @@ public final class Utils {
     }
 
     public static String getDeviceToken() {
-        return "";
+        return "12345678";
     }
 
     public static String getDeviceVersion() {
-        return "";
+        return "27";
     }
 }
