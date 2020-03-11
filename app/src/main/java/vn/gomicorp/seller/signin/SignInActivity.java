@@ -41,19 +41,19 @@ public class SignInActivity extends AppCompatActivity {
         // The activity observes the navigation commands in the ViewModel
         viewModel.getSignInCommand().observe(this, new Observer<Void>() {
             @Override
-            public void onChanged(@Nullable Void _) {
+            public void onChanged(@Nullable Void v) {
                 SignInActivity.this.loginSuccess();
             }
         });
         viewModel.getSignUpCommand().observe(this, new Observer<Void>() {
             @Override
-            public void onChanged(@Nullable Void _) {
+            public void onChanged(@Nullable Void v) {
                 SignInActivity.this.onStartSignUp();
             }
         });
         viewModel.getForgetPasswordCommand().observe(this, new Observer<Void>() {
             @Override
-            public void onChanged(@Nullable Void _) {
+            public void onChanged(@Nullable Void v) {
                 SignInActivity.this.onStartForgetPassword();
             }
         });

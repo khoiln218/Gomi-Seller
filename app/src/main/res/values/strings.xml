@@ -2,9 +2,20 @@
     <string name="app_name">eapps</string>
 
     <!-- TODO: Account -->
-    <string name="hint_email">Email</string>
+    <string name="name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
     <string name="password">Password</string>
+    <string name="contry_id">Contry ID</string>
+    <string name="hint_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_contry_id">Contry ID</string>
     <string name="forget_password">Forget Password</string>
     <string name="login">Log In</string>
+    <string name="sign_up">Sign Up</string>
     <string name="no_have_account">Add new account</string>
+
+    <string name="banner">banner</string>
 </resources>
