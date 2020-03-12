@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProviders;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignInBinding;
 import vn.gomicorp.seller.signup.SignUpActivity;
+import vn.gomicorp.seller.utils.Utils;
 
 public class SignInActivity extends AppCompatActivity {
 
     private SignInViewModel signInViewModel;
+    private ActivitySignInBinding activitySignInBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void initDataBinding() {
-        ActivitySignInBinding activitySignInBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
+        activitySignInBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
         signInViewModel = ViewModelProviders.of(this).get(SignInViewModel.class);
         activitySignInBinding.setSignInViewModel(signInViewModel);
         activitySignInBinding.setLifecycleOwner(this);
@@ -55,6 +57,18 @@ public class SignInActivity extends AppCompatActivity {
                     case SignInEvent.LOG_IN_FALSE:
                         loginError(event.message);
                         break;
+                    case SignInEvent.USERNAME_INPUT_ERROR:
+                        inpuUserNameError();
+                        break;
+                    case SignInEvent.USERNAME_INPUT_SUCCESS:
+                        inpuUserSuccess();
+                        break;
+                    case SignInEvent.PASSWORD_INPUT_ERROR:
+                        inputPwdError();
+                        break;
+                    case SignInEvent.PASSWORD_INPUT_SUCCESS:
+                        inputPwdSuccess();
+                        break;
                 }
             }
         });
@@ -74,5 +88,25 @@ public class SignInActivity extends AppCompatActivity {
 
     private void onStartSignUp() {
         startActivity(new Intent(this, SignUpActivity.class));
+    }
+
+    private void inpuUserNameError() {
+        activitySignInBinding.inputLayoutUserName.setError(getString(R.string.err_input_username));
+        Utils.requestFocus(this, activitySignInBinding.inputUserName);
+        Utils.playVibrate(this);
+    }
+
+    private void inpuUserSuccess() {
+        activitySignInBinding.inputLayoutUserName.setErrorEnabled(false);
+    }
+
+    private void inputPwdError() {
+        activitySignInBinding.inputLayoutPassword.setError(getString(R.string.err_input_password));
+        Utils.requestFocus(this, activitySignInBinding.inputPassword);
+        Utils.playVibrate(this);
+    }
+
+    private void inputPwdSuccess() {
+        activitySignInBinding.inputLayoutPassword.setErrorEnabled(false);
     }
 }

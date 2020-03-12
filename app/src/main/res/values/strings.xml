@@ -12,6 +12,10 @@
     <string name="hint_phone_number">Phone Number</string>
     <string name="hint_password">Password</string>
     <string name="hint_contry_id">Contry ID</string>
+    <string name="err_input_email">Error Input Email</string>
+    <string name="err_input_username">Error Input User Name</string>
+    <string name="err_input_password">Error Input Password</string>
+    <string name="err_input_phone_number">Error Input Phone Number</string>
     <string name="forget_password">Forget Password</string>
     <string name="login">Log In</string>
     <string name="sign_up">Sign Up</string>
