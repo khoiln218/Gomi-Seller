@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package vn.gomicorp.seller;
+package vn.gomicorp.seller.event;
 
 import android.util.Log;
 

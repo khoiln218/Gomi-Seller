@@ -15,12 +15,15 @@ import vn.gomicorp.seller.BuildConfig;
 import vn.gomicorp.seller.EappsApplication;
 
 public final class Utils {
+    public static int HTTP_CONNECTION_TIME_OUT = 10; // 10 seconds
+    public static int HTTP_READ_TIME_OUT = 60; // 60 seconds, 0 -> no time out
+    public static int HTTP_WRITE_TIME_OUT = 60; // 60 seconds, 0 - > no time mout
 
     public static OkHttpClient createHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(GomiConstants.HTTP_CONNECTION_TIME_OUT, TimeUnit.SECONDS)
-                .readTimeout(GomiConstants.HTTP_READ_TIME_OUT, TimeUnit.SECONDS)
-                .writeTimeout(GomiConstants.HTTP_WRITE_TIME_OUT, TimeUnit.SECONDS);
+                .connectTimeout(HTTP_CONNECTION_TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(HTTP_READ_TIME_OUT, TimeUnit.SECONDS)
+                .writeTimeout(HTTP_WRITE_TIME_OUT, TimeUnit.SECONDS);
         return builder.build();
 
     }
@@ -31,9 +34,9 @@ public final class Utils {
         // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(GomiConstants.HTTP_CONNECTION_TIME_OUT, TimeUnit.SECONDS)
-                .readTimeout(GomiConstants.HTTP_READ_TIME_OUT, TimeUnit.SECONDS)
-                .writeTimeout(GomiConstants.HTTP_WRITE_TIME_OUT, TimeUnit.SECONDS);
+                .connectTimeout(HTTP_CONNECTION_TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(HTTP_READ_TIME_OUT, TimeUnit.SECONDS)
+                .writeTimeout(HTTP_WRITE_TIME_OUT, TimeUnit.SECONDS);
 
         builder.addInterceptor(logging);
         return builder.build();

@@ -1,10 +1,20 @@
-package vn.gomicorp.seller.signup;
+package vn.gomicorp.seller.data.source.model.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SignUpRequest {
+    /**
+     * CountryId : 1
+     * DeviceToken : e9WgXLin6fg:APA91bF582iyWWS0d4st83JspciRk2BSnP9YGGVdi2iUZcpzZNET4yx2Y0vyJySSMsH4T6xcteBeGTwZ2YHfLlD8yy4qhVc6YJ93Q2NsyC1Np11CsBXIDf6XLwrd_tgRbJrrhwfZY55l
+     * DeviceVersion : Android 10, API 29
+     * Email : khoiln218@gmail.com
+     * FullName : Khoi Le
+     * Password : 123456
+     * PhoneNumber : 0937001038
+     */
+
     private String Email;
     private String FullName;
     private byte Gender;

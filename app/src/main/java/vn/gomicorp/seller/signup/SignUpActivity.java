@@ -1,8 +1,8 @@
 package vn.gomicorp.seller.signup;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -29,11 +29,29 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void subscribeToNavigationChanges(SignUpViewModel viewModel) {
-        viewModel.getSignInCommand().observe(this, new Observer<Void>() {
+        viewModel.getSignInCommand().observe(this, new Observer<SignUpEvent>() {
             @Override
-            public void onChanged(@Nullable Void v) {
-                finish();
+            public void onChanged(SignUpEvent event) {
+                switch (event.code) {
+                    case SignUpEvent.GOTO_LOGIN:
+                        finish();
+                        break;
+                    case SignUpEvent.SIGN_UP_SUCCESS:
+                        signUpSuccess();
+                        break;
+                    case SignUpEvent.SIGN_UP_FALSE:
+                        signUpFalse(event.message);
+                        break;
+                }
             }
         });
+    }
+
+    private void signUpFalse(String msg) {
+        Toast.makeText(this, "SignUp False: " + msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void signUpSuccess() {
+        Toast.makeText(this, "SignUp Success", Toast.LENGTH_SHORT).show();
     }
 }

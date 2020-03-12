@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.signin;
+package vn.gomicorp.seller.data.source.model.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +9,8 @@ public class SignInRequest {
     /**
      * UserName : khoiln218@gmail.com
      * Password : 123456
-     * DeviceVersion : Android 27
-     * DeviceToken : 123456
+     * DeviceVersion : Android 10, API 29
+     * DeviceToken : e9WgXLin6fg:APA91bF582iyWWS0d4st83JspciRk2BSnP9YGGVdi2iUZcpzZNET4yx2Y0vyJySSMsH4T6xcteBeGTwZ2YHfLlD8yy4qhVc6YJ93Q2NsyC1Np11CsBXIDf6XLwrd_tgRbJrrhwfZY55l
      */
 
     private String UserName;

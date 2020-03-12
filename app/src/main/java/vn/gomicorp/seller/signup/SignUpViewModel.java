@@ -1,25 +1,18 @@
 package vn.gomicorp.seller.signup;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.Gson;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import vn.gomicorp.seller.SingleLiveEvent;
-import vn.gomicorp.seller.data.GomiClient;
-import vn.gomicorp.seller.data.ResponseData;
-import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.event.MultibleLiveEvent;
+import vn.gomicorp.seller.data.AppRepository;
+import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
+import vn.gomicorp.seller.data.source.model.data.AccountInfo;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignUpViewModel extends ViewModel {
-    private String TAG = getClass().getSimpleName();
     private SignUpRequest signUpRequest = new SignUpRequest();
+    private AppRepository mAppRepository = AppRepository.getInstance();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -27,7 +20,7 @@ public class SignUpViewModel extends ViewModel {
     public MutableLiveData<String> phoneNumber = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
 
-    public final SingleLiveEvent<Void> mSignInCommand = new SingleLiveEvent<>();
+    public final MultibleLiveEvent<SignUpEvent> mSignUpCommand = new MultibleLiveEvent<>();
 
     public void signUp() {
         signUpRequest.setCountryId(Integer.parseInt(contryId.getValue()));
@@ -44,34 +37,33 @@ public class SignUpViewModel extends ViewModel {
         gotoSignIn();
     }
 
-    private void requestSignUp(SignUpRequest signUpRequest) {
-        Retrofit retrofit = Utils.createRetrofit(GomiConstants.BASE_URL);
-        GomiClient client = retrofit.create(GomiClient.class);
-        Call<ResponseData<AccountInfo>> call = client.signUp(signUpRequest);
-        call.enqueue(new Callback<ResponseData<AccountInfo>>() {
+    private void requestSignUp(SignUpRequest request) {
+        mAppRepository.signup(request, new ResultListener<AccountInfo>() {
             @Override
-            public void onResponse(Call<ResponseData<AccountInfo>> call, Response<ResponseData<AccountInfo>> response) {
-                try {
-                    ResponseData<AccountInfo> body = response.body();
-                    Log.d(TAG, "onResponse: " + new Gson().toJson(body.getResult()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onLoaded(AccountInfo result) {
+                signUpSuccess();
             }
 
             @Override
-            public void onFailure(Call<ResponseData<AccountInfo>> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
-                t.printStackTrace();
+            public void onDataNotAvailable(String error) {
+                signUpFalse(error);
             }
         });
     }
 
     private void gotoSignIn() {
-        mSignInCommand.call();
+        mSignUpCommand.call(new SignUpEvent(SignUpEvent.GOTO_LOGIN));
     }
 
-    public SingleLiveEvent<Void> getSignInCommand() {
-        return mSignInCommand;
+    private void signUpSuccess() {
+        mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_SUCCESS));
+    }
+
+    private void signUpFalse(String error) {
+        mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_FALSE, error));
+    }
+
+    public MultibleLiveEvent<SignUpEvent> getSignInCommand() {
+        return mSignUpCommand;
     }
 }

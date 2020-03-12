@@ -26,6 +26,9 @@ android {
         enabled = true
     }
 
+    lintOptions {
+        disable 'RestrictedApi'
+    }
 }
 
 dependencies {

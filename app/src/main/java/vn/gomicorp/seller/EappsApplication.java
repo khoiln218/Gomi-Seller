@@ -3,12 +3,12 @@ package vn.gomicorp.seller;
 import android.app.Application;
 import android.content.Context;
 
-import vn.gomicorp.seller.utils.PreferencesHelper;
+import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
 
 public class EappsApplication extends Application {
     private static EappsApplication instance;
 
-    private static PreferencesHelper preferencesHelper;
+    private static AppPreferences appPreferences;
 
     @Override
     public void onCreate() {
@@ -24,10 +24,10 @@ public class EappsApplication extends Application {
         return instance.getApplicationContext();
     }
 
-    public static PreferencesHelper getPreferences() {
-        if (preferencesHelper == null)
-            preferencesHelper = new PreferencesHelper(instance.getAppContext());
+    public static AppPreferences getPreferences() {
+        if (appPreferences == null)
+            appPreferences = new AppPreferences(instance.getAppContext());
 
-        return preferencesHelper;
+        return appPreferences;
     }
 }

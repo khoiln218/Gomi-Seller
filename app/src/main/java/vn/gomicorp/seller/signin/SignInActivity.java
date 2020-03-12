@@ -39,24 +39,29 @@ public class SignInActivity extends AppCompatActivity {
 
     private void subscribeToNavigationChanges(SignInViewModel viewModel) {
         // The activity observes the navigation commands in the ViewModel
-        viewModel.getSignInCommand().observe(this, new Observer<Void>() {
+        viewModel.getLoginCommand().observe(this, new Observer<SignInEvent>() {
             @Override
-            public void onChanged(@Nullable Void v) {
-                SignInActivity.this.loginSuccess();
+            public void onChanged(@Nullable SignInEvent event) {
+                switch (event.code) {
+                    case SignInEvent.FORGET_PASSWORD:
+                        onStartForgetPassword();
+                        break;
+                    case SignInEvent.GOTO_SIGN_UP:
+                        onStartSignUp();
+                        break;
+                    case SignInEvent.LOG_IN_SUCCESS:
+                        loginSuccess();
+                        break;
+                    case SignInEvent.LOG_IN_FALSE:
+                        loginError(event.message);
+                        break;
+                }
             }
         });
-        viewModel.getSignUpCommand().observe(this, new Observer<Void>() {
-            @Override
-            public void onChanged(@Nullable Void v) {
-                SignInActivity.this.onStartSignUp();
-            }
-        });
-        viewModel.getForgetPasswordCommand().observe(this, new Observer<Void>() {
-            @Override
-            public void onChanged(@Nullable Void v) {
-                SignInActivity.this.onStartForgetPassword();
-            }
-        });
+    }
+
+    private void loginError(String error) {
+        Toast.makeText(this, "Login Error: " + error, Toast.LENGTH_SHORT).show();
     }
 
     private void loginSuccess() {

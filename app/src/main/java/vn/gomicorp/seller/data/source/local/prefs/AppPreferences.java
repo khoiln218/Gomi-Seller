@@ -1,9 +1,9 @@
-package vn.gomicorp.seller.utils;
+package vn.gomicorp.seller.data.source.local.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferencesHelper {
+public class AppPreferences {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
@@ -11,7 +11,7 @@ public class PreferencesHelper {
     private static final String PREFS_NAME = "EAPPS";
 
 
-    public PreferencesHelper(Context context) {
+    public AppPreferences(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, PRIVATE_MODE);
         editor = prefs.edit();
     }

@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.data;
+package vn.gomicorp.seller.data.source.model.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
