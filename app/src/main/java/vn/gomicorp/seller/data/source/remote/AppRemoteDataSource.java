@@ -10,12 +10,11 @@ import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.data.AccountInfo;
-import vn.gomicorp.seller.utils.Utils;
 
 public class AppRemoteDataSource implements AppDataSource {
     @Override
     public void signin(final SignInRequest request, final ResultListener<AccountInfo> callback) {
-        Retrofit retrofit = Utils.createRetrofit(EndPoint.BASE_URL);
+        Retrofit retrofit = ApiConfig.createRetrofit(EndPoint.BASE_URL);
         ApiService client = retrofit.create(ApiService.class);
         Call<ResponseData<AccountInfo>> call = client.signIn(request);
         call.enqueue(new Callback<ResponseData<AccountInfo>>() {
@@ -40,7 +39,7 @@ public class AppRemoteDataSource implements AppDataSource {
 
     @Override
     public void signup(SignUpRequest request, final ResultListener<AccountInfo> callback) {
-        Retrofit retrofit = Utils.createRetrofit(EndPoint.BASE_URL);
+        Retrofit retrofit = ApiConfig.createRetrofit(EndPoint.BASE_URL);
         ApiService client = retrofit.create(ApiService.class);
         Call<ResponseData<AccountInfo>> call = client.signUp(request);
         call.enqueue(new Callback<ResponseData<AccountInfo>>() {

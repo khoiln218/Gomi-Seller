@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="signUpViewModel"
             type="vn.gomicorp.seller.signup.SignUpViewModel" />
@@ -95,8 +97,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvname">
 
                 <EditText
+                    android:id="@+id/txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
                     android:hint="@string/hint_name"
                     android:importantForAutofill="no"
                     android:inputType="textCapWords"
@@ -133,8 +137,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvemail">
 
                 <EditText
+                    android:id="@+id/txt_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
                     android:hint="@string/hint_email"
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress"
@@ -172,8 +178,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvphone_number">
 
                 <EditText
+                    android:id="@+id/txt_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
                     android:hint="@string/hint_phone_number"
                     android:importantForAutofill="no"
                     android:inputType="phone"
@@ -212,8 +220,10 @@
                 app:passwordToggleEnabled="true">
 
                 <EditText
+                    android:id="@+id/txt_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
                     android:hint="@string/hint_password"
                     android:importantForAutofill="no"
                     android:inputType="textPassword"
@@ -251,8 +261,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvcontry_id">
 
                 <EditText
+                    android:id="@+id/txt_contryid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
                     android:hint="@string/hint_contry_id"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
@@ -269,12 +281,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
+                android:enabled="@{signUpViewModel.enableBtnSigup, default=false}"
                 android:onClick="@{()->signUpViewModel.signUp()}"
                 android:text="@string/sign_up"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_layout_country_id" />
+
+            <include
+                android:id="@+id/include"
+                layout="@layout/layout_progress"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="@{signUpViewModel.loadding?View.VISIBLE:View.GONE, default=gone}"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
