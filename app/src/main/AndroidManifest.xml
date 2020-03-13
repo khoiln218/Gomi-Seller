@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".signin.SignInActivity"></activity>
+        <activity android:name=".forget.ForgetPasswordActivity"></activity>
+        <activity android:name=".signin.SignInActivity" />
         <activity android:name=".signup.SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignInBinding;
+import vn.gomicorp.seller.forget.ForgetPasswordActivity;
 import vn.gomicorp.seller.signup.SignUpActivity;
 import vn.gomicorp.seller.utils.Utils;
 
@@ -83,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void onStartForgetPassword() {
-        //TODO: start forget password screen
+        startActivity(new Intent(this, ForgetPasswordActivity.class));
     }
 
     private void onStartSignUp() {
