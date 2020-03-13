@@ -1,6 +1,9 @@
 package vn.gomicorp.seller.signup;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +11,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.data.Contry;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
 import vn.gomicorp.seller.utils.Utils;
 
@@ -29,6 +37,47 @@ public class SignUpActivity extends AppCompatActivity {
         signUpViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
         activitySignUpBinding.setSignUpViewModel(signUpViewModel);
         activitySignUpBinding.setLifecycleOwner(this);
+
+        setupContryId();
+    }
+
+    private void setupContryId() {
+        final List<String> categories = new ArrayList<String>();
+        activitySignUpBinding.spContryId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                signUpViewModel.selectContry = position;
+                signUpViewModel.afterTextChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        // Spinner Drop down elements
+        signUpViewModel.getContry(new ResultListener<List<Contry>>() {
+            @Override
+            public void onLoaded(List<Contry> result) {
+                for (Contry contry : result) {
+                    categories.add(contry.name);
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+
+            }
+        });
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        activitySignUpBinding.spContryId.setAdapter(dataAdapter);
     }
 
     private void subscribeToNavigationChanges(SignUpViewModel viewModel) {
@@ -81,12 +130,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void contryIdSuccess() {
-        activitySignUpBinding.inputLayoutCountryId.setErrorEnabled(false);
+//        activitySignUpBinding.inputLayoutCountryId.setErrorEnabled(false);
     }
 
     private void contryIdError() {
-        activitySignUpBinding.inputLayoutCountryId.setError(getString(R.string.err_input_contry_id));
-        Utils.requestFocus(this, activitySignUpBinding.txtContryid);
+//        activitySignUpBinding.inputLayoutCountryId.setError(getString(R.string.err_input_contry_id));
+//        Utils.requestFocus(this, activitySignUpBinding.txtContryid);
         Utils.playVibrate(this);
     }
 
