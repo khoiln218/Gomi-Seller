@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.forget.ForgetPasswordViewModel" />
+            type="vn.gomicorp.seller.forget.reset.ResetPasswordViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".forget.ForgetPasswordActivity">
+        tools:context=".forget.reset.ResetPasswordActivity">
 
         <include
             android:id="@+id/appbar"
@@ -24,13 +24,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_user_name"
+            android:id="@+id/tv_verify_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginRight="32dp"
-            android:text="@string/user_name"
+            android:text="@string/verify_code"
             android:textAppearance="?android:textAppearance"
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/text_size_small"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_phone_number"
+            android:id="@+id/input_layout_verify_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -48,17 +48,57 @@
             app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_name">
+            app:layout_constraintTop_toBottomOf="@+id/tv_verify_code">
 
             <EditText
-                android:id="@+id/input_user_name"
+                android:id="@+id/input_verify_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:afterTextChanged="@{(s)->viewModel.afterTextChanged()}"
-                android:hint="@string/hint_user_name"
-                android:inputType="textEmailAddress"
+                android:hint="@string/hint_verify_code"
                 android:singleLine="true"
-                android:text="@={viewModel.username}"
+                android:text="@={viewModel.verifyCode}"
+                android:textAppearance="?android:textAppearance" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="32dp"
+            android:text="@string/new_password"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_verify_code" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_new_password"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/input_new_pasword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(s)->viewModel.afterTextChanged()}"
+                android:hint="@string/hint_new_password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:text="@={viewModel.newPassword}"
                 android:textAppearance="?android:textAppearance" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -69,13 +109,13 @@
             android:layout_width="@dimen/button_width_180"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:enabled="@{viewModel.enableBtnForget,default=false}"
-            android:onClick="@{()->viewModel.forgot()}"
+            android:enabled="@{viewModel.enableBtn,default=false}"
+            android:onClick="@{()->viewModel.reset()}"
             android:stateListAnimator="@null"
             android:text="@string/send_code"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout_phone_number" />
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_new_password" />
 
         <include
             android:id="@+id/include"

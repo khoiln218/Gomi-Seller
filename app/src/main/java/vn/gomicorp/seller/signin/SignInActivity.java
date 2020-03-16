@@ -80,6 +80,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginSuccess() {
+        //TODO: goto main activity
         Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
     }
 

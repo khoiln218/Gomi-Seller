@@ -135,6 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpSuccess() {
+        //TODO: goto main activity
         Toast.makeText(this, "SignUp Success", Toast.LENGTH_SHORT).show();
     }
 }

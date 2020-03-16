@@ -19,4 +19,10 @@
     <color name="colorGreen">#34B44A</color>
     <color name="colorYellow">#FCC011</color>
     <color name="colorRed">#EC2226</color>
+
+    <!--buttton-->
+    <color name="toggleOnColor">#FF4081</color>
+    <color name="toggleOffColor">@android:color/transparent</color>
+    <color name="uncheckedTextColor">#333</color>
+    <color name="CheckedTextColor">@android:color/white</color>
 </resources>

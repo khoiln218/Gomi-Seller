@@ -59,4 +59,9 @@ public class ApiConfig {
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }
+
+    public static final ApiService getClient() {
+        Retrofit retrofit = createRetrofit(EndPoint.BASE_URL);
+        return retrofit.create(ApiService.class);
+    }
 }

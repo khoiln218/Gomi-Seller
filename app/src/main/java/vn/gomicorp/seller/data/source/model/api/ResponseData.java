@@ -9,33 +9,26 @@ import java.io.Serializable;
 public class ResponseData<T> implements Serializable {
 
     /**
-     * Result : {}
-     * "Status":true,
-     * "Message":null,
-     * "TotalRows":0
+     * Success : true
+     * Message : OK
+     * Code : 200
+     * Result : null
+     * TotalRows : 0
      */
 
-    T Result;
-    boolean Status;
-    String Message;
-    int TotalRows;
+    private boolean Success;
+    private String Message;
+    private int Code;
+    private T Result;
+    private int TotalRows;
 
-    @JsonProperty("Result")
-    public T getResult() {
-        return Result;
+    @JsonProperty("Success")
+    public boolean isSuccess() {
+        return Success;
     }
 
-    public void setResult(T result) {
-        Result = result;
-    }
-
-    @JsonProperty("Status")
-    public boolean getStatus() {
-        return Status;
-    }
-
-    public void setStatus(boolean status) {
-        Status = status;
+    public void setSuccess(boolean Success) {
+        this.Success = Success;
     }
 
     @JsonProperty("Message")
@@ -43,8 +36,26 @@ public class ResponseData<T> implements Serializable {
         return Message;
     }
 
-    public void setMessage(String message) {
-        Message = message;
+    public void setMessage(String Message) {
+        this.Message = Message;
+    }
+
+    @JsonProperty("Code")
+    public int getCode() {
+        return Code;
+    }
+
+    public void setCode(int Code) {
+        this.Code = Code;
+    }
+
+    @JsonProperty("Result")
+    public T getResult() {
+        return Result;
+    }
+
+    public void setResult(T Result) {
+        this.Result = Result;
     }
 
     @JsonProperty("TotalRows")
@@ -52,7 +63,7 @@ public class ResponseData<T> implements Serializable {
         return TotalRows;
     }
 
-    public void setTotalRows(int totalRows) {
-        TotalRows = totalRows;
+    public void setTotalRows(int TotalRows) {
+        this.TotalRows = TotalRows;
     }
 }

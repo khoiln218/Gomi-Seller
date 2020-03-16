@@ -6,16 +6,16 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import vn.gomicorp.seller.data.AppRepository;
+import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
-import vn.gomicorp.seller.data.source.model.data.AccountInfo;
-import vn.gomicorp.seller.event.MultibleLiveEvent;
+import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignUpViewModel extends ViewModel {
-    private AppRepository mAppRepository = AppRepository.getInstance();
+    private AccountRepository mAppRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -25,7 +25,7 @@ public class SignUpViewModel extends ViewModel {
     public MutableLiveData<Boolean> loadding = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtnSigup = new MutableLiveData<>();
 
-    public final MultibleLiveEvent<SignUpEvent> mSignUpCommand = new MultibleLiveEvent<>();
+    public final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
     public void signUp() {
         submitForm();
@@ -132,9 +132,9 @@ public class SignUpViewModel extends ViewModel {
         request.setPassword(password.getValue());
         request.setDeviceToken(Utils.getDeviceToken());
         request.setDeviceVersion(Utils.getDeviceVersion());
-        mAppRepository.signup(request, new ResultListener<AccountInfo>() {
+        mAppRepository.signup(request, new ResultListener<Account>() {
             @Override
-            public void onLoaded(AccountInfo result) {
+            public void onLoaded(Account result) {
                 hideProgressing();
                 signUpSuccess();
             }
@@ -159,7 +159,7 @@ public class SignUpViewModel extends ViewModel {
         mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_FALSE, error));
     }
 
-    public MultibleLiveEvent<SignUpEvent> getSignInCommand() {
+    public MultableLiveEvent<SignUpEvent> getSignInCommand() {
         return mSignUpCommand;
     }
 

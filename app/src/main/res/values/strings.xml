@@ -3,16 +3,22 @@
 
     <!-- TODO: Account -->
     <string name="name">Full Name</string>
+    <string name="user_name">Email Or PhoneNumber</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
     <string name="password">Password</string>
     <string name="contry_id">Contry ID</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="new_password">New Password</string>
 
     <string name="hint_name">Full Name</string>
+    <string name="hint_user_name">Email Or PhoneNumber</string>
     <string name="hint_email">Email</string>
     <string name="hint_phone_number">Phone Number</string>
     <string name="hint_password">Password</string>
     <string name="hint_contry_id">Contry ID</string>
+    <string name="hint_verify_code">Verify Code</string>
+    <string name="hint_new_password">New Password</string>
 
     <string name="err_input_name">Error Input Full Name</string>
     <string name="err_input_email">Error Input Email</string>
@@ -22,6 +28,9 @@
     <string name="err_input_contry_id">Error Input Contry ID</string>
 
     <string name="forget_password">Forget Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="send_code">Send Code</string>
+    <string name="reset">Reset</string>
     <string name="login">Log In</string>
     <string name="sign_up">Sign Up</string>
     <string name="no_have_account">Add new account</string>

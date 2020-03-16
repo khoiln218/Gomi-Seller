@@ -5,17 +5,17 @@ import android.text.Editable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import vn.gomicorp.seller.data.AppRepository;
+import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
-import vn.gomicorp.seller.data.source.model.data.AccountInfo;
-import vn.gomicorp.seller.event.MultibleLiveEvent;
+import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Strings;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignInViewModel extends ViewModel {
-    private AppRepository mAppRepository = AppRepository.getInstance();
+    private AccountRepository mAppRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> userName = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
@@ -25,7 +25,7 @@ public class SignInViewModel extends ViewModel {
     public SignInViewModel() {
     }
 
-    private final MultibleLiveEvent<SignInEvent> mLogInCommand = new MultibleLiveEvent<>();
+    private final MultableLiveEvent<SignInEvent> mLogInCommand = new MultableLiveEvent<>();
 
     public void signIn() {
         submitForm();
@@ -112,7 +112,7 @@ public class SignInViewModel extends ViewModel {
         mLogInCommand.call(new SignInEvent(SignInEvent.PASSWORD_INPUT_SUCCESS));
     }
 
-    public MultibleLiveEvent<SignInEvent> getLoginCommand() {
+    public MultableLiveEvent<SignInEvent> getLoginCommand() {
         return mLogInCommand;
     }
 
@@ -123,9 +123,9 @@ public class SignInViewModel extends ViewModel {
         request.setPassword(password.getValue());
         request.setDeviceToken(Utils.getDeviceToken());
         request.setDeviceVersion(Utils.getDeviceVersion());
-        mAppRepository.signin(request, new ResultListener<AccountInfo>() {
+        mAppRepository.signin(request, new ResultListener<Account>() {
             @Override
-            public void onLoaded(AccountInfo result) {
+            public void onLoaded(Account result) {
                 hideProgressing();
                 loginSuccess();
             }
