@@ -6,7 +6,11 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
@@ -31,9 +35,10 @@ public class SignUpViewModel extends ViewModel {
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<String> certificationCode = new MutableLiveData<>();
     public MutableLiveData<Boolean> loading = new MutableLiveData<>();
-    public MutableLiveData<Boolean> checkIsShow = new MutableLiveData<>();
+    public MutableLiveData<Boolean> countDownIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtnSigup = new MutableLiveData<>();
+    public MutableLiveData<String> countDown = new MutableLiveData<>();
 
     public final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
@@ -46,7 +51,7 @@ public class SignUpViewModel extends ViewModel {
     }
 
     public void verify() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.VERIFY));
+        submitCertificationCode();
     }
 
     public void submitCertificationCode() {
@@ -59,15 +64,13 @@ public class SignUpViewModel extends ViewModel {
     }
 
     private void requestVerifyPhoneNumber() {
-        showProgressing();
+        showCountDown();
         VerifyPhoneNumberRequest request = new VerifyPhoneNumberRequest();
         request.setPhoneNumber(phoneNumber.getValue());
         mAppRepository.verifyPhoneNumber(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
-                hideProgressing();
                 if (result.getCode() == CODE_OK) {
-                    showCheckOk();
                     verifySuccess();
                 } else
                     verifyError(result.getMessage());
@@ -75,20 +78,35 @@ public class SignUpViewModel extends ViewModel {
 
             @Override
             public void onDataNotAvailable(String error) {
-                hideProgressing();
                 verifyError(error);
             }
         });
     }
 
     private void showVerifyBtn() {
-        verifyIsShow.setValue(true);
-        checkIsShow.setValue(false);
+        verifyIsShow.postValue(true);
+        countDownIsShow.postValue(false);
+        countDown.postValue("");
     }
 
-    private void showCheckOk() {
+    private void showCountDown() {
         verifyIsShow.setValue(false);
-        checkIsShow.setValue(true);
+        countDownIsShow.setValue(true);
+        final Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            int start = 30;
+
+            @Override
+            public void run() {
+                start--;
+                countDown.postValue(String.format(EappsApplication.getInstance().getString(R.string.msg_resend), start));
+                if (start == 0) {
+                    showVerifyBtn();
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000);
     }
 
     private void verifyError(String error) {

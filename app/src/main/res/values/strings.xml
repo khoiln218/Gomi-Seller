@@ -37,10 +37,11 @@
     <string name="sign_up">Sign Up</string>
     <string name="verify_phone_number">Verify</string>
     <string name="no_have_account">Add new account</string>
-    
+
     <string name="popup_submit">Are you sure, You wanted to make decision</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+    <string name="msg_resend">Resend after %ds</string>
 
     <string name="banner">banner</string>
 </resources>

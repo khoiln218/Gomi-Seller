@@ -92,12 +92,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void verifySuccess() {
-        phoneNumberSuccess();
         Toast.makeText(this, "Verify success!", Toast.LENGTH_SHORT).show();
     }
 
     private void verifyError(String message) {
-        phoneNumberError();
         Toast.makeText(this, "Verify error: " + message, Toast.LENGTH_SHORT).show();
     }
 

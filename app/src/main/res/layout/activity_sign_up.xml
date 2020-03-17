@@ -207,15 +207,14 @@
                 app:layout_constraintStart_toEndOf="@+id/input_layout_phone_number"
                 app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
 
-            <ImageView
-                android:id="@+id/img_verify_url"
+            <TextView
+                android:id="@+id/tv_verify_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_check"
-                android:tint="@color/colorGreen"
-                android:visibility="@{signUpViewModel.checkIsShow? View.VISIBLE: View.INVISIBLE, default=invisible}"
+                android:text="@={signUpViewModel.countDown}"
+                android:visibility="@{signUpViewModel.countDownIsShow? View.VISIBLE: View.INVISIBLE, default=invisible}"
                 app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
