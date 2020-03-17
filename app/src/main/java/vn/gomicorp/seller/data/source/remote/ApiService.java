@@ -26,5 +26,5 @@ public interface ApiService {
 
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("account/resetpassword")
-    Call<ResponseData> resetPwd(@Body ResetPwdRequest request);
+    Call<ResponseData<Account>> resetPwd(@Body ResetPwdRequest request);
 }

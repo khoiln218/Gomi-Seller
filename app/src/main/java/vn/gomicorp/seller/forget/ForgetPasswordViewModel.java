@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
+import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
@@ -16,6 +17,10 @@ import vn.gomicorp.seller.utils.Inputs;
  * Created by KHOI LE on 3/16/2020.
  */
 public class ForgetPasswordViewModel extends ViewModel {
+    private final int FORGET_SUCCESS = 200;
+    private final int EMAIL_NOT_EXITS = 1004;
+    private final int PHONE_NUMBER_NOT_EXITS = 1005;
+
     private AccountRepository mAppRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> username = new MutableLiveData<>();
@@ -54,11 +59,20 @@ public class ForgetPasswordViewModel extends ViewModel {
         showProccessing();
         final ForgetPwdRequest request = new ForgetPwdRequest();
         request.setUserName(username.getValue());
-        mAppRepository.forgetPwd(request, new ResultListener<Account>() {
+        mAppRepository.forgetPwd(request, new ResultListener<ResponseData<Account>>() {
             @Override
-            public void onLoaded(Account result) {
+            public void onLoaded(ResponseData<Account> result) {
                 hideProccessing();
-                forgetSuccess(result);
+                switch (result.getCode()) {
+                    case FORGET_SUCCESS:
+                        forgetSuccess(result.getResult());
+                        break;
+                    case EMAIL_NOT_EXITS:
+                    case PHONE_NUMBER_NOT_EXITS:
+                    default:
+                        forgetError(result.getMessage());
+
+                }
             }
 
             @Override

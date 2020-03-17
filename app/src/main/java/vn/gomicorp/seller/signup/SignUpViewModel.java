@@ -6,8 +6,11 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
+import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.event.MultableLiveEvent;
@@ -15,7 +18,10 @@ import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignUpViewModel extends ViewModel {
+    private final int SIGNUP_SUCCESS = 200;
+
     private AccountRepository mAppRepository = AccountRepository.getInstance();
+    private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -132,11 +138,15 @@ public class SignUpViewModel extends ViewModel {
         request.setPassword(password.getValue());
         request.setDeviceToken(Utils.getDeviceToken());
         request.setDeviceVersion(Utils.getDeviceVersion());
-        mAppRepository.signup(request, new ResultListener<Account>() {
+        mAppRepository.signup(request, new ResultListener<ResponseData<Account>>() {
             @Override
-            public void onLoaded(Account result) {
+            public void onLoaded(ResponseData<Account> result) {
                 hideProgressing();
-                signUpSuccess();
+                saveAccount(result.getResult());
+                if (result.getCode() == SIGNUP_SUCCESS)
+                    signUpSuccess();
+                else
+                    signUpFalse(result.getMessage());
             }
 
             @Override
@@ -145,6 +155,10 @@ public class SignUpViewModel extends ViewModel {
                 signUpFalse(error);
             }
         });
+    }
+
+    private void saveAccount(Account account) {
+        mAppPreferences.setAccount(account);
     }
 
     private void gotoSignIn() {

@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
+import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 
@@ -15,12 +17,14 @@ import vn.gomicorp.seller.utils.Inputs;
  * Created by KHOI LE on 3/16/2020.
  */
 public class ResetPasswordViewModel extends ViewModel {
+    private final int RESET_SUCCESS = 200;
+
     private AccountRepository mAccountRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> verifyCode = new MutableLiveData<>();
     public MutableLiveData<String> newPassword = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtn = new MutableLiveData<>();
-    public MutableLiveData<Boolean> loadding = new MutableLiveData<>();
+    public MutableLiveData<Boolean> loading = new MutableLiveData<>();
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -58,11 +62,14 @@ public class ResetPasswordViewModel extends ViewModel {
         request.setVerifyCode(verifyCode.getValue());
         request.setNewPassword(newPassword.getValue());
         request.setUserId(userId);
-        mAccountRepository.resetPwd(request, new ResultListener<Void>() {
+        mAccountRepository.resetPwd(request, new ResultListener<ResponseData<Account>>() {
             @Override
-            public void onLoaded(Void result) {
+            public void onLoaded(ResponseData<Account> result) {
                 hideProcessing();
-                resetPwdSuccess();
+                if (result.getCode() == RESET_SUCCESS)
+                    resetPwdSuccess();
+                else
+                    resetPwdError(result.getMessage());
             }
 
             @Override
@@ -82,11 +89,11 @@ public class ResetPasswordViewModel extends ViewModel {
     }
 
     private void hideProcessing() {
-        loadding.setValue(false);
+        loading.setValue(false);
     }
 
     private void showProccessing() {
-        loadding.setValue(true);
+        loading.setValue(true);
     }
 
     public void afterTextChanged() {

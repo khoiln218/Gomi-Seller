@@ -5,8 +5,11 @@ import android.text.Editable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
+import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.event.MultableLiveEvent;
@@ -15,7 +18,11 @@ import vn.gomicorp.seller.utils.Strings;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignInViewModel extends ViewModel {
+    private final int LOGIN_SUCCESS = 200;
+    private final int ACCOUNT_LOCK = 1021;
+
     private AccountRepository mAppRepository = AccountRepository.getInstance();
+    private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
     public MutableLiveData<String> userName = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
@@ -123,11 +130,17 @@ public class SignInViewModel extends ViewModel {
         request.setPassword(password.getValue());
         request.setDeviceToken(Utils.getDeviceToken());
         request.setDeviceVersion(Utils.getDeviceVersion());
-        mAppRepository.signin(request, new ResultListener<Account>() {
+        mAppRepository.signin(request, new ResultListener<ResponseData<Account>>() {
             @Override
-            public void onLoaded(Account result) {
+            public void onLoaded(ResponseData<Account> res) {
                 hideProgressing();
-                loginSuccess();
+                saveAccount(res.getResult());
+                if (res.getCode() == LOGIN_SUCCESS)
+                    loginSuccess();
+                else if (res.getCode() == ACCOUNT_LOCK)
+                    accountLock(res.getMessage());
+                else
+                    loginFalse(res.getMessage());
             }
 
             @Override
@@ -136,5 +149,13 @@ public class SignInViewModel extends ViewModel {
                 loginFalse(error);
             }
         });
+    }
+
+    private void accountLock(String msg) {
+        mLogInCommand.call(new SignInEvent(SignInEvent.ACCOUNT_LOCK, msg));
+    }
+
+    private void saveAccount(Account account) {
+        mAppPreferences.setAccount(account);
     }
 }

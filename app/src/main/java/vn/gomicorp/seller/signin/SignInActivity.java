@@ -55,6 +55,9 @@ public class SignInActivity extends AppCompatActivity {
                     case SignInEvent.LOG_IN_SUCCESS:
                         loginSuccess();
                         break;
+                    case SignInEvent.ACCOUNT_LOCK:
+                        loginError(event.message);
+                        break;
                     case SignInEvent.LOG_IN_FALSE:
                         loginError(event.message);
                         break;

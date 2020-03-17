@@ -122,7 +122,7 @@
             layout="@layout/layout_progress"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{viewModel.loadding?View.VISIBLE:View.GONE, default=gone}"
+            android:visibility="@{viewModel.loading?View.VISIBLE:View.GONE, default=gone}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

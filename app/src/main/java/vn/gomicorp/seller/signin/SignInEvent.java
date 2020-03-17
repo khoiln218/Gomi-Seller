@@ -14,6 +14,7 @@ public class SignInEvent extends Event {
     public static final int USERNAME_INPUT_SUCCESS = 5;
     public static final int PASSWORD_INPUT_ERROR = 6;
     public static final int PASSWORD_INPUT_SUCCESS = 7;
+    public static final int ACCOUNT_LOCK = 8;
 
     public SignInEvent(int code) {
         this.code = code;
