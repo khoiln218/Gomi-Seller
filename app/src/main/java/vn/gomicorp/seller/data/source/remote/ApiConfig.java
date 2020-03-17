@@ -1,11 +1,14 @@
 package vn.gomicorp.seller.data.source.remote;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import vn.gomicorp.seller.BuildConfig;
 
 /**
@@ -48,7 +51,7 @@ public class ApiConfig {
         return new Retrofit.Builder()
                 .client(createHttpClient())
                 .baseUrl(baseUrl)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 
@@ -56,9 +59,15 @@ public class ApiConfig {
         return new Retrofit.Builder()
                 .client(createHttpLoggingClient())
                 .baseUrl(baseUrl)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
+
+    public static Gson gson = new GsonBuilder()
+            .enableComplexMapKeySerialization()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .create();
 
     public static final ApiService getClient() {
         Retrofit retrofit = createRetrofit(EndPoint.BASE_URL);

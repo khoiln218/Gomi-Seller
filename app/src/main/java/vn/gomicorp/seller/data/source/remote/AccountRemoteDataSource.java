@@ -95,7 +95,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
                     if (response.body().isSuccess())
-                        callback.onLoaded(null);
+                        callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
                 } catch (Exception e) {

@@ -134,12 +134,13 @@ public class SignInViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<Account> res) {
                 hideProgressing();
-                saveAccount(res.getResult());
-                if (res.getCode() == LOGIN_SUCCESS)
+                if (res.getCode() == LOGIN_SUCCESS) {
+                    saveAccount(res.getResult());
                     loginSuccess();
-                else if (res.getCode() == ACCOUNT_LOCK)
+                } else if (res.getCode() == ACCOUNT_LOCK) {
+                    saveAccount(res.getResult());
                     accountLock(res.getMessage());
-                else
+                } else
                     loginFalse(res.getMessage());
             }
 

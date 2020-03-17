@@ -1,11 +1,7 @@
 package vn.gomicorp.seller.data.source.model.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> implements Serializable {
 
     /**
@@ -22,7 +18,6 @@ public class ResponseData<T> implements Serializable {
     private T Result;
     private int TotalRows;
 
-    @JsonProperty("Success")
     public boolean isSuccess() {
         return Success;
     }
@@ -31,7 +26,6 @@ public class ResponseData<T> implements Serializable {
         this.Success = Success;
     }
 
-    @JsonProperty("Message")
     public String getMessage() {
         return Message;
     }
@@ -40,7 +34,6 @@ public class ResponseData<T> implements Serializable {
         this.Message = Message;
     }
 
-    @JsonProperty("Code")
     public int getCode() {
         return Code;
     }
@@ -49,7 +42,6 @@ public class ResponseData<T> implements Serializable {
         this.Code = Code;
     }
 
-    @JsonProperty("Result")
     public T getResult() {
         return Result;
     }
@@ -58,7 +50,6 @@ public class ResponseData<T> implements Serializable {
         this.Result = Result;
     }
 
-    @JsonProperty("TotalRows")
     public int getTotalRows() {
         return TotalRows;
     }

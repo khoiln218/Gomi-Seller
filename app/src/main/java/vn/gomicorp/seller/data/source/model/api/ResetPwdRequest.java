@@ -1,7 +1,5 @@
 package vn.gomicorp.seller.data.source.model.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Created by KHOI LE on 3/16/2020.
  */
@@ -17,7 +15,6 @@ public class ResetPwdRequest {
     private String NewPassword;
     private String VerifyCode;
 
-    @JsonProperty("UserId")
     public String getUserId() {
         return UserId;
     }
@@ -26,7 +23,6 @@ public class ResetPwdRequest {
         this.UserId = UserId;
     }
 
-    @JsonProperty("NewPassword")
     public String getNewPassword() {
         return NewPassword;
     }
@@ -35,7 +31,6 @@ public class ResetPwdRequest {
         this.NewPassword = NewPassword;
     }
 
-    @JsonProperty("VerifyCode")
     public String getVerifyCode() {
         return VerifyCode;
     }

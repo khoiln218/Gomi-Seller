@@ -1,9 +1,5 @@
 package vn.gomicorp.seller.data.source.model.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SignInRequest {
 
     /**
@@ -18,7 +14,6 @@ public class SignInRequest {
     private String DeviceVersion;
     private String DeviceToken;
 
-    @JsonProperty("UserName")
     public String getUserName() {
         return UserName;
     }
@@ -27,7 +22,6 @@ public class SignInRequest {
         this.UserName = UserName;
     }
 
-    @JsonProperty("Password")
     public String getPassword() {
         return Password;
     }
@@ -36,7 +30,6 @@ public class SignInRequest {
         this.Password = Password;
     }
 
-    @JsonProperty("DeviceVersion")
     public String getDeviceVersion() {
         return DeviceVersion;
     }
@@ -45,7 +38,6 @@ public class SignInRequest {
         this.DeviceVersion = DeviceVersion;
     }
 
-    @JsonProperty("DeviceToken")
     public String getDeviceToken() {
         return DeviceToken;
     }

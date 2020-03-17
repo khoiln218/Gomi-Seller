@@ -1,9 +1,5 @@
 package vn.gomicorp.seller.data.source.model.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SignUpRequest {
     /**
      * CountryId : 1
@@ -28,7 +24,6 @@ public class SignUpRequest {
     private String DeviceVersion;
     private String CertificationCode;
 
-    @JsonProperty("Email")
     public String getEmail() {
         return Email;
     }
@@ -37,7 +32,6 @@ public class SignUpRequest {
         Email = email;
     }
 
-    @JsonProperty("FullName")
     public String getFullName() {
         return FullName;
     }
@@ -46,7 +40,6 @@ public class SignUpRequest {
         FullName = fullName;
     }
 
-    @JsonProperty("Gender")
     public byte getGender() {
         return Gender;
     }
@@ -55,7 +48,6 @@ public class SignUpRequest {
         Gender = gender;
     }
 
-    @JsonProperty("BirthDay")
     public String getBirthDay() {
         return BirthDay;
     }
@@ -64,7 +56,6 @@ public class SignUpRequest {
         BirthDay = birthDay;
     }
 
-    @JsonProperty("PhoneNumber")
     public String getPhoneNumber() {
         return PhoneNumber;
     }
@@ -73,7 +64,6 @@ public class SignUpRequest {
         PhoneNumber = phoneNumber;
     }
 
-    @JsonProperty("CountryId")
     public int getCountryId() {
         return CountryId;
     }
@@ -82,7 +72,6 @@ public class SignUpRequest {
         CountryId = countryId;
     }
 
-    @JsonProperty("Password")
     public String getPassword() {
         return Password;
     }
@@ -91,7 +80,6 @@ public class SignUpRequest {
         Password = password;
     }
 
-    @JsonProperty("DeviceToken")
     public String getDeviceToken() {
         return DeviceToken;
     }
@@ -100,7 +88,6 @@ public class SignUpRequest {
         DeviceToken = deviceToken;
     }
 
-    @JsonProperty("DeviceVersion")
     public String getDeviceVersion() {
         return DeviceVersion;
     }
@@ -109,7 +96,6 @@ public class SignUpRequest {
         DeviceVersion = deviceVersion;
     }
 
-    @JsonProperty("CertificationCode")
     public String getCertificationCode() {
         return CertificationCode;
     }

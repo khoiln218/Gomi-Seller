@@ -205,10 +205,10 @@ public class SignUpViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<Account> result) {
                 hideProgressing();
-                saveAccount(result.getResult());
-                if (result.getCode() == CODE_OK)
+                if (result.getCode() == CODE_OK) {
+                    saveAccount(result.getResult());
                     signUpSuccess();
-                else
+                } else
                     signUpFalse(result.getMessage());
             }
 

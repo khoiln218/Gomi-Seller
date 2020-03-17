@@ -67,6 +67,7 @@ public final class Utils {
      */
     public static void playVibrate(Context context) {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        assert vibrator != null;
         vibrator.vibrate(500);
     }
 }

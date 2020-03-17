@@ -1,11 +1,7 @@
 package vn.gomicorp.seller.data.source.model.data;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account implements Serializable {
 
     /**
@@ -56,7 +52,6 @@ public class Account implements Serializable {
     private int CountryCode;
     private int AccountType;
 
-    @JsonProperty("VerificationCode")
     public String getVerificationCode() {
         return VerificationCode;
     }
@@ -65,7 +60,6 @@ public class Account implements Serializable {
         this.VerificationCode = VerificationCode;
     }
 
-    @JsonProperty("Password")
     public String getPassword() {
         return Password;
     }
@@ -74,7 +68,6 @@ public class Account implements Serializable {
         this.Password = Password;
     }
 
-    @JsonProperty("NewPassword")
     public String getNewPassword() {
         return NewPassword;
     }
@@ -83,7 +76,6 @@ public class Account implements Serializable {
         this.NewPassword = NewPassword;
     }
 
-    @JsonProperty("DeviceToken")
     public String getDeviceToken() {
         return DeviceToken;
     }
@@ -92,7 +84,6 @@ public class Account implements Serializable {
         this.DeviceToken = DeviceToken;
     }
 
-    @JsonProperty("DeviceVersion")
     public Object getDeviceVersion() {
         return DeviceVersion;
     }
@@ -101,7 +92,6 @@ public class Account implements Serializable {
         this.DeviceVersion = DeviceVersion;
     }
 
-    @JsonProperty("PushNotify")
     public boolean isPushNotify() {
         return PushNotify;
     }
@@ -110,7 +100,6 @@ public class Account implements Serializable {
         this.PushNotify = PushNotify;
     }
 
-    @JsonProperty("ReferralCode")
     public String getReferralCode() {
         return ReferralCode;
     }
@@ -119,7 +108,6 @@ public class Account implements Serializable {
         this.ReferralCode = ReferralCode;
     }
 
-    @JsonProperty("SellerLevel")
     public int getSellerLevel() {
         return SellerLevel;
     }
@@ -128,7 +116,6 @@ public class Account implements Serializable {
         this.SellerLevel = SellerLevel;
     }
 
-    @JsonProperty("ShopId")
     public String getShopId() {
         return ShopId;
     }
@@ -137,7 +124,6 @@ public class Account implements Serializable {
         this.ShopId = ShopId;
     }
 
-    @JsonProperty("ReferralId")
     public String getReferralId() {
         return ReferralId;
     }
@@ -146,7 +132,6 @@ public class Account implements Serializable {
         this.ReferralId = ReferralId;
     }
 
-    @JsonProperty("SellerUrl")
     public String getSellerUrl() {
         return SellerUrl;
     }
@@ -155,7 +140,6 @@ public class Account implements Serializable {
         this.SellerUrl = SellerUrl;
     }
 
-    @JsonProperty("UserId")
     public String getUserId() {
         return UserId;
     }
@@ -164,7 +148,6 @@ public class Account implements Serializable {
         this.UserId = UserId;
     }
 
-    @JsonProperty("UserName")
     public String getUserName() {
         return UserName;
     }
@@ -173,7 +156,6 @@ public class Account implements Serializable {
         this.UserName = UserName;
     }
 
-    @JsonProperty("FullName")
     public String getFullName() {
         return FullName;
     }
@@ -182,7 +164,6 @@ public class Account implements Serializable {
         this.FullName = FullName;
     }
 
-    @JsonProperty("Email")
     public String getEmail() {
         return Email;
     }
@@ -191,7 +172,6 @@ public class Account implements Serializable {
         this.Email = Email;
     }
 
-    @JsonProperty("PhoneNumber")
     public String getPhoneNumber() {
         return PhoneNumber;
     }
@@ -200,7 +180,6 @@ public class Account implements Serializable {
         this.PhoneNumber = PhoneNumber;
     }
 
-    @JsonProperty("Gender")
     public int getGender() {
         return Gender;
     }
@@ -209,7 +188,6 @@ public class Account implements Serializable {
         this.Gender = Gender;
     }
 
-    @JsonProperty("BirthDay")
     public String getBirthDay() {
         return BirthDay;
     }
@@ -218,7 +196,6 @@ public class Account implements Serializable {
         this.BirthDay = BirthDay;
     }
 
-    @JsonProperty("CountryId")
     public int getCountryId() {
         return CountryId;
     }
@@ -227,7 +204,6 @@ public class Account implements Serializable {
         this.CountryId = CountryId;
     }
 
-    @JsonProperty("Avatar")
     public String getAvatar() {
         return Avatar;
     }
@@ -236,7 +212,6 @@ public class Account implements Serializable {
         this.Avatar = Avatar;
     }
 
-    @JsonProperty("CountryCode")
     public int getCountryCode() {
         return CountryCode;
     }
@@ -245,7 +220,6 @@ public class Account implements Serializable {
         this.CountryCode = CountryCode;
     }
 
-    @JsonProperty("AccountType")
     public int getAccountType() {
         return AccountType;
     }
