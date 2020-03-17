@@ -19,6 +19,9 @@ public class SignUpEvent extends Event {
     public static final int PWD_SUCCESS = 11;
     public static final int CONTRYID_ERROR = 12;
     public static final int CONTRYID_SUCCESS = 13;
+    public static final int VERIFY_SUCCESS = 14;
+    public static final int VERIFY_ERROR = 15;
+    public static final int VERIFY = 16;
 
     public SignUpEvent(int code) {
         this.code = code;

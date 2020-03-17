@@ -1,8 +1,10 @@
 package vn.gomicorp.seller.signup;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -39,6 +41,9 @@ public class SignUpActivity extends AppCompatActivity {
                     case SignUpEvent.GOTO_LOGIN:
                         finish();
                         break;
+                    case SignUpEvent.VERIFY:
+                        showPopupVerify();
+                        break;
                     case SignUpEvent.SIGN_UP_SUCCESS:
                         signUpSuccess();
                         break;
@@ -63,6 +68,12 @@ public class SignUpActivity extends AppCompatActivity {
                     case SignUpEvent.PHONENUMBER_SUCCESS:
                         phoneNumberSuccess();
                         break;
+                    case SignUpEvent.VERIFY_ERROR:
+                        verifyError(event.message);
+                        break;
+                    case SignUpEvent.VERIFY_SUCCESS:
+                        verifySuccess();
+                        break;
                     case SignUpEvent.PWD_ERROR:
                         pwdError();
                         break;
@@ -78,6 +89,36 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void verifySuccess() {
+        phoneNumberSuccess();
+        Toast.makeText(this, "Verify success!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void verifyError(String message) {
+        phoneNumberError();
+        Toast.makeText(this, "Verify error: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showPopupVerify() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(getString(R.string.popup_submit));
+        alertDialogBuilder.setPositiveButton(getString(R.string.submit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                signUpViewModel.submitCertificationCode();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void contryIdSuccess() {

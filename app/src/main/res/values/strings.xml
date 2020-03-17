@@ -10,6 +10,7 @@
     <string name="contry_id">Contry ID</string>
     <string name="verify_code">Verify Code</string>
     <string name="new_password">New Password</string>
+    <string name="certification_code">Certification Code</string>
 
     <string name="hint_name">Full Name</string>
     <string name="hint_user_name">Email Or PhoneNumber</string>
@@ -19,6 +20,7 @@
     <string name="hint_contry_id">Contry ID</string>
     <string name="hint_verify_code">Verify Code</string>
     <string name="hint_new_password">New Password</string>
+    <string name="hint_certification_code">Certification Code</string>
 
     <string name="err_input_name">Error Input Full Name</string>
     <string name="err_input_email">Error Input Email</string>
@@ -33,7 +35,12 @@
     <string name="reset">Reset</string>
     <string name="login">Log In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="verify_phone_number">Verify</string>
     <string name="no_have_account">Add new account</string>
+    
+    <string name="popup_submit">Are you sure, You wanted to make decision</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
 
     <string name="banner">banner</string>
 </resources>

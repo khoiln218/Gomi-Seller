@@ -10,6 +10,7 @@ import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
+import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 
 public class AccountRemoteDataSource implements AccountDataSource {
@@ -95,6 +96,30 @@ public class AccountRemoteDataSource implements AccountDataSource {
                 try {
                     if (response.body().isSuccess())
                         callback.onLoaded(null);
+                    else
+                        callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Account>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void verifyPhoneNumber(VerifyPhoneNumberRequest request, final ResultListener<ResponseData<Account>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Account>> call = client.verifyPhoneNumber(request);
+        call.enqueue(new Callback<ResponseData<Account>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
+                try {
+                    if (response.body().isSuccess())
+                        callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
                 } catch (Exception e) {

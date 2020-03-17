@@ -13,6 +13,7 @@ public class SignUpRequest {
      * FullName : Khoi Le
      * Password : 123456
      * PhoneNumber : 0937001038
+     * CertificationCode : 333411
      */
 
     private String Email;
@@ -25,6 +26,7 @@ public class SignUpRequest {
 
     private String DeviceToken;
     private String DeviceVersion;
+    private String CertificationCode;
 
     @JsonProperty("Email")
     public String getEmail() {
@@ -105,5 +107,14 @@ public class SignUpRequest {
 
     public void setDeviceVersion(String deviceVersion) {
         DeviceVersion = deviceVersion;
+    }
+
+    @JsonProperty("CertificationCode")
+    public String getCertificationCode() {
+        return CertificationCode;
+    }
+
+    public void setCertificationCode(String CertificationCode) {
+        this.CertificationCode = CertificationCode;
     }
 }

@@ -171,9 +171,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 app:hintEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/verify_phone_number"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/verify_phone_number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvphone_number">
 
@@ -181,12 +182,82 @@
                     android:id="@+id/txt_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterPhoneNumberChanged(s)}"
                     android:hint="@string/hint_phone_number"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:singleLine="true"
                     android:text="@={signUpViewModel.phoneNumber}"
+                    android:textAppearance="?android:textAppearance" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/verify_phone_number"
+                style="@style/AppTheme.ButtonOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:onClick="@{()->signUpViewModel.verify()}"
+                android:text="@string/verify_phone_number"
+                android:visibility="@{signUpViewModel.verifyIsShow? View.VISIBLE: View.INVISIBLE, default=visible}"
+                app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/input_layout_phone_number"
+                app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
+
+            <ImageView
+                android:id="@+id/img_verify_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_check"
+                android:tint="@color/colorGreen"
+                android:visibility="@{signUpViewModel.checkIsShow? View.VISIBLE: View.INVISIBLE, default=invisible}"
+                app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/input_layout_phone_number"
+                app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
+
+            <!--Verify Code-->
+            <TextView
+                android:id="@+id/tv_verify_phone_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/certification_code"
+                android:textAppearance="?android:textAppearance"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_size_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_phone_number" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_verify_phone_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_verify_phone_number">
+
+                <EditText
+                    android:id="@+id/txt_certification_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:hint="@string/hint_certification_code"
+                    android:importantForAutofill="no"
+                    android:singleLine="true"
+                    android:text="@={signUpViewModel.certificationCode}"
                     android:textAppearance="?android:textAppearance" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -205,7 +276,7 @@
                 android:textSize="@dimen/text_size_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_phone_number" />
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_verify_phone_number" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_password"
@@ -294,7 +365,7 @@
                 layout="@layout/layout_progress"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="@{signUpViewModel.loadding?View.VISIBLE:View.GONE, default=gone}"
+                android:visibility="@{signUpViewModel.loading?View.VISIBLE:View.GONE, default=gone}"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
