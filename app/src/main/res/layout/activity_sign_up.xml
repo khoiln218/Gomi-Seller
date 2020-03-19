@@ -100,7 +100,7 @@
                     android:id="@+id/txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
                     android:hint="@string/hint_name"
                     android:importantForAutofill="no"
                     android:inputType="textCapWords"
@@ -134,19 +134,22 @@
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvemail">
+                app:layout_constraintTop_toBottomOf="@+id/tvemail"
+                app:setError="@{signUpViewModel.errorEmailMsg}"
+                app:setErrorEnabled="@{signUpViewModel.errorEnableEmail}">
 
                 <EditText
                     android:id="@+id/txt_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
                     android:hint="@string/hint_email"
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:text="@={signUpViewModel.email}"
-                    android:textAppearance="?android:textAppearance" />
+                    android:textAppearance="?android:textAppearance"
+                    app:requestFocus="@{signUpViewModel.requestFocusEmail}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,28 +175,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 app:hintEnabled="false"
-                app:layout_constraintEnd_toStartOf="@+id/verify_phone_number"
+                app:layout_constraintEnd_toStartOf="@+id/bt_resend"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/verify_phone_number"
+                app:layout_constraintStart_toEndOf="@+id/bt_resend"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvphone_number">
+                app:layout_constraintTop_toBottomOf="@+id/tvphone_number"
+                app:setError="@{signUpViewModel.errorPhoneNumberMsg}"
+                app:setErrorEnabled="@{signUpViewModel.errorEnablePhoneNumber}">
 
                 <EditText
                     android:id="@+id/txt_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterPhoneNumberChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterPhoneNumberChanged()}"
                     android:hint="@string/hint_phone_number"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:singleLine="true"
                     android:text="@={signUpViewModel.phoneNumber}"
-                    android:textAppearance="?android:textAppearance" />
+                    android:textAppearance="?android:textAppearance"
+                    app:requestFocus="@{signUpViewModel.requestFocusPhoneNumber}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/verify_phone_number"
+                android:id="@+id/bt_resend"
                 style="@style/AppTheme.ButtonOutline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -208,7 +214,7 @@
                 app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
 
             <TextView
-                android:id="@+id/tv_verify_url"
+                android:id="@+id/tv_resend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
@@ -252,7 +258,7 @@
                     android:id="@+id/txt_certification_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
                     android:hint="@string/hint_certification_code"
                     android:importantForAutofill="no"
                     android:singleLine="true"
@@ -287,19 +293,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvpassword"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                app:setError="@{signUpViewModel.errorPwdMsg}"
+                app:setErrorEnabled="@{signUpViewModel.errorEnablePwd}">
 
                 <EditText
                     android:id="@+id/txt_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
+                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
                     android:hint="@string/hint_password"
                     android:importantForAutofill="no"
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:text="@={signUpViewModel.password}"
-                    android:textAppearance="?android:textAppearance" />
+                    android:textAppearance="?android:textAppearance"
+                    app:requestFocus="@{signUpViewModel.requestFocusPwd}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -319,30 +328,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_country_id"
+            <Spinner
+                android:id="@+id/select_country_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                app:hintEnabled="false"
+                android:backgroundTint="@color/colorAccent"
+                android:onItemSelected="@{(p, v, pos, id) -> signUpViewModel.itemSelectedListener.onItemSelected(pos)}"
+                android:onTouch="@{(v, event)->signUpViewModel.touchListener.onTouch(event)}"
+                app:adapter="@{signUpViewModel.adapter}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvcontry_id">
-
-                <EditText
-                    android:id="@+id/txt_contryid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged(s)}"
-                    android:hint="@string/hint_contry_id"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.contryId}"
-                    android:textAppearance="?android:textAppearance" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toBottomOf="@+id/tvcontry_id" />
 
             <Button
                 android:id="@+id/button"
@@ -357,7 +355,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_country_id" />
+                app:layout_constraintTop_toBottomOf="@+id/select_country_id" />
 
             <include
                 android:id="@+id/include"

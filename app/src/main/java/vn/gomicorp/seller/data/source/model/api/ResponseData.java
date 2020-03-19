@@ -12,18 +12,18 @@ public class ResponseData<T> implements Serializable {
      * TotalRows : 0
      */
 
-    private boolean Success;
+    private boolean Status;
     private String Message;
     private int Code;
     private T Result;
     private int TotalRows;
 
-    public boolean isSuccess() {
-        return Success;
+    public boolean isStatus() {
+        return Status;
     }
 
-    public void setSuccess(boolean Success) {
-        this.Success = Success;
+    public void setStatus(boolean Success) {
+        this.Status = Success;
     }
 
     public String getMessage() {

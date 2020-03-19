@@ -1,23 +1,33 @@
 package vn.gomicorp.seller.signup;
 
-import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Spinner;
 
+import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.AccountRepository;
+import vn.gomicorp.seller.data.LocationRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.model.data.Country;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Utils;
@@ -25,22 +35,38 @@ import vn.gomicorp.seller.utils.Utils;
 public class SignUpViewModel extends ViewModel {
     private final int CODE_OK = 200;
 
-    private AccountRepository mAppRepository = AccountRepository.getInstance();
+    private AccountRepository accountRepository = AccountRepository.getInstance();
+    private LocationRepository locationRepository = LocationRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
+
+    private int countryCode;
+    private static List<Country> countries = new ArrayList<>();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
-    public MutableLiveData<String> contryId = new MutableLiveData<>();
     public MutableLiveData<String> phoneNumber = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<String> certificationCode = new MutableLiveData<>();
+
+    public MutableLiveData<String> errorEmailMsg = new MutableLiveData<>();
+    public MutableLiveData<String> errorPhoneNumberMsg = new MutableLiveData<>();
+    public MutableLiveData<String> errorPwdMsg = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> errorEnableEmail = new MutableLiveData<>();
+    public MutableLiveData<Boolean> errorEnablePhoneNumber = new MutableLiveData<>();
+    public MutableLiveData<Boolean> errorEnablePwd = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> requestFocusEmail = new MutableLiveData<>();
+    public MutableLiveData<Boolean> requestFocusPhoneNumber = new MutableLiveData<>();
+    public MutableLiveData<Boolean> requestFocusPwd = new MutableLiveData<>();
+
     public MutableLiveData<Boolean> loading = new MutableLiveData<>();
     public MutableLiveData<Boolean> countDownIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtnSigup = new MutableLiveData<>();
     public MutableLiveData<String> countDown = new MutableLiveData<>();
 
-    public final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
+    private final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
     public SignUpViewModel() {
         showVerifyBtn();
@@ -54,7 +80,7 @@ public class SignUpViewModel extends ViewModel {
         submitCertificationCode();
     }
 
-    public void submitCertificationCode() {
+    private void submitCertificationCode() {
         if (!TextUtils.isEmpty(phoneNumber.getValue())) {
             phoneNumberSuccess();
             requestVerifyPhoneNumber();
@@ -63,11 +89,34 @@ public class SignUpViewModel extends ViewModel {
         }
     }
 
+    void requestCountryId() {
+        locationRepository.getLocationCountry(new ResultListener<ResponseData<List<Country>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Country>> result) {
+                if (result.getCode() == CODE_OK) {
+                    countries = result.getResult();
+                    updateCountry();
+                } else {
+                    Log.d("requestCountryId", "onLoaded: " + result.getMessage());
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                Log.d("requestCountryId", "onDataNotAvailable: " + error);
+            }
+        });
+    }
+
+    private void updateCountry() {
+        adapter.postValue(adapter.getValue());
+    }
+
     private void requestVerifyPhoneNumber() {
         showCountDown();
         VerifyPhoneNumberRequest request = new VerifyPhoneNumberRequest();
         request.setPhoneNumber(phoneNumber.getValue());
-        mAppRepository.verifyPhoneNumber(request, new ResultListener<ResponseData<Account>>() {
+        accountRepository.verifyPhoneNumber(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
                 if (result.getCode() == CODE_OK) {
@@ -83,17 +132,24 @@ public class SignUpViewModel extends ViewModel {
         });
     }
 
+    private void setCountryCode(int position) {
+        this.countryCode = countries.get(position).getId();
+    }
+
     private void showVerifyBtn() {
         verifyIsShow.postValue(true);
         countDownIsShow.postValue(false);
         countDown.postValue("");
+        if (timer != null)
+            timer.cancel();
     }
 
+    private Timer timer;
+
     private void showCountDown() {
+        timer = new Timer();
         verifyIsShow.setValue(false);
         countDownIsShow.setValue(true);
-        final Timer timer = new Timer();
-
         timer.schedule(new TimerTask() {
             int start = 30;
 
@@ -118,82 +174,55 @@ public class SignUpViewModel extends ViewModel {
     }
 
     private void submitForm() {
-        if (TextUtils.isEmpty(fullName.getValue())) {
-            fullNameError();
-            return;
-        } else {
-            fullNameSuccess();
-        }
-
-        if (TextUtils.isEmpty(email.getValue()) || !Inputs.validateEmail(email.getValue())) {
+        if (!Inputs.validateEmail(email.getValue())) {
             emailError();
             return;
         } else {
             emailSuccess();
         }
 
-        if (TextUtils.isEmpty(phoneNumber.getValue()) || !Inputs.validatePhoneNumber(phoneNumber.getValue())) {
+        if (!Inputs.validatePhoneNumber(phoneNumber.getValue())) {
             phoneNumberError();
             return;
         } else {
             phoneNumberSuccess();
         }
 
-        if (TextUtils.isEmpty(password.getValue()) || !Inputs.validatePassword(password.getValue())) {
+        if (!Inputs.validatePassword(password.getValue())) {
             passwordError();
             return;
         } else {
             passwordSuccess();
         }
 
-        if (TextUtils.isEmpty(contryId.getValue())) {
-            contryIdError();
-            return;
-        } else {
-            contryIdSuccess();
-        }
-
         requestSignUp();
     }
 
-    private void contryIdSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.CONTRYID_SUCCESS));
-    }
-
-    private void contryIdError() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.CONTRYID_ERROR));
-    }
-
     private void passwordSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.PWD_SUCCESS));
+        errorEnablePwd.setValue(false);
     }
 
     private void passwordError() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.PWD_ERROR));
+        errorPwdMsg.setValue(EappsApplication.getInstance().getString(R.string.err_input_password));
+        requestFocusPwd.setValue(true);
     }
 
     private void phoneNumberSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.PHONENUMBER_SUCCESS));
+        errorEnablePhoneNumber.setValue(false);
     }
 
     private void phoneNumberError() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.PHONENUMBER_ERROR));
+        errorPhoneNumberMsg.setValue(EappsApplication.getInstance().getString(R.string.err_input_phone_number));
+        requestFocusPhoneNumber.setValue(true);
     }
 
     private void emailSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.EMAIL_SUCCESS));
+        errorEnableEmail.setValue(false);
     }
 
     private void emailError() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.EMAIL_ERROR));
-    }
-
-    private void fullNameSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.FULLNAME_SUCCESS));
-    }
-
-    private void fullNameError() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.FULLNAME_ERROR));
+        errorEmailMsg.setValue(EappsApplication.getInstance().getString(R.string.err_input_email));
+        requestFocusEmail.setValue(true);
     }
 
     private void showProgressing() {
@@ -211,7 +240,7 @@ public class SignUpViewModel extends ViewModel {
     private void requestSignUp() {
         showProgressing();
         SignUpRequest request = new SignUpRequest();
-        request.setCountryId(Integer.parseInt(contryId.getValue()));
+        request.setCountryId(countryCode);
         request.setEmail(email.getValue());
         request.setFullName(fullName.getValue());
         request.setPhoneNumber(phoneNumber.getValue());
@@ -219,7 +248,7 @@ public class SignUpViewModel extends ViewModel {
         request.setCertificationCode(certificationCode.getValue());
         request.setDeviceToken(Utils.getDeviceToken());
         request.setDeviceVersion(Utils.getDeviceVersion());
-        mAppRepository.signup(request, new ResultListener<ResponseData<Account>>() {
+        accountRepository.signup(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
                 hideProgressing();
@@ -254,29 +283,25 @@ public class SignUpViewModel extends ViewModel {
         mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_FALSE, error));
     }
 
-    public MultableLiveEvent<SignUpEvent> getSignInCommand() {
+    MultableLiveEvent<SignUpEvent> getSignInCommand() {
         return mSignUpCommand;
     }
 
-    public void afterTextChanged(Editable s) {
-        if (checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLengthContryId() && checkLengthVerifyCode()) {
+    public void afterTextChanged() {
+        if (checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLengthVerifyCode()) {
             enableBtnSigup.setValue(true);
         } else {
             enableBtnSigup.setValue(false);
         }
     }
 
-    public void afterPhoneNumberChanged(Editable s) {
-        afterTextChanged(s);
+    public void afterPhoneNumberChanged() {
+        afterTextChanged();
         showVerifyBtn();
     }
 
     private boolean checkLengthVerifyCode() {
-        return !TextUtils.isEmpty(contryId.getValue());
-    }
-
-    private boolean checkLengthContryId() {
-        return !TextUtils.isEmpty(contryId.getValue());
+        return !TextUtils.isEmpty(certificationCode.getValue());
     }
 
     private boolean checkLengthPwd() {
@@ -293,5 +318,59 @@ public class SignUpViewModel extends ViewModel {
 
     private boolean checkLengthName() {
         return !TextUtils.isEmpty(fullName.getValue());
+    }
+
+    public OnItemSelectedListener itemSelectedListener = new OnItemSelectedListener();
+
+    public OnTouchListener touchListener = new OnTouchListener();
+
+    public class OnItemSelectedListener {
+        public void onItemSelected(int position) {
+            setCountryCode(position);
+        }
+    }
+
+    public class OnTouchListener {
+        public boolean onTouch(MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (countries.size() == 0)
+                    requestCountryId();
+            }
+            return false;
+        }
+    }
+
+    public static MutableLiveData<CountryAdapter> adapter = new MutableLiveData<>();
+
+
+    @BindingAdapter("adapter")
+    public static void setAdapter(Spinner spinner, CountryAdapter adt) {
+        if (adt == null) {
+            adt = new CountryAdapter(spinner.getContext(), countries);
+            adapter.setValue(adt);
+            spinner.setAdapter(adt);
+        } else {
+            adt.setData(countries);
+            adt.notifyDataSetChanged();
+        }
+    }
+
+    @BindingAdapter("setErrorEnabled")
+    public static void setErrorEnabled(TextInputLayout inputLayout, boolean enable) {
+        inputLayout.setErrorEnabled(enable);
+    }
+
+    @BindingAdapter("setError")
+    public static void setError(TextInputLayout inputLayout, String msg) {
+        inputLayout.setError(msg);
+        Utils.playVibrate(inputLayout.getContext());
+    }
+
+    @BindingAdapter("requestFocus")
+    public static void requestFocus(View txt, boolean requestFocus) {
+        if (requestFocus) {
+            txt.setFocusableInTouchMode(true);
+            txt.requestFocus();
+        }
     }
 }

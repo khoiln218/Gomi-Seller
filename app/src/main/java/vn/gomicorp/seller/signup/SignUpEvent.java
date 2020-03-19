@@ -8,20 +8,9 @@ import vn.gomicorp.seller.event.Event;
 public class SignUpEvent extends Event {
     public static final int SIGN_UP_SUCCESS = 0;
     public static final int SIGN_UP_FALSE = 1;
-    public static final int GOTO_LOGIN = 3;
-    public static final int FULLNAME_ERROR = 4;
-    public static final int FULLNAME_SUCCESS = 5;
-    public static final int EMAIL_ERROR = 6;
-    public static final int EMAIL_SUCCESS = 7;
-    public static final int PHONENUMBER_ERROR = 8;
-    public static final int PHONENUMBER_SUCCESS = 9;
-    public static final int PWD_ERROR = 10;
-    public static final int PWD_SUCCESS = 11;
-    public static final int CONTRYID_ERROR = 12;
-    public static final int CONTRYID_SUCCESS = 13;
-    public static final int VERIFY_SUCCESS = 14;
-    public static final int VERIFY_ERROR = 15;
-    public static final int VERIFY = 16;
+    public static final int GOTO_LOGIN = 2;
+    public static final int VERIFY_SUCCESS = 3;
+    public static final int VERIFY_ERROR = 4;
 
     public SignUpEvent(int code) {
         this.code = code;

@@ -22,7 +22,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
-                    if (response.body().isSuccess())
+                    if (response.body().isStatus())
                         callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
@@ -46,7 +46,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
-                    if (response.body().isSuccess())
+                    if (response.body().isStatus())
                         callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
@@ -70,7 +70,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
-                    if (response.body().isSuccess())
+                    if (response.body().isStatus())
                         callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
@@ -94,7 +94,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
-                    if (response.body().isSuccess())
+                    if (response.body().isStatus())
                         callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
@@ -118,7 +118,7 @@ public class AccountRemoteDataSource implements AccountDataSource {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
                 try {
-                    if (response.body().isSuccess())
+                    if (response.body().isStatus())
                         callback.onLoaded(response.body());
                     else
                         callback.onDataNotAvailable(response.body().getMessage());
