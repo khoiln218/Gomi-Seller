@@ -64,6 +64,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
         intent.putExtra("UserId", account.getUserId());
         startActivity(intent);
+        finish();
     }
 
     private void usernameSuccess() {

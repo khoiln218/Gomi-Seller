@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
+import vn.gomicorp.seller.utils.Intents;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -72,7 +73,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpSuccess() {
-        //TODO: goto main activity
-        Toast.makeText(this, "SignUp Success", Toast.LENGTH_SHORT).show();
+        Intents.startMainActivity(this);
     }
 }

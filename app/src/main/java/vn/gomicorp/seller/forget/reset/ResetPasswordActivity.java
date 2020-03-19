@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityResetPaswordBinding;
+import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.Utils;
 
 public class ResetPasswordActivity extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     private void resetSuccess() {
-        Toast.makeText(this, "Reset Success", Toast.LENGTH_SHORT).show();
+        Intents.startMainActivity(this);
     }
 
     private void resetError(String error) {

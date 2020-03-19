@@ -14,6 +14,7 @@ import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignInBinding;
 import vn.gomicorp.seller.forget.ForgetPasswordActivity;
 import vn.gomicorp.seller.signup.SignUpActivity;
+import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignInActivity extends AppCompatActivity {
@@ -83,8 +84,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginSuccess() {
-        //TODO: goto main activity
-        Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
+        Intents.startMainActivity(this);
     }
 
     private void onStartForgetPassword() {

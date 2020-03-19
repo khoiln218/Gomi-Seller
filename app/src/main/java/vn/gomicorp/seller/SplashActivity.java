@@ -15,14 +15,14 @@ import com.google.firebase.iid.InstanceIdResult;
 import vn.gomicorp.seller.signin.SignInActivity;
 import vn.gomicorp.seller.signup.SignUpActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
     }
 
     @Override

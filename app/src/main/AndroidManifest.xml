@@ -14,11 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".forget.reset.ResetPasswordActivity"></activity>
+        <activity android:name=".main.MainActivity"></activity>
+        <activity android:name=".createshop.CreateShopActivity" />
+        <activity android:name=".forget.reset.ResetPasswordActivity" />
         <activity android:name=".forget.ForgetPasswordActivity" />
         <activity android:name=".signin.SignInActivity" />
         <activity android:name=".signup.SignUpActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
