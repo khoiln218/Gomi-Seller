@@ -64,7 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     private void resetSuccess() {
-        Intents.startMainActivity(this);
+        Intents.directToMainActivity(this);
     }
 
     private void resetError(String error) {

@@ -43,5 +43,10 @@
     <string name="cancel">Cancel</string>
     <string name="msg_resend">Resend after %ds</string>
 
+    <!--Shop-->
+    <string name="shop_name">Shop Name</string>
+    <string name="hint_shop_name">Shop Name</string>
+    <string name="verify_url">Verify</string>
+
     <string name="banner">banner</string>
 </resources>

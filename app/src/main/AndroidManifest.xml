@@ -14,8 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.MainActivity"></activity>
-        <activity android:name=".createshop.CreateShopActivity" />
+        <activity android:name=".main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".shopinfo.ShopInformationActivity" />
         <activity android:name=".forget.reset.ResetPasswordActivity" />
         <activity android:name=".forget.ForgetPasswordActivity" />
         <activity android:name=".signin.SignInActivity" />

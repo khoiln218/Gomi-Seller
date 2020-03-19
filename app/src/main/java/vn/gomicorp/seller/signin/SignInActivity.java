@@ -84,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginSuccess() {
-        Intents.startMainActivity(this);
+        Intents.directToMainActivity(this);
     }
 
     private void onStartForgetPassword() {

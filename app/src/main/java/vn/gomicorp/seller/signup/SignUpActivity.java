@@ -73,6 +73,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpSuccess() {
-        Intents.startMainActivity(this);
+        Intents.directToMainActivity(this);
     }
 }
