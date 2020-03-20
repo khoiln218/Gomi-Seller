@@ -19,6 +19,7 @@ import java.util.TimerTask;
 
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.adapter.LocationAdapter;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.LocationRepository;
 import vn.gomicorp.seller.data.ResultListener;
@@ -27,7 +28,7 @@ import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
-import vn.gomicorp.seller.data.source.model.data.Country;
+import vn.gomicorp.seller.data.source.model.data.Location;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Utils;
@@ -40,7 +41,7 @@ public class SignUpViewModel extends ViewModel {
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
     private int countryCode;
-    private static List<Country> countries = new ArrayList<>();
+    private static List<Location> countries = new ArrayList<>();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -90,9 +91,9 @@ public class SignUpViewModel extends ViewModel {
     }
 
     void requestCountryId() {
-        locationRepository.getLocationCountry(new ResultListener<ResponseData<List<Country>>>() {
+        locationRepository.getLocationCountry(new ResultListener<ResponseData<List<Location>>>() {
             @Override
-            public void onLoaded(ResponseData<List<Country>> result) {
+            public void onLoaded(ResponseData<List<Location>> result) {
                 if (result.getCode() == CODE_OK) {
                     countries = result.getResult();
                     updateCountry();
@@ -340,13 +341,12 @@ public class SignUpViewModel extends ViewModel {
         }
     }
 
-    public static MutableLiveData<CountryAdapter> adapter = new MutableLiveData<>();
-
+    public static MutableLiveData<LocationAdapter> adapter = new MutableLiveData<>();
 
     @BindingAdapter("adapter")
-    public static void setAdapter(Spinner spinner, CountryAdapter adt) {
+    public static void setAdapter(Spinner spinner, LocationAdapter adt) {
         if (adt == null) {
-            adt = new CountryAdapter(spinner.getContext(), countries);
+            adt = new LocationAdapter(spinner.getContext(), countries);
             adapter.setValue(adt);
             spinner.setAdapter(adt);
         } else {
@@ -355,6 +355,7 @@ public class SignUpViewModel extends ViewModel {
         }
     }
 
+    //TODO: abstract
     @BindingAdapter("setErrorEnabled")
     public static void setErrorEnabled(TextInputLayout inputLayout, boolean enable) {
         inputLayout.setErrorEnabled(enable);

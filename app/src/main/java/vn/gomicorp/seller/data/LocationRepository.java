@@ -3,7 +3,7 @@ package vn.gomicorp.seller.data;
 import java.util.List;
 
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
-import vn.gomicorp.seller.data.source.model.data.Country;
+import vn.gomicorp.seller.data.source.model.data.Location;
 import vn.gomicorp.seller.data.source.remote.LocationRemoteDataSource;
 
 import static androidx.core.util.Preconditions.checkNotNull;
@@ -35,8 +35,20 @@ public class LocationRepository implements LocationDataSource {
     }
 
     @Override
-    public void getLocationCountry(ResultListener<ResponseData<List<Country>>> callback) {
+    public void getLocationCountry(ResultListener<ResponseData<List<Location>>> callback) {
         checkNotNull(callback);
         mRemoteDataSource.getLocationCountry(callback);
+    }
+
+    @Override
+    public void getLocationProvince(int id, ResultListener<ResponseData<List<Location>>> callback) {
+        checkNotNull(callback);
+        mRemoteDataSource.getLocationProvince(id, callback);
+    }
+
+    @Override
+    public void getLocationDistrict(int id, ResultListener<ResponseData<List<Location>>> callback) {
+        checkNotNull(callback);
+        mRemoteDataSource.getLocationDistrict(id, callback);
     }
 }

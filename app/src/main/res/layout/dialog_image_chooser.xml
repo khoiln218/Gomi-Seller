@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_medium">
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:textAppearance="?android:textAppearance"
+        android:textColor="@color/colorHintText"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_standard"
+            android:layout_height="@dimen/icon_size_standard"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_camera"
+            android:tint="@color/colorSecondary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/take_photo"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorPrimaryText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/choose_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_standard"
+            android:layout_height="@dimen/icon_size_standard"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_photo_library"
+            android:tint="@color/colorSecondary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/choose_image_gallery"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorPrimaryText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_standard"
+            android:layout_height="@dimen/icon_size_standard"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_eye"
+            android:tint="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/text_view_photo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/view_photo"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorPrimaryText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/remove_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_standard"
+            android:layout_height="@dimen/icon_size_standard"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/text_remove_photo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/remove_photo"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorPrimaryText" />
+
+    </LinearLayout>
+</LinearLayout>

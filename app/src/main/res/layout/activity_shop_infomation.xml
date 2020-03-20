@@ -1,7 +1,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data></data>
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="vn.gomicorp.seller.shopinfo.ShopInformationViewModel" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -46,7 +53,8 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_home_banner"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:setImageView="@{viewModel.coverUrl}" />
 
                 <ImageButton
                     android:id="@+id/imb_camera"
@@ -55,6 +63,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/circle_with_border_36"
+                    android:onClick="@{()->viewModel.changeCover()}"
                     android:src="@drawable/ic_camera"
                     android:tint="@color/colorSecondary"
                     app:layout_constraintBottom_toBottomOf="@id/img_cover"
@@ -110,15 +119,19 @@
                     android:hint="@string/hint_shop_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/img_cover">
+                    app:layout_constraintTop_toBottomOf="@id/img_cover"
+                    app:setError="@{viewModel.errorShopName}"
+                    app:setErrorEnabled="@{viewModel.enableErrorShopName}">
 
                     <EditText
                         android:id="@+id/txt_shop_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:afterTextChanged="@{(s) -> viewModel.afterTextChanged()}"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:text="@={viewModel.shopName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -132,7 +145,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/input_layout_shop_url"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:layout_constraintHorizontal_weight="40"
+                    app:layout_constraintHorizontal_weight="30"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/input_layout_shop_name" />
 
@@ -145,15 +158,20 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="30"
                     app:layout_constraintStart_toEndOf="@+id/tv_domain"
-                    app:layout_constraintTop_toTopOf="@+id/tv_domain">
+                    app:layout_constraintTop_toTopOf="@+id/tv_domain"
+                    app:setError="@{viewModel.errorUrl}"
+                    app:setErrorEnabled="@{viewModel.enableErrorUrl}">
 
                     <EditText
                         android:id="@+id/txt_shop_url"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:afterTextChanged="@{(s) -> viewModel.afterUrlChanged()}"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:text="@={viewModel.sellerUrl}"
+                        app:requestFocus="@{viewModel.requestFocusUrl}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -161,11 +179,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
+                    android:onClick="@{()->viewModel.verifyUrl()}"
                     android:text="@string/verify_url"
+                    android:visibility="@{viewModel.verifyIsShow?View.VISIBLE:View.INVISIBLE, default=visible}"
                     app:layout_constraintBottom_toBottomOf="@+id/input_layout_shop_url"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="30"
+                    app:layout_constraintHorizontal_weight="20"
+                    app:layout_constraintStart_toEndOf="@+id/input_layout_shop_url"
+                    app:layout_constraintTop_toTopOf="@+id/input_layout_shop_url" />
+
+                <ImageView
+                    android:id="@+id/img_check_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:src="@drawable/ic_check"
+                    android:tint="@color/colorGreen"
+                    android:visibility="@{viewModel.checkOkIsShow?View.VISIBLE:View.INVISIBLE, default=visible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/input_layout_shop_url"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_weight="20"
                     app:layout_constraintStart_toEndOf="@+id/input_layout_shop_url"
                     app:layout_constraintTop_toTopOf="@+id/input_layout_shop_url" />
 
@@ -176,6 +211,10 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.contryItemSelectedListener.onItemSelected(pos)}"
+                    android:onTouch="@{(v, event)->viewModel.contryTouchListener.onTouch(event)}"
+                    app:adapterContry="@{viewModel.contryAdapter}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_domain" />
@@ -187,6 +226,10 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.provinceItemSelectedListener.onItemSelected(pos)}"
+                    android:onTouch="@{(v, event)->viewModel.provinceTouchListener.onTouch(event)}"
+                    app:adapterProvince="@{viewModel.provinceAdapter}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spn_country" />
@@ -198,23 +241,51 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.districtItemSelectedListener.onItemSelected(pos)}"
+                    android:onTouch="@{(v, event)->viewModel.districtTouchListener.onTouch(event)}"
+                    app:adapterDistrict="@{viewModel.districtAdapter}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spn_province" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spn_district">
+
+                    <EditText
+                        android:id="@+id/txt_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/hint_description"
+                        android:inputType="textPersonName"
+                        android:text="@={viewModel.description}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Button
                     android:id="@+id/btn_submit"
-                    android:layout_width="wrap_content"
+                    style="@style/AppTheme.ButtonPrimary"
+                    android:layout_width="@dimen/button_width_180"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="32dp"
+                    android:enabled="@{viewModel.enableBtnSubmit, default=false}"
+                    android:onClick="@{()->viewModel.createShop()}"
                     android:text="@string/submit"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spn_district" />
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_description" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

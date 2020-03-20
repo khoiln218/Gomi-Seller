@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -69,5 +70,20 @@ public final class Utils {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         assert vibrator != null;
         vibrator.vibrate(500);
+    }
+
+    /**
+     * Get Display Width
+     *
+     * @return
+     */
+    public static int getScreenWidth() {
+        Context context = EappsApplication.getInstance().getApplicationContext();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        assert windowManager != null;
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        return displayMetrics.widthPixels;
     }
 }

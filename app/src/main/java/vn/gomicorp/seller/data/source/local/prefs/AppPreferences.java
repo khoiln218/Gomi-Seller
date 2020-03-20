@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.model.data.Shop;
 
 public class AppPreferences {
     private SharedPreferences prefs;
@@ -56,6 +57,10 @@ public class AppPreferences {
         editor.commit();
     }
 
+    public void setShop(Shop shop) {
+        editor.putString(SHOP_ID, shop.getId());
+        editor.commit();
+    }
 
     public String getUserId() {
         return prefs.getString(USER_ID, null);

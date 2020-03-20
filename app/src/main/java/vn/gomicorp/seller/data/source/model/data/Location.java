@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide;
 /**
  * Created by KHOI LE on 3/18/2020.
  */
-public class Country {
+public class Location {
 
 
     /**

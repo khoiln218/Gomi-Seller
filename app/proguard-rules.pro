@@ -5,3 +5,7 @@
   public *;
 }
 #---end Glide------------------
+
+#Cropper---------------
+-keep class androidx.appcompat.widget.** { *; }
+#End Cropper-----------

@@ -4,9 +4,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="country"
-            type="vn.gomicorp.seller.data.source.model.data.Country" />
+            name="location"
+            type="vn.gomicorp.seller.data.source.model.data.Location" />
     </data>
 
     <LinearLayout
@@ -19,7 +21,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="5dp"
-            app:flag="@{country.flag}" />
+            android:visibility="@{location.flag==null?View.GONE : View.VISIBLE, default=visible}"
+            app:flag="@{location.flag}" />
 
         <TextView
             android:id="@+id/textView"
@@ -27,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="5dp"
-            android:text="@{country.name}"
+            android:text="@{location.name}"
             android:textColor="#000"
             android:textSize="16sp" />
     </LinearLayout>
