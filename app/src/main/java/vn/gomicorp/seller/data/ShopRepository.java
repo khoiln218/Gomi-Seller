@@ -5,6 +5,8 @@ import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 import vn.gomicorp.seller.data.source.remote.ShopRemoteDataSource;
+import vn.gomicorp.seller.data.source.test.MockShopDataSource;
+import vn.gomicorp.seller.utils.GomiConstants;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
@@ -16,7 +18,10 @@ public class ShopRepository implements ShopDataSource {
     private ShopDataSource mRemoteDataSource;
 
     private ShopRepository() {
-        mRemoteDataSource = new ShopRemoteDataSource();
+        if (GomiConstants.TEST)
+            mRemoteDataSource = new MockShopDataSource();
+        else
+            mRemoteDataSource = new ShopRemoteDataSource();
     }
 
     public static ShopRepository getInstance() {

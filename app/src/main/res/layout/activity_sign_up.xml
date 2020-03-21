@@ -337,10 +337,10 @@
                 android:backgroundTint="@color/colorAccent"
                 android:onItemSelected="@{(p, v, pos, id) -> signUpViewModel.itemSelectedListener.onItemSelected(pos)}"
                 android:onTouch="@{(v, event)->signUpViewModel.touchListener.onTouch(event)}"
-                app:adapter="@{signUpViewModel.adapter}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvcontry_id" />
+                app:layout_constraintTop_toBottomOf="@+id/tvcontry_id"
+                app:locations="@{signUpViewModel.countries}" />
 
             <Button
                 android:id="@+id/button"

@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil;
 
 import java.util.List;
 
-import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Location;
 import vn.gomicorp.seller.databinding.CountryItemBinding;
 
@@ -24,8 +23,8 @@ public class LocationAdapter extends BaseAdapter {
 
     private int type;
 
-    List<Location> locations;
-    Context context;
+    private List<Location> locations;
+    private Context context;
 
     public LocationAdapter(Context applicationContext, List<Location> locations) {
         context = applicationContext;
@@ -61,13 +60,15 @@ public class LocationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-//        if (view == null) {
-        CountryItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.country_item, viewGroup, false);
+        CountryItemBinding binding;
+        if (view == null) {
+            binding = CountryItemBinding.inflate(LayoutInflater.from(context), viewGroup, false);
+        } else {
+            binding = DataBindingUtil.bind(view);
+        }
+        assert binding != null;
         binding.setLocation(getItem(i));
-        view = binding.getRoot();
-//        } else {
-//            view.setTag(getItem(i).getCode());
-//        }
-        return view;
+        binding.executePendingBindings();
+        return binding.getRoot();
     }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Location;
 import vn.gomicorp.seller.data.source.remote.LocationRemoteDataSource;
+import vn.gomicorp.seller.data.source.test.MockLocationDataSource;
+import vn.gomicorp.seller.utils.GomiConstants;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
@@ -16,7 +18,10 @@ public class LocationRepository implements LocationDataSource {
     private LocationDataSource mRemoteDataSource;
 
     private LocationRepository() {
-        mRemoteDataSource = new LocationRemoteDataSource();
+        if (GomiConstants.TEST)
+            mRemoteDataSource = new MockLocationDataSource();
+        else
+            mRemoteDataSource = new LocationRemoteDataSource();
     }
 
     public static LocationRepository getInstance() {

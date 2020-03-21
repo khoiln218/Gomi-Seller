@@ -212,9 +212,9 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
                     android:backgroundTint="@color/colorAccent"
-                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.contryItemSelectedListener.onItemSelected(pos)}"
-                    android:onTouch="@{(v, event)->viewModel.contryTouchListener.onTouch(event)}"
-                    app:adapterContry="@{viewModel.contryAdapter}"
+                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.countryItemSelectedListener.onItemSelected(pos)}"
+                    android:onTouch="@{(v, event)->viewModel.countryTouchListener.onTouch(event)}"
+                    app:countries="@{viewModel.countries}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_domain" />
@@ -229,10 +229,10 @@
                     android:backgroundTint="@color/colorAccent"
                     android:onItemSelected="@{(p, v, pos, id) -> viewModel.provinceItemSelectedListener.onItemSelected(pos)}"
                     android:onTouch="@{(v, event)->viewModel.provinceTouchListener.onTouch(event)}"
-                    app:adapterProvince="@{viewModel.provinceAdapter}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spn_country" />
+                    app:layout_constraintTop_toBottomOf="@id/spn_country"
+                    app:provinces="@{viewModel.provinces}" />
 
                 <Spinner
                     android:id="@+id/spn_district"
@@ -244,7 +244,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:onItemSelected="@{(p, v, pos, id) -> viewModel.districtItemSelectedListener.onItemSelected(pos)}"
                     android:onTouch="@{(v, event)->viewModel.districtTouchListener.onTouch(event)}"
-                    app:adapterDistrict="@{viewModel.districtAdapter}"
+                    app:districts="@{viewModel.districts}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spn_province" />

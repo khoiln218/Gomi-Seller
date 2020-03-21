@@ -8,6 +8,8 @@ import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.data.source.remote.AccountRemoteDataSource;
+import vn.gomicorp.seller.data.source.test.MockAccoutDataSource;
+import vn.gomicorp.seller.utils.GomiConstants;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
@@ -16,7 +18,10 @@ public class AccountRepository implements AccountDataSource {
     private AccountDataSource mRemoteDataSource;
 
     private AccountRepository() {
-        mRemoteDataSource = new AccountRemoteDataSource();
+        if (GomiConstants.TEST)
+            mRemoteDataSource = new MockAccoutDataSource();
+        else
+            mRemoteDataSource = new AccountRemoteDataSource();
     }
 
     public static AccountRepository getInstance() {

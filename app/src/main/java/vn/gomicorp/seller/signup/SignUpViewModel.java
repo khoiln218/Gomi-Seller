@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.signup;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,7 +43,6 @@ public class SignUpViewModel extends ViewModel {
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
     private int countryCode;
-    private static List<Location> countries = new ArrayList<>();
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -66,6 +67,10 @@ public class SignUpViewModel extends ViewModel {
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtnSigup = new MutableLiveData<>();
     public MutableLiveData<String> countDown = new MutableLiveData<>();
+
+    @SuppressLint("StaticFieldLeak")
+    private static LocationAdapter adapter;
+    public MutableLiveData<List<Location>> countries = new MutableLiveData<>();
 
     private final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
@@ -95,8 +100,7 @@ public class SignUpViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<List<Location>> result) {
                 if (result.getCode() == CODE_OK) {
-                    countries = result.getResult();
-                    updateCountry();
+                    updateCountry(result.getResult());
                 } else {
                     Log.d("requestCountryId", "onLoaded: " + result.getMessage());
                 }
@@ -109,8 +113,8 @@ public class SignUpViewModel extends ViewModel {
         });
     }
 
-    private void updateCountry() {
-        adapter.postValue(adapter.getValue());
+    private void updateCountry(List<Location> locs) {
+        countries.postValue(locs);
     }
 
     private void requestVerifyPhoneNumber() {
@@ -134,7 +138,7 @@ public class SignUpViewModel extends ViewModel {
     }
 
     private void setCountryCode(int position) {
-        this.countryCode = countries.get(position).getId();
+        this.countryCode = Objects.requireNonNull(countries.getValue()).get(position).getId();
     }
 
     private void showVerifyBtn() {
@@ -334,24 +338,25 @@ public class SignUpViewModel extends ViewModel {
     public class OnTouchListener {
         public boolean onTouch(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (countries.size() == 0)
+                if (countries.getValue() == null || countries.getValue().size() == 0)
                     requestCountryId();
             }
             return false;
         }
     }
 
-    public static MutableLiveData<LocationAdapter> adapter = new MutableLiveData<>();
+    void releaseAdapter() {
+        adapter = null;
+    }
 
-    @BindingAdapter("adapter")
-    public static void setAdapter(Spinner spinner, LocationAdapter adt) {
-        if (adt == null) {
-            adt = new LocationAdapter(spinner.getContext(), countries);
-            adapter.setValue(adt);
-            spinner.setAdapter(adt);
+    @BindingAdapter("locations")
+    public static void setAdapter(Spinner spinner, List<Location> locations) {
+        if (adapter == null) {
+            adapter = new LocationAdapter(spinner.getContext(), new ArrayList<Location>());
+            spinner.setAdapter(adapter);
         } else {
-            adt.setData(countries);
-            adt.notifyDataSetChanged();
+            adapter.setData(locations);
+            adapter.notifyDataSetChanged();
         }
     }
 

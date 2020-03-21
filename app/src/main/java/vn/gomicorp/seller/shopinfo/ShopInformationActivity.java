@@ -80,9 +80,15 @@ public class ShopInformationActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        viewModel.releaseAdapter();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        viewModel.onActivityresult(requestCode, resultCode, data);
+        viewModel.onActivityResult(requestCode, resultCode, data);
     }
 
     private void cropImage(Uri uri) {

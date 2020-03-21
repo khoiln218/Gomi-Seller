@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.Objects;
+
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
 import vn.gomicorp.seller.utils.Intents;
@@ -27,6 +29,12 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         signUpViewModel.requestCountryId();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Objects.requireNonNull(signUpViewModel).releaseAdapter();
     }
 
     private void initDataBinding() {

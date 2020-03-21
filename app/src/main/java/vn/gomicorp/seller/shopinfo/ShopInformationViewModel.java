@@ -1,10 +1,10 @@
 package vn.gomicorp.seller.shopinfo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,13 +52,16 @@ public class ShopInformationViewModel extends ViewModel {
     private LocationRepository mLocationRepository = LocationRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
-    private static List<Location> countries = new ArrayList<>();
-    private static List<Location> provinces = new ArrayList<>();
-    private static List<Location> districts = new ArrayList<>();
+    public MutableLiveData<List<Location>> countries = new MutableLiveData<>();
+    public MutableLiveData<List<Location>> provinces = new MutableLiveData<>();
+    public MutableLiveData<List<Location>> districts = new MutableLiveData<>();
 
-    public static MutableLiveData<LocationAdapter> contryAdapter = new MutableLiveData<>();
-    public static MutableLiveData<LocationAdapter> provinceAdapter = new MutableLiveData<>();
-    public static MutableLiveData<LocationAdapter> districtAdapter = new MutableLiveData<>();
+    @SuppressLint("StaticFieldLeak")
+    private static LocationAdapter countryAdapter;
+    @SuppressLint("StaticFieldLeak")
+    private static LocationAdapter provinceAdapter;
+    @SuppressLint("StaticFieldLeak")
+    private static LocationAdapter districtAdapter;
 
     public MutableLiveData<String> sellerUrl = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
@@ -68,7 +71,7 @@ public class ShopInformationViewModel extends ViewModel {
     public MutableLiveData<String> description = new MutableLiveData<>();
     private Uri imageUri;
 
-    public MultableLiveEvent<ShopInfoEvent> getCmd() {
+    MultableLiveEvent<ShopInfoEvent> getCmd() {
         return cmd;
     }
 
@@ -97,7 +100,8 @@ public class ShopInformationViewModel extends ViewModel {
         request.setProvinceId(provinceId);
         request.setDistrictId(districtId);
         request.setWebAddress(sellerUrl.getValue());
-        request.setDescription(description.getValue() + "");
+        String des = description.getValue();
+        request.setDescription(des == null ? "" : des);
         if (imageUri != null)
             request.setCover(MediaHelper.getBase64FromImageUri(EappsApplication.getInstance(), imageUri, 1024, 1024));
         mShopRepository.create(request, new ResultListener<ResponseData<Shop>>() {
@@ -163,38 +167,93 @@ public class ShopInformationViewModel extends ViewModel {
     }
 
     void requestLocationCountryId() {
-        clearContry();
+        clearCountry();
         mLocationRepository.getLocationCountry(new ResultListener<ResponseData<List<Location>>>() {
             @Override
             public void onLoaded(ResponseData<List<Location>> result) {
                 if (result.getCode() == CODE_OK) {
                     int id = result.getResult().get(0).getId();
-                    countries = result.getResult();
-                    updateContry();
+                    updateCountry(result.getResult());
                     requestLocationProvinceId(id);
                 } else
-                    clearContry();
+                    clearCountry();
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                clearContry();
+                clearCountry();
             }
         });
     }
 
-    private void clearContry() {
+    private void clearCountry() {
         clearProvince();
-        countries.clear();
         countryId = NONE_SELECT;
-        updateContry();
+        updateCountry(new ArrayList<Location>());
     }
 
-    private void updateContry() {
-        contryAdapter.setValue(contryAdapter.getValue());
+    private void updateCountry(List<Location> result) {
+        countries.postValue(result);
     }
 
-    void onActivityresult(int requestCode, int resultCode, @Nullable Intent data) {
+    private void requestLocationProvinceId(int countryId) {
+        clearProvince();
+        mLocationRepository.getLocationProvince(countryId, new ResultListener<ResponseData<List<Location>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Location>> result) {
+                if (result.getCode() == CODE_OK) {
+                    int id = result.getResult().get(0).getId();
+                    updateProvince(result.getResult());
+                    requestLocationDistrictId(id);
+                } else
+                    clearProvince();
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                clearProvince();
+            }
+        });
+    }
+
+    private void clearProvince() {
+        clearDistrict();
+        provinceId = NONE_SELECT;
+        updateProvince(new ArrayList<Location>());
+    }
+
+    private void updateProvince(List<Location> result) {
+        provinces.postValue(result);
+    }
+
+    private void requestLocationDistrictId(int provinceId) {
+        clearDistrict();
+        mLocationRepository.getLocationDistrict(provinceId, new ResultListener<ResponseData<List<Location>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Location>> result) {
+                if (result.getCode() == CODE_OK) {
+                    updateDistrict(result.getResult());
+                } else
+                    clearDistrict();
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                clearDistrict();
+            }
+        });
+    }
+
+    private void clearDistrict() {
+        districtId = NONE_SELECT;
+        updateDistrict(new ArrayList<Location>());
+    }
+
+    private void updateDistrict(List<Location> result) {
+        districts.postValue(result);
+    }
+
+    void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case GomiConstants.REQUEST_CAMERA:
@@ -232,105 +291,39 @@ public class ShopInformationViewModel extends ViewModel {
         cmd.call(event);
     }
 
-    private void requestLocationProvinceId(int countryId) {
-        clearProvince();
-        mLocationRepository.getLocationProvince(countryId, new ResultListener<ResponseData<List<Location>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Location>> result) {
-                if (result.getCode() == CODE_OK) {
-                    int id = result.getResult().get(0).getId();
-                    provinces = result.getResult();
-                    updateProvice();
-                    requestLocationDistrictId(id);
-                } else
-                    clearProvince();
-            }
-
-            @Override
-            public void onDataNotAvailable(String error) {
-                clearProvince();
-            }
-        });
-    }
-
-    private void clearProvince() {
-        clearDistrict();
-        provinces.clear();
-        provinceId = NONE_SELECT;
-        updateProvice();
-    }
-
-    private void updateProvice() {
-        provinceAdapter.setValue(provinceAdapter.getValue());
-    }
-
-    private void requestLocationDistrictId(int provinceId) {
-        clearDistrict();
-        mLocationRepository.getLocationDistrict(provinceId, new ResultListener<ResponseData<List<Location>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Location>> result) {
-                if (result.getCode() == CODE_OK) {
-                    districts = result.getResult();
-                    updateDistrict();
-                } else
-                    clearDistrict();
-            }
-
-            @Override
-            public void onDataNotAvailable(String error) {
-                clearDistrict();
-            }
-        });
-    }
-
-    private void clearDistrict() {
-        districts.clear();
-        districtId = NONE_SELECT;
-        updateDistrict();
-    }
-
-    private void updateDistrict() {
-        districtAdapter.setValue(districtAdapter.getValue());
-    }
-
     private void requestShopVerifyUrl() {
-        checkUrlOK = false;
         VerifyUrlRequest request = new VerifyUrlRequest();
         request.setWebAddress(sellerUrl.getValue());
         mShopRepository.verifySellerUrl(request, new ResultListener<ResponseData>() {
             @Override
             public void onLoaded(ResponseData result) {
                 if (result.getCode() == CODE_OK) {
-                    checkUrlOK = true;
                     showCheckOk();
                 } else {
                     urlError();
-                    verifiError(result.getMessage());
+                    verifyError(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 urlError();
-                verifiError(error);
+                verifyError(error);
             }
         });
     }
 
-    private void verifiError(String error) {
+    private void verifyError(String error) {
         cmd.call(new ShopInfoEvent(ShopInfoEvent.VERIFY_ERROR, error));
     }
 
     public void afterUrlChanged() {
         showVerifyBtn();
-        checkUrlOK = false;
         afterTextChanged();
     }
 
     public MutableLiveData<Boolean> enableBtnSubmit = new MutableLiveData<>();
-    public MutableLiveData<Boolean> requestFocusShopName = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusUrl = new MutableLiveData<>();
-    boolean checkUrlOK = false;
 
     public void afterTextChanged() {
         if (validateShopName() && validateUrl() && validateLocation())
@@ -355,20 +348,21 @@ public class ShopInformationViewModel extends ViewModel {
     private int provinceId;
     private int districtId;
 
-    public OnItemSelectedListener contryItemSelectedListener = new OnItemSelectedListener() {
+    public OnItemSelectedListener countryItemSelectedListener = new OnItemSelectedListener() {
         @Override
         public void onItemSelected(int position) {
-            countryId = countries.get(position).getId();
+            if (countries.getValue().size() == 0) return;
+            countryId = countries.getValue().get(position).getId();
             requestLocationProvinceId(countryId);
             afterTextChanged();
         }
     };
 
-    public OnTouchListener contryTouchListener = new OnTouchListener() {
+    public OnTouchListener countryTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (countries.size() == 0)
+                if (countries.getValue() == null || countries.getValue().size() == 0)
                     requestLocationCountryId();
             }
             return false;
@@ -378,7 +372,8 @@ public class ShopInformationViewModel extends ViewModel {
     public OnItemSelectedListener provinceItemSelectedListener = new OnItemSelectedListener() {
         @Override
         public void onItemSelected(int position) {
-            provinceId = provinces.get(position).getId();
+            if (provinces.getValue().size() == 0) return;
+            provinceId = provinces.getValue().get(position).getId();
             requestLocationDistrictId(provinceId);
             afterTextChanged();
         }
@@ -388,7 +383,7 @@ public class ShopInformationViewModel extends ViewModel {
         @Override
         public boolean onTouch(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (provinces.size() == 0)
+                if (provinces.getValue() == null || provinces.getValue().size() == 0)
                     requestLocationProvinceId(countryId);
             }
             return false;
@@ -398,7 +393,8 @@ public class ShopInformationViewModel extends ViewModel {
     public OnItemSelectedListener districtItemSelectedListener = new OnItemSelectedListener() {
         @Override
         public void onItemSelected(int position) {
-            districtId = districts.get(position).getId();
+            if (districts.getValue().size() == 0) return;
+            districtId = districts.getValue().get(position).getId();
             afterTextChanged();
         }
     };
@@ -407,7 +403,7 @@ public class ShopInformationViewModel extends ViewModel {
         @Override
         public boolean onTouch(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (districts.size() == 0)
+                if (districts.getValue() == null || districts.getValue().size() == 0)
                     requestLocationDistrictId(provinceId);
             }
             return false;
@@ -418,54 +414,46 @@ public class ShopInformationViewModel extends ViewModel {
         void onItemSelected(int position);
     }
 
+    void releaseAdapter() {
+        countryAdapter = null;
+        provinceAdapter = null;
+        districtAdapter = null;
+    }
+
     public interface OnTouchListener {
         boolean onTouch(MotionEvent event);
     }
 
-    @BindingAdapter("adapterContry")
-    public static void setAdapterContry(Spinner spinner, LocationAdapter adt) {
-        setAdapter(spinner, adt, LocationAdapter.COUNTRY);
-    }
-
-    @BindingAdapter("adapterProvince")
-    public static void setAdapterProvince(Spinner spinner, LocationAdapter adt) {
-        setAdapter(spinner, adt, LocationAdapter.PROVINCE);
-    }
-
-    @BindingAdapter("adapterDistrict")
-    public static void setAdapterDistrict(Spinner spinner, LocationAdapter adt) {
-        setAdapter(spinner, adt, LocationAdapter.DISTRICT);
-    }
-
-    public static void setAdapter(Spinner spinner, LocationAdapter adt, int type) {
-        List<Location> locs;
-        MutableLiveData<LocationAdapter> adapter;
-        switch (type) {
-            case LocationAdapter.COUNTRY:
-                locs = countries;
-                adapter = contryAdapter;
-                break;
-            case LocationAdapter.PROVINCE:
-                locs = provinces;
-                adapter = provinceAdapter;
-                break;
-            case LocationAdapter.DISTRICT:
-                locs = districts;
-                adapter = districtAdapter;
-                break;
-            default:
-                adapter = null;
-                locs = new ArrayList<>();
-                Log.d("Eapps", "setAdapter: Location not type");
-                break;
-        }
-        if (adt == null) {
-            adt = new LocationAdapter(spinner.getContext(), locs);
-            adapter.setValue(adt);
-            spinner.setAdapter(adt);
+    @BindingAdapter("countries")
+    public static void setAdapterCountry(Spinner spinner, List<Location> locations) {
+        if (countryAdapter == null) {
+            countryAdapter = new LocationAdapter(spinner.getContext(), new ArrayList<Location>());
+            spinner.setAdapter(countryAdapter);
         } else {
-            adt.setData(locs);
-            adt.notifyDataSetChanged();
+            countryAdapter.setData(locations);
+            countryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @BindingAdapter("provinces")
+    public static void setAdapterProvince(Spinner spinner, List<Location> locations) {
+        if (provinceAdapter == null) {
+            provinceAdapter = new LocationAdapter(spinner.getContext(), new ArrayList<Location>());
+            spinner.setAdapter(provinceAdapter);
+        } else {
+            provinceAdapter.setData(locations);
+            provinceAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @BindingAdapter("districts")
+    public static void setAdapterDistrict(Spinner spinner, List<Location> locations) {
+        if (districtAdapter == null) {
+            districtAdapter = new LocationAdapter(spinner.getContext(), new ArrayList<Location>());
+            spinner.setAdapter(districtAdapter);
+        } else {
+            districtAdapter.setData(locations);
+            districtAdapter.notifyDataSetChanged();
         }
     }
 
