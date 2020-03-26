@@ -9,13 +9,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.main.home.HomeFragment;
 import vn.gomicorp.seller.main.market.MarketFragment;
+import vn.gomicorp.seller.main.market.MarketViewModel;
 import vn.gomicorp.seller.main.mypage.MyPageFragment;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
 
@@ -42,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public static MarketViewModel obtainViewModel(FragmentActivity activity) {
+        return ViewModelProviders.of(activity).get(MarketViewModel.class);
     }
 
     @Override

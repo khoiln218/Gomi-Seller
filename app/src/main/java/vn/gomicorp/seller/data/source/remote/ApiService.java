@@ -10,14 +10,18 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
+import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
+import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Location;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 
 public interface ApiService {
@@ -60,4 +64,12 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("shop/create")
     Call<ResponseData<Shop>> createShop(@Body CreateShopRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/introduce")
+    Call<ResponseData<Introduce>> introduce(@Body IntroduceRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/select")
+    Call<ResponseData<Product>> select(@Body ToggleProductRequest request);
 }

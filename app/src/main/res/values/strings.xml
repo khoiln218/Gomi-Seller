@@ -56,5 +56,11 @@
     <string name="remove_photo">Remove Photo</string>
     <string name="cover">Change Cover</string>
 
+    <!--Main-->
+    <string name="view">Xem thêm</string>
+
     <string name="banner">banner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
