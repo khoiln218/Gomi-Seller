@@ -2,6 +2,7 @@ package vn.gomicorp.seller.binding;
 
 import android.os.Parcelable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,17 @@ import vn.gomicorp.seller.widgets.slider.SliderView;
  */
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
+
+    @BindingAdapter("setLayoutLoading")
+    public static void setLayoutLoading(View view, Void _v) {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
+            params.setFullSpan(true);
+
+            view.setLayoutParams(params);
+        }
+    }
 
     @BindingAdapter("setBannerSlider")
     public static void setBannerSlider(SliderLayout slider, Collection collection) {

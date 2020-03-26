@@ -9,6 +9,7 @@ import java.util.List;
 
 import vn.gomicorp.seller.adapter.holder.BannerSliderHolder;
 import vn.gomicorp.seller.adapter.holder.CategoryHolder;
+import vn.gomicorp.seller.adapter.holder.LoadingHolder;
 import vn.gomicorp.seller.adapter.holder.ProductHolder;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.event.ProductHandler;
@@ -40,7 +41,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
             case CollectionType.SEEN_PRODUCT:
                 return ProductHolder.getInstance(parent);
             default:
-                return new LoadingHolder(parent);
+                return LoadingHolder.getInstance(parent);
         }
     }
 
@@ -72,17 +73,11 @@ public class MarketListAdapter extends RecyclerView.Adapter {
     }
 
     public interface CollectionType {
+        int SEEN_PRODUCT = -3;
+        int CATAGORY = -2;
+        int BANNER = -1;
         int VIEW_LOADING = 0;
         int NEW_PRODUCT = 1;
         int RECOMEND_PRODUCT = 2;
-        int BANNER = 3;
-        int CATAGORY = 4;
-        int SEEN_PRODUCT = 5;
-    }
-
-    private class LoadingHolder extends RecyclerView.ViewHolder {
-        public LoadingHolder(ViewGroup viewGroup) {
-            super(viewGroup);
-        }
     }
 }
