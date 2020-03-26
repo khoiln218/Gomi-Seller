@@ -1,6 +1,7 @@
 package vn.gomicorp.seller.binding;
 
 import android.os.Parcelable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,18 +23,43 @@ import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.CategoryItemAdapter;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
+import vn.gomicorp.seller.data.source.model.data.Banner;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.MegaCateListBean;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.ProductHandler;
 import vn.gomicorp.seller.utils.Numbers;
 import vn.gomicorp.seller.utils.Utils;
+import vn.gomicorp.seller.widgets.slider.SliderLayout;
+import vn.gomicorp.seller.widgets.slider.SliderView;
 
 /**
  * Created by KHOI LE on 3/23/2020.
  */
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
+
+    @BindingAdapter("setBannerSlider")
+    public static void setBannerSlider(SliderLayout slider, Collection collection) {
+        slider.clearSliderView();
+        for (Parcelable parcelable : collection.getData()) {
+            if (parcelable instanceof Banner) {
+                SliderView sliderView = new SliderView(slider.getContext());
+                sliderView.setImagePath(((Banner) parcelable).getImagePath());
+                slider.addSliderView(sliderView);
+            }
+        }
+    }
+
+    @BindingAdapter("setHeight")
+    public static void setHeight(View view, int height) {
+        view.getLayoutParams().height = height;
+    }
+
+    @BindingAdapter("setScrollTimeSec")
+    public static void setScrollTimeSec(SliderLayout sliderLayout, int duration) {
+        sliderLayout.setScrollTimeSec(duration);
+    }
 
     @BindingAdapter({"setCollections", "listener"})
     public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler listener) {

@@ -1,6 +1,5 @@
 package vn.gomicorp.seller.adapter;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import vn.gomicorp.seller.adapter.holder.BannerSliderHolder;
 import vn.gomicorp.seller.adapter.holder.CategoryHolder;
 import vn.gomicorp.seller.adapter.holder.ProductHolder;
 import vn.gomicorp.seller.data.source.model.data.Collection;
@@ -32,7 +32,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case CollectionType.BANNER:
-                return new BannerSliderHolder(parent);
+                return BannerSliderHolder.getInstance(parent);
             case CollectionType.CATAGORY:
                 return CategoryHolder.getInstance(parent);
             case CollectionType.NEW_PRODUCT:
@@ -77,19 +77,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         int RECOMEND_PRODUCT = 2;
         int BANNER = 3;
         int CATAGORY = 4;
-        int SEEN_PRODUCT = 5;//
-    }
-
-    private class BannerSliderHolder extends RecyclerView.ViewHolder {
-        Collection collection;
-
-        public BannerSliderHolder(@NonNull View viewGroup) {
-            super(viewGroup);
-        }
-
-        void setBannerSlider(Collection collection) {
-            this.collection = collection;
-        }
+        int SEEN_PRODUCT = 5;
     }
 
     private class LoadingHolder extends RecyclerView.ViewHolder {

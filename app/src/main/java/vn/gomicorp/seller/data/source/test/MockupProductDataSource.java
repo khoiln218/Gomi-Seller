@@ -23,7 +23,38 @@ public class MockupProductDataSource implements ProductDataSource {
             "    \"Message\": \"OK\",\n" +
             "    \"Code\": 200,\n" +
             "    \"Result\": {\n" +
-            "        \"BannerList\": [],\n" +
+            "        \"BannerList\": [\n" +
+            "            {\n" +
+            "                \"Id\": \"1\",\n" +
+            "                \"Name\": \"\",\n" +
+            "                \"ImagePath\": \"R.drawable.ic_place_holder\",\n" +
+            "                \"WebAddress\": \"\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "                \"Id\": \"2\",\n" +
+            "                \"Name\": \"\",\n" +
+            "                \"ImagePath\": \"R.drawable.ic_place_holder\",\n" +
+            "                \"WebAddress\": \"\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "                \"Id\": \"3\",\n" +
+            "                \"Name\": \"\",\n" +
+            "                \"ImagePath\": \"R.drawable.ic_place_holder\",\n" +
+            "                \"WebAddress\": \"\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "                \"Id\": \"4\",\n" +
+            "                \"Name\": \"\",\n" +
+            "                \"ImagePath\": \"R.drawable.ic_place_holder\",\n" +
+            "                \"WebAddress\": \"\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "                \"Id\": \"5\",\n" +
+            "                \"Name\": \"\",\n" +
+            "                \"ImagePath\": \"R.drawable.ic_place_holder\",\n" +
+            "                \"WebAddress\": \"\"\n" +
+            "            }\n" +
+            "        ],\n" +
             "        \"MegaCateList\": [\n" +
             "            {\n" +
             "                \"Id\": 1,\n" +
@@ -95,7 +126,37 @@ public class MockupProductDataSource implements ProductDataSource {
             "            {\n" +
             "                \"Id\": 1,\n" +
             "                \"Name\": \"Sản phẩm mới\",\n" +
-            "                \"ProductList\": [                    \n" +
+            "                \"ProductList\": [\n" +
+            "                    {\n" +
+            "                        \"Id\": \"347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "                        \"Name\": \"Xịt Trị Mụn Lưng Aetem Cleanback Mist\",\n" +
+            "                        \"Description\": null,\n" +
+            "                        \"Thumbnail\": \"http://192.168.0.12:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg\",\n" +
+            "                        \"Url\": \"xit-tri-mun-lung-aetem-cleanback-mist/347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "                        \"BrandId\": 0,\n" +
+            "                        \"DetailId\": 0,\n" +
+            "                        \"BrandName\": null,\n" +
+            "                        \"BrandCountry\": null,\n" +
+            "                        \"Price\": 339000,\n" +
+            "                        \"MarketPrice\": 339000,\n" +
+            "                        \"SaleOff\": 0,\n" +
+            "                        \"Profit\": 33900,\n" +
+            "                        \"IsSelling\": 1,\n" +
+            "                        \"AvgRating\": 0,\n" +
+            "                        \"Purchases\": 0,\n" +
+            "                        \"VideoReviews\": 0,\n" +
+            "                        \"Comments\": 0,\n" +
+            "                        \"AlsoSell\": 0,\n" +
+            "                        \"Reviews\": 0,\n" +
+            "                        \"SellerVideo\": null,\n" +
+            "                        \"ImageList\": null,\n" +
+            "                        \"Type\": null,\n" +
+            "                        \"AttributeList\": null,\n" +
+            "                        \"VideoReviewList\": null,\n" +
+            "                        \"VariantList\": null,\n" +
+            "                        \"CommentList\": null,\n" +
+            "                        \"TotalPage\": 0\n" +
+            "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"ff961d03-fa40-4988-967a-3cf4c087d176\",\n" +
             "                        \"Name\": \"Lăn Loại Bỏ Tế Bào Chết Và Dưỡng Ẩm Cho Bàn Chân - Athis BHA+ Foot Stick Softening\",\n" +
@@ -106,12 +167,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 199000.0000,\n" +
-            "                        \"MarketPrice\": 199000.0000,\n" +
+            "                        \"Price\": 199000,\n" +
+            "                        \"MarketPrice\": 199000,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 19900.0000,\n" +
+            "                        \"Profit\": 19900,\n" +
             "                        \"IsSelling\": 1,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -124,37 +185,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
-            "                    },\n" +
-            "\t\t\t\t\t{\n" +
-            "                        \"Id\": \"347a551a-4744-4799-ba84-3613950362d3\",\n" +
-            "                        \"Name\": \"Xịt Trị Mụn Lưng Aetem Cleanback Mist\",\n" +
-            "                        \"Description\": null,\n" +
-            "                        \"Thumbnail\": \"http://192.168.0.12:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg\",\n" +
-            "                        \"Url\": \"xit-tri-mun-lung-aetem-cleanback-mist/347a551a-4744-4799-ba84-3613950362d3\",\n" +
-            "                        \"BrandId\": 0,\n" +
-            "                        \"DetailId\": 0,\n" +
-            "                        \"BrandName\": null,\n" +
-            "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 339000.0000,\n" +
-            "                        \"MarketPrice\": 339000.0000,\n" +
-            "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 33900.0000,\n" +
-            "                        \"IsSelling\": 1,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
-            "                        \"Purchases\": 0,\n" +
-            "                        \"VideoReviews\": 0,\n" +
-            "                        \"Comments\": 0,\n" +
-            "                        \"AlsoSell\": 0,\n" +
-            "                        \"Reviews\": 0,\n" +
-            "                        \"SellerVideo\": null,\n" +
-            "                        \"ImageList\": null,\n" +
-            "                        \"Type\": null,\n" +
-            "                        \"AttributeList\": null,\n" +
-            "                        \"VideoReviewList\": null,\n" +
-            "                        \"VariantList\": null,\n" +
-            "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"b561609b-7993-472c-a20c-acc3d02b4449\",\n" +
@@ -166,12 +197,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 19840000.0000,\n" +
-            "                        \"MarketPrice\": 19840000.0000,\n" +
+            "                        \"Price\": 1.984E7,\n" +
+            "                        \"MarketPrice\": 1.984E7,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 1984000.0000,\n" +
+            "                        \"Profit\": 1984000,\n" +
             "                        \"IsSelling\": 0,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -184,7 +215,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"622f926b-1d54-4567-b761-bd8e24506a54\",\n" +
@@ -196,12 +227,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 448000.0000,\n" +
-            "                        \"MarketPrice\": 448000.0000,\n" +
+            "                        \"Price\": 448000,\n" +
+            "                        \"MarketPrice\": 448000,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 44800.0000,\n" +
+            "                        \"Profit\": 44800,\n" +
             "                        \"IsSelling\": 0,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -214,7 +245,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    }\n" +
             "                ]\n" +
             "            },\n" +
@@ -232,12 +263,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 339000.0000,\n" +
-            "                        \"MarketPrice\": 339000.0000,\n" +
+            "                        \"Price\": 339000,\n" +
+            "                        \"MarketPrice\": 339000,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 33900.0000,\n" +
+            "                        \"Profit\": 33900,\n" +
             "                        \"IsSelling\": 1,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -250,7 +281,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"7cb61dd9-96ac-4f5f-a475-33b047b01132\",\n" +
@@ -262,12 +293,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 599000.0000,\n" +
-            "                        \"MarketPrice\": 599000.0000,\n" +
+            "                        \"Price\": 599000,\n" +
+            "                        \"MarketPrice\": 599000,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 59900.0000,\n" +
+            "                        \"Profit\": 59900,\n" +
             "                        \"IsSelling\": 0,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -280,7 +311,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"5d29f3cd-727f-480d-94ac-11fd61df3aaa\",\n" +
@@ -292,12 +323,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 42600000.0000,\n" +
-            "                        \"MarketPrice\": 42600000.0000,\n" +
+            "                        \"Price\": 4.26E7,\n" +
+            "                        \"MarketPrice\": 4.26E7,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 4260000.0000,\n" +
+            "                        \"Profit\": 4260000,\n" +
             "                        \"IsSelling\": 0,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -310,7 +341,7 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    },\n" +
             "                    {\n" +
             "                        \"Id\": \"bc1df52d-5979-46e1-af53-202edaaef480\",\n" +
@@ -322,12 +353,12 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"DetailId\": 0,\n" +
             "                        \"BrandName\": null,\n" +
             "                        \"BrandCountry\": null,\n" +
-            "                        \"Price\": 156000.0000,\n" +
-            "                        \"MarketPrice\": 156000.0000,\n" +
+            "                        \"Price\": 156000,\n" +
+            "                        \"MarketPrice\": 156000,\n" +
             "                        \"SaleOff\": 0,\n" +
-            "                        \"Profit\": 15600.0000,\n" +
+            "                        \"Profit\": 15600,\n" +
             "                        \"IsSelling\": 0,\n" +
-            "                        \"AvgRating\": 0.0,\n" +
+            "                        \"AvgRating\": 0,\n" +
             "                        \"Purchases\": 0,\n" +
             "                        \"VideoReviews\": 0,\n" +
             "                        \"Comments\": 0,\n" +
@@ -340,45 +371,41 @@ public class MockupProductDataSource implements ProductDataSource {
             "                        \"VideoReviewList\": null,\n" +
             "                        \"VariantList\": null,\n" +
             "                        \"CommentList\": null,\n" +
-            "                        \"TotalPage\": 0.0\n" +
+            "                        \"TotalPage\": 0\n" +
             "                    }\n" +
             "                ]\n" +
             "            }\n" +
             "        ],\n" +
-            "        \"ProductSeen\": {\n" +
-            "            \"ProductList\": [\n" +
-            "                {\n" +
-            "                    \"Id\": \"347a551a-4744-4799-ba84-3613950362d3\",\n" +
-            "                    \"Name\": \"Xịt Trị Mụn Lưng Aetem Cleanback Mist\",\n" +
-            "                    \"Description\": null,\n" +
-            "                    \"Thumbnail\": \"http://192.168.0.12:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg\",\n" +
-            "                    \"Url\": \"xit-tri-mun-lung-aetem-cleanback-mist/347a551a-4744-4799-ba84-3613950362d3\",\n" +
-            "                    \"BrandId\": 0,\n" +
-            "                    \"DetailId\": 0,\n" +
-            "                    \"BrandName\": null,\n" +
-            "                    \"BrandCountry\": null,\n" +
-            "                    \"Price\": 339000.0000,\n" +
-            "                    \"MarketPrice\": 339000.0000,\n" +
-            "                    \"SaleOff\": 0,\n" +
-            "                    \"Profit\": 33900.0000,\n" +
-            "                    \"IsSelling\": 1,\n" +
-            "                    \"AvgRating\": 0.0,\n" +
-            "                    \"Purchases\": 0,\n" +
-            "                    \"VideoReviews\": 0,\n" +
-            "                    \"Comments\": 0,\n" +
-            "                    \"AlsoSell\": 0,\n" +
-            "                    \"Reviews\": 0,\n" +
-            "                    \"SellerVideo\": null,\n" +
-            "                    \"ImageList\": null,\n" +
-            "                    \"Type\": null,\n" +
-            "                    \"AttributeList\": null,\n" +
-            "                    \"VideoReviewList\": null,\n" +
-            "                    \"VariantList\": null,\n" +
-            "                    \"CommentList\": null,\n" +
-            "                    \"TotalPage\": 0.0\n" +
-            "                }\n" +
-            "            ]\n" +
-            "        }\n" +
+            "        \"ProductSeen\": {\"ProductList\": [{\n" +
+            "            \"Id\": \"347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "            \"Name\": \"Xịt Trị Mụn Lưng Aetem Cleanback Mist\",\n" +
+            "            \"Description\": null,\n" +
+            "            \"Thumbnail\": \"http://192.168.0.12:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg\",\n" +
+            "            \"Url\": \"xit-tri-mun-lung-aetem-cleanback-mist/347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "            \"BrandId\": 0,\n" +
+            "            \"DetailId\": 0,\n" +
+            "            \"BrandName\": null,\n" +
+            "            \"BrandCountry\": null,\n" +
+            "            \"Price\": 339000,\n" +
+            "            \"MarketPrice\": 339000,\n" +
+            "            \"SaleOff\": 0,\n" +
+            "            \"Profit\": 33900,\n" +
+            "            \"IsSelling\": 1,\n" +
+            "            \"AvgRating\": 0,\n" +
+            "            \"Purchases\": 0,\n" +
+            "            \"VideoReviews\": 0,\n" +
+            "            \"Comments\": 0,\n" +
+            "            \"AlsoSell\": 0,\n" +
+            "            \"Reviews\": 0,\n" +
+            "            \"SellerVideo\": null,\n" +
+            "            \"ImageList\": null,\n" +
+            "            \"Type\": null,\n" +
+            "            \"AttributeList\": null,\n" +
+            "            \"VideoReviewList\": null,\n" +
+            "            \"VariantList\": null,\n" +
+            "            \"CommentList\": null,\n" +
+            "            \"TotalPage\": 0\n" +
+            "        }]}\n" +
             "    },\n" +
             "    \"TotalRows\": 0\n" +
             "}";

@@ -18,6 +18,7 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
+import vn.gomicorp.seller.data.source.model.data.Banner;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.MegaCateListBean;
@@ -122,6 +123,13 @@ public class MarketViewModel extends ViewModel {
                 if (result.getCode() == CODE_OK) {
                     Log.d("reqCollections", "onLoaded-Success: " + new Gson().toJson(result.getResult()));
                     List<Collection> collectionList = new ArrayList<>();
+
+                    //banner
+                    List<Parcelable> banners = new ArrayList<>();
+                    for (Banner banner : result.getResult().getBannerList()) {
+                        banners.add(banner);
+                    }
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, "", banners));
 
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
