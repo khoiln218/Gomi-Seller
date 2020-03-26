@@ -12,8 +12,9 @@ import androidx.lifecycle.Observer;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentMarketBinding;
-import vn.gomicorp.seller.dialog.SelectProductDialogFragment;
+import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.main.MainActivity;
+import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class MarketFragment extends Fragment {
 
@@ -53,7 +54,7 @@ public class MarketFragment extends Fragment {
 
     private void showDialogPickProduct(Product product) {
         final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
-        selectProductDialogFragment.setListener(new SelectProductDialogFragment.OnSelectedListener() {
+        selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
                 viewModel.requestPickProduct(product);

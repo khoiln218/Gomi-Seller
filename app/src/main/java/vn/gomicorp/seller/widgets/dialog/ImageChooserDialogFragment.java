@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.dialog;
+package vn.gomicorp.seller.widgets.dialog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.event.OnClickListener;
 
 public class ImageChooserDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
@@ -101,17 +102,5 @@ public class ImageChooserDialogFragment extends BottomSheetDialogFragment implem
                 break;
         }
         dismiss();
-    }
-
-
-    public interface OnClickListener {
-
-        void onTakePhoto();
-
-        void onChooseImage();
-
-        void onViewPhoto();
-
-        void onRemovePhoto();
     }
 }

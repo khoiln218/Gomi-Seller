@@ -10,7 +10,7 @@
 
         <variable
             name="listener"
-            type="vn.gomicorp.seller.dialog.SelectProductDialogFragment.OnSelectedListener" />
+            type="vn.gomicorp.seller.event.OnSelectedListener" />
     </data>
 
     <LinearLayout

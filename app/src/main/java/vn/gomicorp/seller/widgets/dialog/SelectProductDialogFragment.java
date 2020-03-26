@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.dialog;
+package vn.gomicorp.seller.widgets.dialog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.DialogSelectProductBinding;
+import vn.gomicorp.seller.event.OnSelectedListener;
 
 /**
  * Created by KHOI LE on 3/26/2020.
@@ -52,9 +53,5 @@ public class SelectProductDialogFragment extends BottomSheetDialogFragment {
         if (getArguments() == null)
             dismiss();
         product = getArguments().getParcelable(PRODUCT_EXTRA);
-    }
-
-    public interface OnSelectedListener {
-        void onSelected(Product product);
     }
 }

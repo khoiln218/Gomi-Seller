@@ -30,4 +30,16 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- -->
+    <style name="AppTheme.TabIndicator" parent="Base.Widget.Design.TabLayout">
+        <item name="android:clipToPadding">true</item>
+        <item name="tabGravity">center</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabBackground">@drawable/tab_indicator_selector</item>
+        <item name="tabContentStart">0dp</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+        <item name="tabPaddingStart">6dp</item>
+    </style>
 </resources>

@@ -35,7 +35,7 @@ import vn.gomicorp.seller.utils.Utils;
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
 
-    @BindingAdapter({"bind:setCollections", "bind:listener"})
+    @BindingAdapter({"setCollections", "listener"})
     public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler listener) {
         if (recyclerView.getAdapter() == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -68,7 +68,7 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter({"bind:setProducts", "bind:listener"})
+    @BindingAdapter({"setProducts", "listener"})
     public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler listener) {
         List<Product> products = new ArrayList<>();
         for (Parcelable parcelable : collection.getData()) {

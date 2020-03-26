@@ -19,9 +19,10 @@ import java.io.IOException;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityShopInfomationBinding;
-import vn.gomicorp.seller.dialog.ImageChooserDialogFragment;
+import vn.gomicorp.seller.event.OnClickListener;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.MediaHelper;
+import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
 public class ShopInformationActivity extends AppCompatActivity {
     private ShopInformationViewModel viewModel;
@@ -111,7 +112,7 @@ public class ShopInformationActivity extends AppCompatActivity {
 
         ImageChooserDialogFragment fragment = ImageChooserDialogFragment.instance(title, false);
         fragment.show(getSupportFragmentManager(), fragment.getTag());
-        fragment.setClickListener(new ImageChooserDialogFragment.OnClickListener() {
+        fragment.setClickListener(new OnClickListener() {
             @Override
             public void onTakePhoto() {
                 try {
