@@ -1,7 +1,6 @@
 package vn.gomicorp.seller.signup;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -13,6 +12,7 @@ import java.util.Objects;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
 import vn.gomicorp.seller.utils.Intents;
+import vn.gomicorp.seller.utils.ToastUtils;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -69,15 +69,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void verifySuccess() {
-        Toast.makeText(this, "Verify success!", Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast("Verify success!");
     }
 
     private void verifyError(String message) {
-        Toast.makeText(this, "Verify error: " + message, Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast(message);
     }
 
     private void signUpFalse(String msg) {
-        Toast.makeText(this, "SignUp False: " + msg, Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast(msg);
     }
 
     private void signUpSuccess() {

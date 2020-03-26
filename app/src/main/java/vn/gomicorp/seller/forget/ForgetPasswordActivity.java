@@ -3,7 +3,6 @@ package vn.gomicorp.seller.forget;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +16,7 @@ import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.databinding.ActivityForgetPasswordBinding;
 import vn.gomicorp.seller.forget.reset.ResetPasswordActivity;
+import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
@@ -57,7 +57,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void forgetError(String error) {
-        Toast.makeText(this, "Forget error: " + error, Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast(error);
     }
 
     private void fogetSuccess(Account account) {

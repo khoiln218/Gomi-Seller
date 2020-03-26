@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -14,6 +13,7 @@ import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentMarketBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.main.MainActivity;
+import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class MarketFragment extends Fragment {
@@ -45,7 +45,7 @@ public class MarketFragment extends Fragment {
             @Override
             public void onChanged(MarketEvent event) {
                 if (event.code == MarketEvent.SELECT_ERROR)
-                    Toast.makeText(getActivity(), "Select Error: " + event.message, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToast(event.message);
                 else if (event.code == MarketEvent.ON_PICK)
                     showDialogPickProduct((Product) event.getData());
             }

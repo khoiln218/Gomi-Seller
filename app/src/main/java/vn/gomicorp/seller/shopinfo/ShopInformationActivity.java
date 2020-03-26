@@ -3,7 +3,6 @@ package vn.gomicorp.seller.shopinfo;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +21,7 @@ import vn.gomicorp.seller.databinding.ActivityShopInfomationBinding;
 import vn.gomicorp.seller.event.OnClickListener;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.MediaHelper;
+import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
 public class ShopInformationActivity extends AppCompatActivity {
@@ -40,16 +40,15 @@ public class ShopInformationActivity extends AppCompatActivity {
             public void onChanged(ShopInfoEvent event) {
                 switch (event.code) {
                     case ShopInfoEvent.CREATE_ERROR:
-                        Toast.makeText(ShopInformationActivity.this, "Create Error: " + event.message, Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(event.message);
                         break;
                     case ShopInfoEvent.CREATE_SUCCESS:
                         createSuccess();
                         break;
                     case ShopInfoEvent.VERIFY_ERROR:
-                        Toast.makeText(ShopInformationActivity.this, "Verify Error: " + event.message, Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(event.message);
                         break;
                     case ShopInfoEvent.VERIFY_SUCCESS:
-                        Toast.makeText(ShopInformationActivity.this, "Verify success", Toast.LENGTH_SHORT).show();
                         break;
                     case ShopInfoEvent.START_CROPPER:
                         cropImage((Uri) event.getData());

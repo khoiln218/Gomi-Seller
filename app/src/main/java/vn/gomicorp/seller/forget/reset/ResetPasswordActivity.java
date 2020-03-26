@@ -2,7 +2,6 @@ package vn.gomicorp.seller.forget.reset;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +14,7 @@ import java.util.Objects;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityResetPaswordBinding;
 import vn.gomicorp.seller.utils.Intents;
+import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 
 public class ResetPasswordActivity extends AppCompatActivity {
@@ -68,7 +68,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     private void resetError(String error) {
-        Toast.makeText(this, "Reset Error: " + error, Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast(error);
     }
 
     private void newPwdSuccess() {

@@ -2,7 +2,6 @@ package vn.gomicorp.seller.signin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +14,7 @@ import vn.gomicorp.seller.databinding.ActivitySignInBinding;
 import vn.gomicorp.seller.forget.ForgetPasswordActivity;
 import vn.gomicorp.seller.signup.SignUpActivity;
 import vn.gomicorp.seller.utils.Intents;
+import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignInActivity extends AppCompatActivity {
@@ -80,7 +80,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void loginError(String error) {
-        Toast.makeText(this, "Login Error: " + error, Toast.LENGTH_SHORT).show();
+        ToastUtils.showToast(error);
     }
 
     private void loginSuccess() {
