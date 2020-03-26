@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="product"
+            type="vn.gomicorp.seller.data.source.model.data.Product" />
+
+        <variable
+            name="listener"
+            type="vn.gomicorp.seller.dialog.SelectProductDialogFragment.OnSelectedListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/padding_large"
+            android:paddingTop="@dimen/padding_large"
+            android:paddingEnd="@dimen/padding_large">
+
+            <ImageView
+                android:id="@+id/image_thumbnail"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:setImageSelectDialog="@{product.thumbnail}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:text="@{product.name}"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorPrimaryText" />
+
+                <TextView
+                    android:id="@+id/text_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textStyle="bold"
+                    app:setPrice="@{product.price}" />
+
+                <TextView
+                    android:id="@+id/text_profit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorGreen"
+                    app:setProfit="@{product.profit}" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_add_product"
+            style="@style/AppTheme.ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_medium"
+            android:onClick="@{(v)->listener.onSelected(product)}"
+            android:text="@{product.isSelling==1 ? @string/sub_product : @string/add_product}" />
+
+    </LinearLayout>
+</layout>

@@ -33,6 +33,8 @@ import vn.gomicorp.seller.utils.Utils;
  * Created by KHOI LE on 3/23/2020.
  */
 public class MainBinding {
+    private static final int INTRODUCE_ROW = 2;
+
     @BindingAdapter({"bind:setCollections", "bind:listener"})
     public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler listener) {
         if (recyclerView.getAdapter() == null) {
@@ -74,7 +76,7 @@ public class MainBinding {
                 products.add((Product) parcelable);
         }
         if (recyclerView.getAdapter() == null) {
-            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL) {
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(INTRODUCE_ROW, StaggeredGridLayoutManager.VERTICAL) {
                 @Override
                 public boolean canScrollVertically() {
                     return false;
@@ -107,13 +109,27 @@ public class MainBinding {
                 .into(view);
     }
 
+    @BindingAdapter("setImageSelectDialog")
+    public static void setImageSelectDialog(ImageView view, String imageUrl) {
+        Glide.with(view.getContext())
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.ic_place_holder)
+                        .override(Utils.getScreenWidth() / 3)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true))
+                .into(view);
+    }
+
     @BindingAdapter("setImage")
     public static void setImage(ImageView view, String thumbnail) {
+        int width = Utils.getScreenWidth() / INTRODUCE_ROW;
         Glide.with(view.getContext())
                 .load(thumbnail)
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.ic_place_holder)
-                        .override(Utils.getScreenWidth() / 2)
+                        .override(width)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true))

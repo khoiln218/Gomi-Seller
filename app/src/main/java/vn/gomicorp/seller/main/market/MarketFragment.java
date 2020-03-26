@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentMarketBinding;
+import vn.gomicorp.seller.dialog.SelectProductDialogFragment;
 import vn.gomicorp.seller.main.MainActivity;
 
 public class MarketFragment extends Fragment {
@@ -43,8 +45,22 @@ public class MarketFragment extends Fragment {
             public void onChanged(MarketEvent event) {
                 if (event.code == MarketEvent.SELECT_ERROR)
                     Toast.makeText(getActivity(), "Select Error: " + event.message, Toast.LENGTH_SHORT).show();
+                else if (event.code == MarketEvent.ON_PICK)
+                    showDialogPickProduct((Product) event.getData());
             }
         });
+    }
+
+    private void showDialogPickProduct(Product product) {
+        final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
+        selectProductDialogFragment.setListener(new SelectProductDialogFragment.OnSelectedListener() {
+            @Override
+            public void onSelected(Product product) {
+                viewModel.requestPickProduct(product);
+                selectProductDialogFragment.dismiss();
+            }
+        });
+        selectProductDialogFragment.show(getFragmentManager(), getTag());
     }
 
     @Override

@@ -61,11 +61,17 @@ public class MarketViewModel extends ViewModel {
     }
 
     private void pick(Product product) {
-        requestPickProduct(product);
+        onPick(product);
+    }
+
+    private void onPick(Product product) {
+        MarketEvent event = new MarketEvent(MarketEvent.ON_PICK);
+        event.setData(product);
+        cmd.call(event);
     }
 
     //TODO: refactor
-    private void requestPickProduct(Product product) {
+    public void requestPickProduct(Product product) {
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());

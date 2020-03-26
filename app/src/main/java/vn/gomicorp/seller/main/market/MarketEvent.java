@@ -7,6 +7,11 @@ import vn.gomicorp.seller.event.Event;
  */
 public class MarketEvent extends Event {
     public static final int SELECT_ERROR = 0;
+    public static final int ON_PICK = 1;
+
+    public MarketEvent(int code) {
+        this.code = code;
+    }
 
     public MarketEvent(int code, String msg) {
         this.code = code;

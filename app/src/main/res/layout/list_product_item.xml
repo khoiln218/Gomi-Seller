@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -24,7 +25,7 @@
         android:onClick="@{(v)->listener.onSelect(product)}"
         app:cardElevation="2dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,75 +34,73 @@
 
             <ImageView
                 android:id="@+id/image_thumb"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/padding_small"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_place_holder"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:setImage="@{product.thumbnail}" />
 
             <TextView
                 android:id="@+id/text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:minLines="2"
                 android:text="@{product.name}"
                 android:textAppearance="?android:textAppearance"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_small"
+                app:layout_constraintTop_toBottomOf="@id/image_thumb"
+                tools:layout_editor_absoluteX="8dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/btn_selector"
+                android:layout_width="@dimen/icon_size_large"
+                android:layout_height="@dimen/icon_size_large"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:onClick="@{(v)->toggleItem.toggle(product)}"
+                android:scaleType="fitCenter"
+                android:src="@{product.isSelling == 1 ? @drawable/ic_subtraction : @drawable/ic_add}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_name" />
+
+            <TextView
+                android:id="@+id/text_price"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_xsmall">
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?android:textAppearance"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/text_size_small"
+                app:layout_constraintEnd_toStartOf="@+id/btn_selector"
+                app:layout_constraintStart_toStartOf="@id/image_thumb"
+                app:layout_constraintTop_toBottomOf="@id/text_name"
+                app:setPrice="@{product.price}" />
 
-                <ImageButton
-                    android:id="@+id/btn_selector"
-                    android:layout_width="@dimen/icon_size_large"
-                    android:layout_height="@dimen/icon_size_large"
-                    android:background="@null"
-                    android:onClick="@{(v)->toggleItem.toggle(product)}"
-                    android:scaleType="fitCenter"
-                    android:src="@{product.isSelling == 1 ? @drawable/ic_subtraction : @drawable/ic_add}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/text_profit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?android:textAppearance"
+                android:textColor="@color/colorGreen"
+                android:textSize="@dimen/text_size_small"
+                app:layout_constraintEnd_toStartOf="@+id/btn_selector"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_price"
+                app:setProfit="@{product.profit}" />
 
-                <TextView
-                    android:id="@+id/text_price"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_xsmall"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="?android:textAppearance"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_size_small"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_selector"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:setPrice="@{product.price}" />
-
-                <TextView
-                    android:id="@+id/text_profit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="?android:textAppearance"
-                    android:textColor="@color/colorGreen"
-                    android:textSize="@dimen/text_size_small"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_selector"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_price"
-                    app:setProfit="@{product.profit}" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>
