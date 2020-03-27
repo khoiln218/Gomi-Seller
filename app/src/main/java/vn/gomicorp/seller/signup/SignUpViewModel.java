@@ -4,14 +4,11 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Spinner;
 
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -357,26 +354,6 @@ public class SignUpViewModel extends ViewModel {
         } else {
             adapter.setData(locations);
             adapter.notifyDataSetChanged();
-        }
-    }
-
-    //TODO: abstract
-    @BindingAdapter("setErrorEnabled")
-    public static void setErrorEnabled(TextInputLayout inputLayout, boolean enable) {
-        inputLayout.setErrorEnabled(enable);
-    }
-
-    @BindingAdapter("setError")
-    public static void setError(TextInputLayout inputLayout, String msg) {
-        inputLayout.setError(msg);
-        Utils.playVibrate(inputLayout.getContext());
-    }
-
-    @BindingAdapter("requestFocus")
-    public static void requestFocus(View txt, boolean requestFocus) {
-        if (requestFocus) {
-            txt.setFocusableInTouchMode(true);
-            txt.requestFocus();
         }
     }
 }

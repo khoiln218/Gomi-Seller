@@ -9,10 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.data.source.model.data.Category;
+import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentMarketBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.main.MainActivity;
+import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
@@ -44,10 +48,22 @@ public class MarketFragment extends Fragment {
         viewModel.getCmd().observe(this, new Observer<MarketEvent>() {
             @Override
             public void onChanged(MarketEvent event) {
-                if (event.code == MarketEvent.SELECT_ERROR)
-                    ToastUtils.showToast(event.message);
-                else if (event.code == MarketEvent.ON_PICK)
-                    showDialogPickProduct((Product) event.getData());
+                switch (event.code) {
+                    case MarketEvent.SELECT_ERROR:
+                        ToastUtils.showToast(event.message);
+                        break;
+                    case MarketEvent.ON_PICK:
+                        showDialogPickProduct((Product) event.getData());
+                        break;
+                    case MarketEvent.ONCLICK_CATEGORY:
+                        Category category = (Category) event.getData();
+                        Intents.startCategoryActivity(getActivity(), MarketListAdapter.CollectionType.CATAGORY, category.getId(), category.getName());
+                        break;
+                    case MarketEvent.ONCLICK_COLLECTION:
+                        Collection collection = (Collection) event.getData();
+                        Intents.startCategoryActivity(getActivity(), collection.getType(), collection.getType(), collection.getName());
+                        break;
+                }
             }
         });
     }

@@ -9,8 +9,16 @@
             type="vn.gomicorp.seller.data.source.model.data.Collection" />
 
         <variable
-            name="listener"
+            name="productHandler"
             type="vn.gomicorp.seller.event.ProductHandler" />
+
+        <variable
+            name="collectionHandler"
+            type="vn.gomicorp.seller.event.CollectionHandler" />
+
+        <variable
+            name="onLoadMoreListener"
+            type="vn.gomicorp.seller.event.OnLoadMoreListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -51,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:gravity="center_vertical"
+                    android:onClick="@{(v)->collectionHandler.onSelect(collection)}"
                     android:text="@string/view"
                     android:textAppearance="?android:textAppearance"
                     android:textColor="@color/colorSecondaryText"
@@ -63,7 +72,8 @@
                 android:id="@+id/recycler_market_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:listener="@{listener}"
+                app:onLoadMoreListener="@{onLoadMoreListener}"
+                app:productHandler="@{productHandler}"
                 app:setProducts="@{collection}" />
 
         </LinearLayout>

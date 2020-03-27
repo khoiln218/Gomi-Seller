@@ -7,8 +7,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +17,12 @@ import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Banner;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
-import vn.gomicorp.seller.data.source.model.data.MegaCateListBean;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.event.CategoryHandler;
+import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.ProductHandler;
 
@@ -32,15 +32,34 @@ import vn.gomicorp.seller.event.ProductHandler;
 public class MarketViewModel extends ViewModel {
     private final int CODE_OK = 200;
 
-    public ProductHandler listener = new ProductHandler() {
+    public ProductHandler productHandler = new ProductHandler() {
         @Override
-        public void onSelect(Product product) {
+        public void onShow(Product product) {
             select(product);
         }
 
         @Override
         public void onPick(Product product) {
             pick(product);
+        }
+    };
+
+    public CategoryHandler categoryHandler = new CategoryHandler() {
+        @Override
+        public void onClick(Category category) {
+            MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_CATEGORY);
+            event.setData(category);
+            cmd.call(event);
+        }
+    };
+
+    public CollectionHandler collectionHandler = new CollectionHandler() {
+        @Override
+        public void onSelect(Collection collection) {
+            MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_COLLECTION);
+            collection.getData().clear();
+            event.setData(collection);
+            cmd.call(event);
         }
     };
 
@@ -121,7 +140,6 @@ public class MarketViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<Introduce> result) {
                 if (result.getCode() == CODE_OK) {
-                    Log.d("reqCollections", "onLoaded-Success: " + new Gson().toJson(result.getResult()));
                     List<Collection> collectionList = new ArrayList<>();
 
                     //banner
@@ -133,8 +151,8 @@ public class MarketViewModel extends ViewModel {
 
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
-                    for (MegaCateListBean megaCateListBean : result.getResult().getMegaCateList()) {
-                        categorys.add(megaCateListBean);
+                    for (Category category : result.getResult().getMegaCateList()) {
+                        categorys.add(category);
                     }
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.CATAGORY, "", categorys));
 

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.databinding.ListCategoryBinding;
+import vn.gomicorp.seller.event.CategoryHandler;
 
 public class CategoryHolder extends RecyclerView.ViewHolder {
     private ListCategoryBinding binding;
@@ -22,8 +23,9 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void setCategoryList(Collection collection) {
+    public void setCategoryList(Collection collection, CategoryHandler categoryHandler) {
         binding.setCollection(collection);
+        binding.setCategoryHandler(categoryHandler);
         binding.executePendingBindings();
     }
 }

@@ -16,7 +16,7 @@ public class Introduce {
 
     private ProductSeenBean ProductSeen;
     private List<Banner> BannerList;
-    private List<MegaCateListBean> MegaCateList;
+    private List<Category> MegaCateList;
     private List<CollectionListBean> CollectionList;
 
     public ProductSeenBean getProductSeen() {
@@ -35,11 +35,11 @@ public class Introduce {
         this.BannerList = BannerList;
     }
 
-    public List<MegaCateListBean> getMegaCateList() {
+    public List<Category> getMegaCateList() {
         return MegaCateList;
     }
 
-    public void setMegaCateList(List<MegaCateListBean> MegaCateList) {
+    public void setMegaCateList(List<Category> MegaCateList) {
         this.MegaCateList = MegaCateList;
     }
 

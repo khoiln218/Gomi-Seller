@@ -7,6 +7,10 @@
         <variable
             name="collection"
             type="vn.gomicorp.seller.data.source.model.data.Collection" />
+
+        <variable
+            name="categoryHandler"
+            type="vn.gomicorp.seller.event.CategoryHandler" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -21,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            app:setCategorys="@{collection}" />
+            app:categoryHandler="@{categoryHandler}"
+            app:setCategories="@{collection}" />
 
     </androidx.cardview.widget.CardView>
 </layout>

@@ -5,8 +5,9 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import vn.gomicorp.seller.data.source.model.data.MegaCateListBean;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.databinding.ListCategoryItemBinding;
+import vn.gomicorp.seller.event.CategoryHandler;
 
 /**
  * Created by KHOI LE on 3/25/2020.
@@ -25,8 +26,9 @@ public class CategoryItemHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void setCategory(MegaCateListBean category) {
+    public void bind(Category category, CategoryHandler categoryHandler) {
         binding.setCategory(category);
+        binding.setListener(categoryHandler);
         binding.executePendingBindings();
     }
 }

@@ -8,6 +8,8 @@ import vn.gomicorp.seller.event.Event;
 public class MarketEvent extends Event {
     public static final int SELECT_ERROR = 0;
     public static final int ON_PICK = 1;
+    public static final int ONCLICK_CATEGORY = 2;
+    public static final int ONCLICK_COLLECTION = 3;
 
     public MarketEvent(int code) {
         this.code = code;

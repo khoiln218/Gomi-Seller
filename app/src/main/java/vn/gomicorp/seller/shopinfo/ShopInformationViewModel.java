@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
@@ -474,25 +472,5 @@ public class ShopInformationViewModel extends ViewModel {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true))
                 .into(view);
-    }
-
-    //TODO: abstract
-    @BindingAdapter("setErrorEnabled")
-    public static void setErrorEnabled(TextInputLayout inputLayout, boolean enable) {
-        inputLayout.setErrorEnabled(enable);
-    }
-
-    @BindingAdapter("setError")
-    public static void setError(TextInputLayout inputLayout, String msg) {
-        inputLayout.setError(msg);
-        Utils.playVibrate(inputLayout.getContext());
-    }
-
-    @BindingAdapter("requestFocus")
-    public static void requestFocus(View txt, boolean requestFocus) {
-        if (requestFocus) {
-            txt.setFocusableInTouchMode(true);
-            txt.requestFocus();
-        }
     }
 }

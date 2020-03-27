@@ -6,13 +6,18 @@
 
         <variable
             name="category"
-            type="vn.gomicorp.seller.data.source.model.data.MegaCateListBean" />
+            type="vn.gomicorp.seller.data.source.model.data.Category" />
+
+        <variable
+            name="listener"
+            type="vn.gomicorp.seller.event.CategoryHandler" />
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:onClick="@{(v)->listener.onClick(category)}"
         android:orientation="vertical"
         android:paddingStart="@dimen/padding_xlarge"
         android:paddingTop="@dimen/padding_medium"

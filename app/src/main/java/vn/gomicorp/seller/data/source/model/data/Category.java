@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by KHOI LE on 3/25/2020.
  */
-public class MegaCateListBean implements Parcelable {
+public class Category implements Parcelable {
     /**
      * Id : 1
      * Name : Trang sức - Phụ kiện
@@ -17,21 +17,21 @@ public class MegaCateListBean implements Parcelable {
     private String Name;
     private String Icon;
 
-    protected MegaCateListBean(Parcel in) {
+    protected Category(Parcel in) {
         Id = in.readInt();
         Name = in.readString();
         Icon = in.readString();
     }
 
-    public static final Creator<MegaCateListBean> CREATOR = new Creator<MegaCateListBean>() {
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
         @Override
-        public MegaCateListBean createFromParcel(Parcel in) {
-            return new MegaCateListBean(in);
+        public Category createFromParcel(Parcel in) {
+            return new Category(in);
         }
 
         @Override
-        public MegaCateListBean[] newArray(int size) {
-            return new MegaCateListBean[size];
+        public Category[] newArray(int size) {
+            return new Category[size];
         }
     };
 

@@ -12,20 +12,26 @@ import vn.gomicorp.seller.adapter.holder.CategoryHolder;
 import vn.gomicorp.seller.adapter.holder.LoadingHolder;
 import vn.gomicorp.seller.adapter.holder.ProductHolder;
 import vn.gomicorp.seller.data.source.model.data.Collection;
+import vn.gomicorp.seller.event.CategoryHandler;
+import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.ProductHandler;
 
 public class MarketListAdapter extends RecyclerView.Adapter {
     private List<Collection> collections;
-    private ProductHandler listener;
+    private ProductHandler productHandler;
+    private CategoryHandler categoryHandler;
+    private CollectionHandler collectionHandler;
 
     public void setCollections(List<Collection> collections) {
         this.collections = collections;
         notifyDataSetChanged();
     }
 
-    public MarketListAdapter(List<Collection> collections, ProductHandler listener) {
+    public MarketListAdapter(List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler) {
         this.collections = collections;
-        this.listener = listener;
+        this.productHandler = productHandler;
+        this.categoryHandler = categoryHandler;
+        this.collectionHandler = collectionHandler;
     }
 
     @NonNull
@@ -51,10 +57,10 @@ public class MarketListAdapter extends RecyclerView.Adapter {
             ((BannerSliderHolder) holder).setBannerSlider(collections.get(position));
 
         else if (holder instanceof CategoryHolder)
-            ((CategoryHolder) holder).setCategoryList(collections.get(position));
+            ((CategoryHolder) holder).setCategoryList(collections.get(position), categoryHandler);
 
         else if (holder instanceof ProductHolder) {
-            ((ProductHolder) holder).bind(collections.get(position), listener);
+            ((ProductHolder) holder).bind(collections.get(position), productHandler, collectionHandler);
         }
     }
 
