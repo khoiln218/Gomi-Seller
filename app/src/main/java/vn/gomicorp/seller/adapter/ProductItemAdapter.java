@@ -1,7 +1,6 @@
 package vn.gomicorp.seller.adapter;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,7 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
     private ProductHandler productHandler;
 
     private int getPosition(Product product) {
-        if (getItemCount() != 0)
+        if (getItemCount() > 0)
             for (int i = 0; i < productList.size(); i++) {
                 if (TextUtils.equals(productList.get(i).getId(), product.getId())) return i;
             }
@@ -34,9 +33,10 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
     }
 
     public void notifyItemChanged(Product product) {
-        int pos = getPosition(product);
-        Log.d("TAG", "notifyItemChanged: " + pos);
-        notifyItemChanged(pos);
+        if (product != null) {
+            int pos = getPosition(product);
+            notifyItemChanged(pos);
+        }
     }
 
     public void setProductList(List<Product> productList) {

@@ -12,6 +12,11 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
+    <style name="AppTheme.CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:textSize">0sp</item>
+    </style>
+
     <!-- Button -->
     <style name="AppTheme.ButtonPrimary" parent="AppTheme.Base">
         <item name="android:background">@drawable/button_primary_selector</item>

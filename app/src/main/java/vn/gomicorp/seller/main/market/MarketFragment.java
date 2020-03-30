@@ -63,6 +63,10 @@ public class MarketFragment extends Fragment {
                         Collection collection = (Collection) event.getData();
                         Intents.startCategoryActivity(getActivity(), collection.getType(), collection.getType(), collection.getName());
                         break;
+                    case MarketEvent.SHOW_DETAIL:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(getActivity(), product.getId());
+                        break;
                 }
             }
         });

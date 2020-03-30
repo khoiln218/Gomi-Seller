@@ -37,7 +37,9 @@ public class MarketViewModel extends ViewModel {
     public ProductHandler productHandler = new ProductHandler() {
         @Override
         public void onShow(Product product) {
-            select(product);
+            MarketEvent event = new MarketEvent(MarketEvent.SHOW_DETAIL);
+            event.setData(product);
+            cmd.call(event);
         }
 
         @Override
@@ -74,14 +76,6 @@ public class MarketViewModel extends ViewModel {
     }
 
     public MultableLiveEvent<MarketEvent> cmd = new MultableLiveEvent<>();
-
-    void select(Product product) {
-        requestSelectProduct(product);
-    }
-
-    private void requestSelectProduct(Product product) {
-        Log.e("TAG", "requestSelectProduct: " + product.getId());
-    }
 
     private void pick(Product product) {
         onPick(product);

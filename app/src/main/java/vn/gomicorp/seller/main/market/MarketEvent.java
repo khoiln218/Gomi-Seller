@@ -10,6 +10,7 @@ public class MarketEvent extends Event {
     public static final int ON_PICK = 1;
     public static final int ONCLICK_CATEGORY = 2;
     public static final int ONCLICK_COLLECTION = 3;
+    public static final int SHOW_DETAIL = 4;
 
     public MarketEvent(int code) {
         this.code = code;

@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,15 +19,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.adapter.AttributeAdapter;
 import vn.gomicorp.seller.adapter.CategoryItemAdapter;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.adapter.ProductDetailAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
+import vn.gomicorp.seller.data.source.model.data.Attribute;
 import vn.gomicorp.seller.data.source.model.data.Banner;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
@@ -47,10 +52,87 @@ import vn.gomicorp.seller.widgets.slider.SliderView;
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
 
+    @BindingAdapter("setAttributeContent")
+    public static void setAttributeContent(final TextView textView, String content) {
+        textView.setText(Utils.fromHtml(content));
+        textView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (textView.getLineCount() > 3) {
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+                    textView.setPadding(0, 10, 0, 0);
+                }
+            }
+        });
+    }
+
+    @BindingAdapter("setAttributes")
+    public static void setAttributes(RecyclerView recyclerView, List<Attribute> attributeList) {
+        if (recyclerView.getAdapter() == null) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext()) {
+                @Override
+                public boolean canScrollHorizontally() {
+                    return false;
+                }
+
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
+
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+            AttributeAdapter adapter = new AttributeAdapter(attributeList);
+            recyclerView.setAdapter(adapter);
+        } else {
+            ((AttributeAdapter) recyclerView.getAdapter()).setAttributes(attributeList);
+        }
+    }
+
     @BindingAdapter("selectChange")
     public static void selectChange(RecyclerView recyclerView, Product product) {
         if (recyclerView.getAdapter() != null) {
             ((ProductItemAdapter) recyclerView.getAdapter()).notifyItemChanged(product);
+        }
+    }
+
+    @BindingAdapter({"setTitle", "isShow"})
+    public static void setTitleCollapsing(CollapsingToolbarLayout collapsing, String title, boolean isShow) {
+        collapsing.setTitle(isShow ? title : "");
+    }
+
+    @BindingAdapter("setSaleOff")
+    public static void setSaleOff(TextView textView, int saleOff) {
+        textView.setText(String.format("-%d%%", saleOff));
+    }
+
+    @BindingAdapter("setProduct")
+    public static void setProduct(RecyclerView recyclerView, Product product) {
+        if (recyclerView.getAdapter() == null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+            ProductDetailAdapter adapter = new ProductDetailAdapter(product);
+            recyclerView.setAdapter(adapter);
+        } else {
+            ((ProductDetailAdapter) recyclerView.getAdapter()).setProduct(product);
+        }
+
+    }
+
+    @BindingAdapter("setImageSlider")
+    public static void setImageSlider(SliderLayout sliderLayout, List<String> imageUrlList) {
+        if (imageUrlList == null || imageUrlList.size() == 0)
+            return;
+        sliderLayout.clearSliderView();
+        for (String imageUrl : imageUrlList) {
+            SliderView sliderView = new SliderView(sliderLayout.getContext());
+            sliderView.setImagePath(imageUrl);
+            sliderLayout.addSliderView(sliderView);
         }
     }
 

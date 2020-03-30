@@ -6,6 +6,7 @@ import android.content.Intent;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.market.collection.CollectionActivity;
+import vn.gomicorp.seller.main.market.detail.ProductDetailActivity;
 import vn.gomicorp.seller.shopinfo.ShopInformationActivity;
 
 /**
@@ -37,6 +38,13 @@ public class Intents {
         intent.putExtra(GomiConstants.EXTRA_TYPE, type);
         intent.putExtra(GomiConstants.EXTRA_ID, id);
         intent.putExtra(GomiConstants.EXTRA_TITLE, title);
+
+        activity.startActivity(intent);
+    }
+
+    public static void startProductDetailActivity(Activity activity, String productId) {
+        Intent intent = new Intent(activity, ProductDetailActivity.class);
+        intent.putExtra(GomiConstants.EXTRA_ID, productId);
 
         activity.startActivity(intent);
     }

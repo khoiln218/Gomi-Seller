@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="vn.gomicorp.seller.utils.Utils" />
+
+        <variable
+            name="viewModel"
+            type="vn.gomicorp.seller.main.market.detail.ProductDetailViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.market.detail.ProductDetailActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:addOnOffsetChangedListener="@{viewModel}"
+            app:theme="@style/AppTheme.AppBarOverlay">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/colorPrimary"
+                app:expandedTitleTextAppearance="@style/AppTheme.CollapsingToolbarLayoutExpandedTextStyle"
+                app:isShow="@{viewModel.isShow}"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:setTitle="@{viewModel.product.name}">
+
+                <RelativeLayout
+                    android:id="@+id/header_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:layout_collapseMode="parallax"
+                    app:setHeight="@{Utils.screenWidth}">
+
+                    <vn.gomicorp.seller.widgets.slider.SliderLayout
+                        android:id="@+id/image_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:setImageSlider="@{viewModel.product.imageList}" />
+
+                </RelativeLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@drawable/gradient_light"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDivider"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:setProduct="@{viewModel.product}" />
+
+        <include
+            layout="@layout/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
