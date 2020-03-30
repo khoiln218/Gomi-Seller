@@ -1,6 +1,7 @@
 package vn.gomicorp.seller.adapter;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,25 +18,7 @@ import vn.gomicorp.seller.event.ProductHandler;
  */
 public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> {
     private List<Product> productList;
-    private ProductHandler listener;
-    private Product productChange = null;
-
-    public interface ToggleProductHandler {
-        void toggle(Product product);
-    }
-
-    public ToggleProductHandler toggleProductHandler = new ToggleProductHandler() {
-        @Override
-        public void toggle(Product product) {
-            if (listener != null)
-                listener.onPick(product);
-            itemUpdate(product);
-        }
-    };
-
-    private void itemUpdate(Product product) {
-        productChange = product;
-    }
+    private ProductHandler productHandler;
 
     private int getPosition(Product product) {
         if (getItemCount() != 0)
@@ -45,19 +28,20 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
         return 0;
     }
 
-    public ProductItemAdapter(List<Product> productList, ProductHandler listener) {
+    public ProductItemAdapter(List<Product> productList, ProductHandler productHandler) {
         this.productList = productList;
-        this.listener = listener;
+        this.productHandler = productHandler;
+    }
+
+    public void notifyItemChanged(Product product) {
+        int pos = getPosition(product);
+        Log.d("TAG", "notifyItemChanged: " + pos);
+        notifyItemChanged(pos);
     }
 
     public void setProductList(List<Product> productList) {
-        if (productChange == null) {
-            this.productList = productList;
-            notifyDataSetChanged();
-        } else {
-            int pos = getPosition(productChange);
-            notifyItemChanged(pos);
-        }
+        this.productList = productList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -68,7 +52,7 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemHolder holder, int position) {
-        holder.bind(productList.get(position), listener, toggleProductHandler);
+        holder.bind(productList.get(position), productHandler);
     }
 
     @Override

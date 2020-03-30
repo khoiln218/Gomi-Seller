@@ -19,6 +19,10 @@
         <variable
             name="onLoadMoreListener"
             type="vn.gomicorp.seller.event.OnLoadMoreListener" />
+
+        <variable
+            name="productChange"
+            type="vn.gomicorp.seller.data.source.model.data.Product" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -74,6 +78,7 @@
                 android:layout_height="wrap_content"
                 app:onLoadMoreListener="@{onLoadMoreListener}"
                 app:productHandler="@{productHandler}"
+                app:selectChange="@{productChange}"
                 app:setProducts="@{collection}" />
 
         </LinearLayout>

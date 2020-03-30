@@ -47,6 +47,13 @@ import vn.gomicorp.seller.widgets.slider.SliderView;
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
 
+    @BindingAdapter("selectChange")
+    public static void selectChange(RecyclerView recyclerView, Product product) {
+        if (recyclerView.getAdapter() != null) {
+            ((ProductItemAdapter) recyclerView.getAdapter()).notifyItemChanged(product);
+        }
+    }
+
     @BindingAdapter("refreshing")
     public static void setRefreshing(SwipeRefreshLayout swipeRefreshLayout, boolean isRefreshing) {
         swipeRefreshLayout.setRefreshing(isRefreshing);
@@ -124,8 +131,8 @@ public class MainBinding {
         sliderLayout.setScrollTimeSec(duration);
     }
 
-    @BindingAdapter({"setCollections", "productHandler", "categoryHandler", "collectionHandler"})
-    public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler) {
+    @BindingAdapter({"setCollections", "productHandler", "categoryHandler", "collectionHandler", "selectChange"})
+    public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, Product productChange) {
         if (recyclerView.getAdapter() == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -135,6 +142,7 @@ public class MainBinding {
             recyclerView.setAdapter(adapter);
         } else {
             ((MarketListAdapter) recyclerView.getAdapter()).setCollections(collections);
+            ((MarketListAdapter) recyclerView.getAdapter()).setProductChange(productChange);
         }
     }
 

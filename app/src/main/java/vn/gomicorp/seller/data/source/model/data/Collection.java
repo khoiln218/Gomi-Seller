@@ -15,6 +15,7 @@ public class Collection {
     public Collection(int type, List<Parcelable> data) {
         this.type = type;
         this.data = data;
+        this.name = "";
     }
 
     public Collection(int type, String name, List<Parcelable> data) {

@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
@@ -65,6 +67,7 @@ public class MarketViewModel extends ViewModel {
 
     private ProductRepository mProductRepository = ProductRepository.getInstance();
     public MutableLiveData<List<Collection>> collections = new MutableLiveData<>();
+    public MutableLiveData<Product> productChange = new MutableLiveData<>();
 
     public MultableLiveEvent<MarketEvent> getCmd() {
         return cmd;
@@ -90,7 +93,6 @@ public class MarketViewModel extends ViewModel {
         cmd.call(event);
     }
 
-    //TODO: refactor
     public void requestPickProduct(Product product) {
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
@@ -115,15 +117,14 @@ public class MarketViewModel extends ViewModel {
         cmd.call(new MarketEvent(MarketEvent.SELECT_ERROR, message));
     }
 
-    //TODO: update item
     private void updateProduct(Product product) {
         for (Collection collection : collections.getValue()) {
             for (Parcelable parcelable : collection.getData()) {
                 if (parcelable instanceof Product) {
                     Product item = (Product) parcelable;
                     if (TextUtils.equals(product.getId(), item.getId())) {
-                        item.setIsSelling(product.getIsSelling());
-                        collections.setValue(collections.getValue());
+                        collection.getData().set(collection.getData().indexOf(item), product);
+                        productChange.setValue(product);
                         break;
                     }
                 } else {
@@ -133,7 +134,6 @@ public class MarketViewModel extends ViewModel {
         }
     }
 
-    //TODO: refactor
     void requestCollections() {
         final IntroduceRequest request = new IntroduceRequest();
         mProductRepository.introduce(request, new ResultListener<ResponseData<Introduce>>() {
@@ -147,14 +147,14 @@ public class MarketViewModel extends ViewModel {
                     for (Banner banner : result.getResult().getBannerList()) {
                         banners.add(banner);
                     }
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, "", banners));
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, banners));
 
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
                     for (Category category : result.getResult().getMegaCateList()) {
                         categorys.add(category);
                     }
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.CATAGORY, "", categorys));
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.CATAGORY, categorys));
 
                     //collectionlist
                     for (Introduce.CollectionListBean collectionListBean : result.getResult().getCollectionList()) {
@@ -170,7 +170,7 @@ public class MarketViewModel extends ViewModel {
                     for (Product product : result.getResult().getProductSeen().getProductList()) {
                         productList.add(product);
                     }
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.SEEN_PRODUCT, "Sản phẩm đã xem", productList));
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.SEEN_PRODUCT, EappsApplication.getInstance().getString(R.string.product_seen), productList));
 
                     //update collection
                     collections.setValue(collectionList);

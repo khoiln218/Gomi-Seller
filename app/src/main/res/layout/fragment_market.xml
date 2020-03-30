@@ -21,6 +21,7 @@
             app:categoryHandler="@{viewModel.categoryHandler}"
             app:collectionHandler="@{viewModel.collectionHandler}"
             app:productHandler="@{viewModel.productHandler}"
+            app:selectChange="@{viewModel.productChange}"
             app:setCollections="@{viewModel.collections}" />
 
     </LinearLayout>

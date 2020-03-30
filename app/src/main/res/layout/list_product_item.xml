@@ -10,19 +10,15 @@
             type="vn.gomicorp.seller.data.source.model.data.Product" />
 
         <variable
-            name="listener"
+            name="productHandler"
             type="vn.gomicorp.seller.event.ProductHandler" />
-
-        <variable
-            name="toggleItem"
-            type="vn.gomicorp.seller.adapter.ProductItemAdapter.ToggleProductHandler" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_xsmall"
-        android:onClick="@{(v)->listener.onShow(product)}"
+        android:onClick="@{(v)->productHandler.onShow(product)}"
         app:cardElevation="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,7 +59,7 @@
                 android:layout_height="@dimen/icon_size_large"
                 android:layout_marginTop="16dp"
                 android:background="@null"
-                android:onClick="@{(v)->toggleItem.toggle(product)}"
+                android:onClick="@{(v)->productHandler.onPick(product)}"
                 android:scaleType="fitCenter"
                 android:src="@{product.isSelling == 1 ? @drawable/ic_subtraction : @drawable/ic_add}"
                 app:layout_constraintBottom_toBottomOf="parent"

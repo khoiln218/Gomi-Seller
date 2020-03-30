@@ -28,10 +28,9 @@ public class ProductItemHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void bind(Product product, ProductHandler listener, ProductItemAdapter.ToggleProductHandler toggleProductHandler) {
+    public void bind(Product product, ProductHandler listener) {
         binding.setProduct(product);
-        binding.setListener(listener);
-        binding.setToggleItem(toggleProductHandler);
+        binding.setProductHandler(listener);
         binding.executePendingBindings();
     }
 }
