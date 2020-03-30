@@ -11,18 +11,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.main.home.HomeFragment;
+import vn.gomicorp.seller.main.home.HomeViewModel;
 import vn.gomicorp.seller.main.market.MarketFragment;
 import vn.gomicorp.seller.main.market.MarketViewModel;
 import vn.gomicorp.seller.main.mypage.MyPageFragment;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    public static final int HOME = 1;
+    public static final int MARKET = 2;
+    public static final int NOTIFICATION = 3;
+    public static final int MY_PAGE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +53,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         transaction.commit();
     }
 
-    public static MarketViewModel obtainViewModel(FragmentActivity activity) {
-        return ViewModelProviders.of(activity).get(MarketViewModel.class);
+    public static ViewModel obtainViewModel(FragmentActivity activity, int screen) {
+        switch (screen) {
+            case HOME:
+                return ViewModelProviders.of(activity).get(HomeViewModel.class);
+            case MARKET:
+                return ViewModelProviders.of(activity).get(MarketViewModel.class);
+            default:
+                return null;
+        }
     }
 
     @Override

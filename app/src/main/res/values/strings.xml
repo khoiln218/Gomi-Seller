@@ -68,4 +68,6 @@
     <string name="product_seen">Sản phẩm đã xem</string>
     <string name="no_result">Empty</string>
     <string name="product_attribute">Thông tin chi tiết</string>
+    <string name="withdrawn">Withdrawn</string>
+    <string name="all">All</string>
 </resources>

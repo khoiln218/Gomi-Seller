@@ -36,7 +36,7 @@ public class MarketFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_market, container, false);
         if (binding == null)
             binding = FragmentMarketBinding.bind(root);
-        viewModel = MainActivity.obtainViewModel(getActivity());
+        viewModel = (MarketViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.MARKET);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getActivity());
         initCmd();
