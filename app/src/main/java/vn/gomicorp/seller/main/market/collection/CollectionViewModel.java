@@ -8,17 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.OnLoadTabListener;
+import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/26/2020.
  */
-public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, OnProductAdapterInitListener {
     private int type;
     private int id;
     private String name;
@@ -175,5 +177,10 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public void init(ProductItemAdapter adapter) {
+
     }
 }

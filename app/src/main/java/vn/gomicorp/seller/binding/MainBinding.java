@@ -35,6 +35,7 @@ import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.OnLoadTabListener;
+import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 import vn.gomicorp.seller.utils.Numbers;
 import vn.gomicorp.seller.utils.Utils;
@@ -131,18 +132,17 @@ public class MainBinding {
         sliderLayout.setScrollTimeSec(duration);
     }
 
-    @BindingAdapter({"setCollections", "productHandler", "categoryHandler", "collectionHandler", "selectChange"})
-    public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, Product productChange) {
+    @BindingAdapter({"setCollections", "productHandler", "categoryHandler", "collectionHandler", "onProductAdapterInitListener"})
+    public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, OnProductAdapterInitListener onProductAdapterInitListener) {
         if (recyclerView.getAdapter() == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
 
-            MarketListAdapter adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler);
+            MarketListAdapter adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler, onProductAdapterInitListener);
             recyclerView.setAdapter(adapter);
         } else {
             ((MarketListAdapter) recyclerView.getAdapter()).setCollections(collections);
-            ((MarketListAdapter) recyclerView.getAdapter()).setProductChange(productChange);
         }
     }
 
@@ -165,8 +165,8 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter({"setCategoryProducts", "productHandler", "onLoadMoreListener"})
-    public static void setCategoryProducts(RecyclerView recyclerView, List<Product> products, ProductHandler productHandler, final OnLoadMoreListener onLoadMoreListener) {
+    @BindingAdapter({"setCategoryProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
+    public static void setCategoryProducts(RecyclerView recyclerView, List<Product> products, ProductHandler productHandler, final OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
         if (recyclerView.getAdapter() == null) {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(INTRODUCE_ROW, StaggeredGridLayoutManager.VERTICAL) {
                 @Override
@@ -206,20 +206,23 @@ public class MainBinding {
                         }
                     }
                 });
+            if (onProductAdapterInitListener != null) {
+                onProductAdapterInitListener.init(adapter);
+            }
             recyclerView.setAdapter(adapter);
         } else {
             ((ProductItemAdapter) recyclerView.getAdapter()).setProductList(products);
         }
     }
 
-    @BindingAdapter({"setProducts", "productHandler", "onLoadMoreListener"})
-    public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler productHandler, OnLoadMoreListener onLoadMoreListener) {
+    @BindingAdapter({"setProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
+    public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler productHandler, OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
         List<Product> products = new ArrayList<>();
         for (Parcelable parcelable : collection.getData()) {
             if (parcelable instanceof Product)
                 products.add((Product) parcelable);
         }
-        setCategoryProducts(recyclerView, products, productHandler, onLoadMoreListener);
+        setCategoryProducts(recyclerView, products, productHandler, onLoadMoreListener, onProductAdapterInitListener);
     }
 
     @BindingAdapter("setImageCategory")
@@ -228,8 +231,7 @@ public class MainBinding {
                 .load(icon)
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(view);
     }
 
@@ -241,8 +243,7 @@ public class MainBinding {
                         .placeholder(R.drawable.ic_place_holder)
                         .override(Utils.getScreenWidth() / 3)
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(view);
     }
 
@@ -255,8 +256,7 @@ public class MainBinding {
                         .placeholder(R.drawable.ic_place_holder)
                         .override(width)
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(view);
     }
 

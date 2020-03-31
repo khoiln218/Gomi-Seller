@@ -454,6 +454,7 @@ public class MockupProductDataSource implements ProductDataSource {
 
     @Override
     public void select(ToggleProductRequest request, ResultListener<ResponseData<Product>> callback) {
+        Log.d("exeProduct", "select: " + new Gson().toJson(request));
         exeProduct(jsonSelect, request, callback);
     }
 
@@ -473,10 +474,11 @@ public class MockupProductDataSource implements ProductDataSource {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("exeProduct", "DATA: " + jsonData);
                 ResponseData<Product> res = new Gson().fromJson(jsonData, new TypeToken<ResponseData<Product>>() {
                 }.getType());
+                res.getResult().setId(request.getProductId());
                 res.getResult().setIsSelling(request.getIsSelling() == 1 ? 0 : 1);
+                Log.d("exeProduct", "DATA: " + new Gson().toJson(res.getResult()));
                 callback.onLoaded(res);
             }
         }, 400);

@@ -1,7 +1,6 @@
 package vn.gomicorp.seller.adapter;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,15 +16,16 @@ import vn.gomicorp.seller.event.ProductHandler;
  * Created by KHOI LE on 3/23/2020.
  */
 public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> {
+    final int NOT_FOUND = -1;
     private List<Product> productList;
     private ProductHandler productHandler;
 
     private int getPosition(Product product) {
-        if (getItemCount() != 0)
+        if (getItemCount() > 0)
             for (int i = 0; i < productList.size(); i++) {
                 if (TextUtils.equals(productList.get(i).getId(), product.getId())) return i;
             }
-        return 0;
+        return NOT_FOUND;
     }
 
     public ProductItemAdapter(List<Product> productList, ProductHandler productHandler) {
@@ -35,8 +35,8 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
 
     public void notifyItemChanged(Product product) {
         int pos = getPosition(product);
-        Log.d("TAG", "notifyItemChanged: " + pos);
-        notifyItemChanged(pos);
+        if (pos != NOT_FOUND)
+            notifyItemChanged(pos);
     }
 
     public void setProductList(List<Product> productList) {
