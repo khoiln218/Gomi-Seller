@@ -22,6 +22,7 @@ import vn.gomicorp.seller.main.home.HomeViewModel;
 import vn.gomicorp.seller.main.market.MarketFragment;
 import vn.gomicorp.seller.main.market.MarketViewModel;
 import vn.gomicorp.seller.main.mypage.MyPageFragment;
+import vn.gomicorp.seller.main.mypage.MyPageViewModel;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return ViewModelProviders.of(activity).get(HomeViewModel.class);
             case MARKET:
                 return ViewModelProviders.of(activity).get(MarketViewModel.class);
+            case MY_PAGE:
+                return ViewModelProviders.of(activity).get(MyPageViewModel.class);
             default:
                 return null;
         }
