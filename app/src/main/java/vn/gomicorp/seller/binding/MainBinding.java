@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -165,8 +164,25 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter({"setCategoryProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
-    public static void setCategoryProducts(RecyclerView recyclerView, List<Product> products, ProductHandler productHandler, final OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
+    @BindingAdapter("setCollectionAdapter")
+    public static void setCollectionAdapter(RecyclerView recyclerView, ProductItemAdapter adapter) {
+        if (adapter != null && recyclerView.getAdapter() == null) {
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(INTRODUCE_ROW, StaggeredGridLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+            adapter.addOnScrollListener(recyclerView);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    @BindingAdapter({"setProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
+    public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler productHandler, final OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
+        List<Product> products = new ArrayList<>();
+        for (Parcelable parcelable : collection.getData()) {
+            if (parcelable instanceof Product)
+                products.add((Product) parcelable);
+        }
         if (recyclerView.getAdapter() == null) {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(INTRODUCE_ROW, StaggeredGridLayoutManager.VERTICAL) {
                 @Override
@@ -179,33 +195,10 @@ public class MainBinding {
                     return false;
                 }
             };
-
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-            ProductItemAdapter adapter = new ProductItemAdapter(products, productHandler);
-            if (onLoadMoreListener != null)
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-                            final StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
-
-                            int visibleItemCount = layoutManager.getChildCount();
-                            int totalItemCount = layoutManager.getItemCount();
-                            int pastVisibleItems = 0;
-
-                            int[] firstVisibleItems = null;
-                            firstVisibleItems = layoutManager.findFirstVisibleItemPositions(firstVisibleItems);
-                            if (firstVisibleItems != null && firstVisibleItems.length > 0)
-                                pastVisibleItems = firstVisibleItems[0];
-
-                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount)
-                                onLoadMoreListener.onLoadMore();
-                        }
-                    }
-                });
+            ProductItemAdapter adapter = new ProductItemAdapter(products, productHandler, onLoadMoreListener);
             if (onProductAdapterInitListener != null) {
                 onProductAdapterInitListener.init(adapter);
             }
@@ -213,16 +206,6 @@ public class MainBinding {
         } else {
             ((ProductItemAdapter) recyclerView.getAdapter()).setProductList(products);
         }
-    }
-
-    @BindingAdapter({"setProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
-    public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler productHandler, OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
-        List<Product> products = new ArrayList<>();
-        for (Parcelable parcelable : collection.getData()) {
-            if (parcelable instanceof Product)
-                products.add((Product) parcelable);
-        }
-        setCategoryProducts(recyclerView, products, productHandler, onLoadMoreListener, onProductAdapterInitListener);
     }
 
     @BindingAdapter("setImageCategory")

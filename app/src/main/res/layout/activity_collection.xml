@@ -63,10 +63,7 @@
                 android:paddingStart="@dimen/padding_medium"
                 android:paddingEnd="@dimen/padding_medium"
                 android:paddingBottom="@dimen/padding_medium"
-                app:onLoadMoreListener="@{viewModel}"
-                app:onProductAdapterInitListener="@{viewModel}"
-                app:productHandler="@{viewModel.productHandler}"
-                app:setCategoryProducts="@{viewModel.products}" />
+                app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
