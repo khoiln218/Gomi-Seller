@@ -6,8 +6,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+
 import vn.gomicorp.seller.data.ProductDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
@@ -456,6 +459,11 @@ public class MockupProductDataSource implements ProductDataSource {
     public void select(ToggleProductRequest request, ResultListener<ResponseData<Product>> callback) {
         Log.d("exeProduct", "select: " + new Gson().toJson(request));
         exeProduct(jsonSelect, request, callback);
+    }
+
+    @Override
+    public void findbycollection(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+
     }
 
     private void exeIntroduce(final String jsonData, final ResultListener<ResponseData<Introduce>> callback) {

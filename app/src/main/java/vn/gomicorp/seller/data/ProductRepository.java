@@ -1,5 +1,8 @@
 package vn.gomicorp.seller.data;
 
+import java.util.List;
+
+import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
@@ -47,5 +50,10 @@ public class ProductRepository implements ProductDataSource {
     @Override
     public void select(ToggleProductRequest request, ResultListener<ResponseData<Product>> callback) {
         mProductDataSource.select(request, callback);
+    }
+
+    @Override
+    public void findbycollection(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        mProductDataSource.findbycollection(request, page, callback);
     }
 }
