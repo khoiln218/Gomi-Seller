@@ -10,6 +10,7 @@ import java.util.List;
 
 import vn.gomicorp.seller.data.ProductDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -463,6 +464,11 @@ public class MockupProductDataSource implements ProductDataSource {
 
     @Override
     public void findbycollection(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+
+    }
+
+    @Override
+    public void findbycategory(CategoryByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
 
     }
 

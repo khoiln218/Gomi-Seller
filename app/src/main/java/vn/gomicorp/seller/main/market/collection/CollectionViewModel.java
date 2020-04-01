@@ -1,7 +1,5 @@
 package vn.gomicorp.seller.main.market.collection;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -13,9 +11,12 @@ import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.ShopRepository;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Category;
+import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
@@ -31,13 +32,15 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     private int type;
     private int id;
     private String name;
-    private int page = 0;
+    private int page = INIT_PAGE;
     private int totalPage = 0;
+    private int categoryType;
 
-    public List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
     private ProductItemAdapter adapter;
 
     private ProductRepository mProductRepository = ProductRepository.getInstance();
+    private ShopRepository mShopRepository = ShopRepository.getInstance();
 
     public MutableLiveData<List<Category>> categories = new MutableLiveData<>();
     public MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
@@ -67,14 +70,14 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         @Override
         public void onLoaded(Category selectedCate) {
             id = selectedCate.getId();
-            name = selectedCate.getName();
-            updateToolbar(name);
+            categoryType = CategoryType.CATEGORY;
             onRefresh();
         }
 
         @Override
         public void onLoadFails() {
-
+            products.clear();
+            updateProductList();
         }
     };
 
@@ -88,7 +91,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     public void onRefresh() {
         page = INIT_PAGE;
         products.clear();
-        adapter.setProductList(products);
+        updateProductList();
         switch (type) {
             case MarketListAdapter.CollectionType.CATAGORY:
                 initCategory();
@@ -100,15 +103,12 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
             case MarketListAdapter.CollectionType.SEEN_PRODUCT:
                 initProductSeen();
                 break;
-            default:
-                initCollection();
-                break;
         }
     }
 
     @Override
     public void onLoadMore() {
-        if (page >= totalPage || adapter.isLoading()) return;
+        if (page >= totalPage) return;
         page++;
         switch (type) {
             case MarketListAdapter.CollectionType.CATAGORY:
@@ -120,9 +120,6 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
                 break;
             case MarketListAdapter.CollectionType.SEEN_PRODUCT:
                 loadMoreProductSeen();
-                break;
-            default:
-                initCollection();
                 break;
         }
     }
@@ -159,38 +156,71 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         mProductRepository.findbycollection(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
+                refreshed();
                 if (result.getCode() == CODE_OK) {
-                    refreshed();
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
-                } else {
-                    Log.d("TAG", "onLoaded: " + result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                Log.d("TAG", "onDataNotAvailable: " + error);
+                refreshed();
             }
         });
     }
 
     private void initCategory() {
-        requestSubCategory(id);
-    }
-
-    private void requestSubCategory(int id) {
-        updateCategory();
         requestProductListByCategoryId(id);
     }
 
-    private void updateCategory() {
+    void requestCategory(final int id) {
+        CategoryByIdRequest request = new CategoryByIdRequest();
+        request.setCategoryType(categoryType);
+        request.setFindById(id);
+        mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Category>> result) {
+                refreshed();
+                if (result.getCode() == CODE_OK) {
+                    categories.setValue(result.getResult());
+                    updateCategory();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                refreshed();
+            }
+        });
+
     }
 
     private void requestProductListByCategoryId(int id) {
-        refreshed();
-        updateProductList();
+        adapter.setLoading();
+        CategoryByIdRequest request = new CategoryByIdRequest();
+        request.setCategoryType(categoryType);
+        request.setFindById(id);
+        mProductRepository.findbycategory(request, page, new ResultListener<ResponseData<List<Product>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Product>> result) {
+                refreshed();
+                if (result.getCode() == CODE_OK) {
+                    products.addAll(result.getResult());
+                    totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    updateProductList();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                refreshed();
+            }
+        });
+    }
+
+    private void updateCategory() {
     }
 
     private void updateProductList() {
@@ -215,5 +245,9 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCategoryType(int categoryType) {
+        this.categoryType = categoryType;
     }
 }

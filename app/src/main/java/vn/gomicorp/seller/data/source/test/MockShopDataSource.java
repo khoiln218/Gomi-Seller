@@ -7,11 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopDataSource;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 
 /**
@@ -66,6 +70,11 @@ public class MockShopDataSource implements ShopDataSource {
     @Override
     public void create(CreateShopRequest request, ResultListener<ResponseData<Shop>> callback) {
         excute(createJson, callback);
+    }
+
+    @Override
+    public void findcatebytype(CategoryByIdRequest request, ResultListener<ResponseData<List<Category>>> callback) {
+
     }
 
     private void excute(final String jsonData, final ResultListener<ResponseData<Shop>> callback) {

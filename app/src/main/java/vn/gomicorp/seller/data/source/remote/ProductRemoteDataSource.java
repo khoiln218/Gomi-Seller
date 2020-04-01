@@ -7,6 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.gomicorp.seller.data.ProductDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -65,6 +66,27 @@ public class ProductRemoteDataSource implements ProductDataSource {
     public void findbycollection(CollectionByIdRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
         ApiService client = ApiConfig.getClient();
         Call<ResponseData<List<Product>>> call = client.findbycollection(request, page);
+        call.enqueue(new Callback<ResponseData<List<Product>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Product>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbycategory(CategoryByIdRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Product>>> call = client.findbycategory(request, page);
         call.enqueue(new Callback<ResponseData<List<Product>>>() {
             @Override
             public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {

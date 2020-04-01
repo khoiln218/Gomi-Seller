@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
 import vn.gomicorp.seller.utils.GomiConstants;
 
@@ -37,6 +38,7 @@ public class CollectionActivity extends AppCompatActivity {
         viewModel.setName(name);
         viewModel.setId(id);
         viewModel.setType(type);
+        viewModel.setCategoryType(CategoryType.MEGA_CATEGORY);
     }
 
     private void setupCmd() {
@@ -63,7 +65,10 @@ public class CollectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.onRefresh();
+        if (type == MarketListAdapter.CollectionType.CATAGORY)
+            viewModel.requestCategory(id);
+        else
+            viewModel.onRefresh();
     }
 
     private void setupToolbar() {

@@ -1,7 +1,6 @@
 package vn.gomicorp.seller.adapter;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -61,12 +60,9 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemHolder> 
                     if (firstVisibleItems != null && firstVisibleItems.length > 0)
                         pastVisibleItems = firstVisibleItems[0];
 
-                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount)
+                    if (!isLoading && (visibleItemCount + pastVisibleItems) >= totalItemCount)
                         if (onLoadMoreListener != null)
                             onLoadMoreListener.onLoadMore();
-
-                    Log.d("TAG", "onScrolled: "+visibleItemCount +", " + pastVisibleItems +", " + totalItemCount);
-
                 }
             });
         }
