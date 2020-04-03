@@ -88,7 +88,12 @@ public class MainBinding {
 
                 @Override
                 public void onTabReselected(TabLayout.Tab tab) {
+                    if (tab.getPosition() > categories.size())
+                        return;
 
+                    Category selectedCategory = categories.get(tab.getPosition());
+                    if (onLoadTabListener != null)
+                        onLoadTabListener.onLoaded(selectedCategory);
                 }
             });
         } else {

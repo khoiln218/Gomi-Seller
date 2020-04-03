@@ -6,7 +6,7 @@ import vn.gomicorp.seller.event.Event;
  * Created by KHOI LE on 3/27/2020.
  */
 public class CollectionEvent extends Event {
-    public static final int UPDATE_TOOLBAR = 0;
+    public static final int OPEN_SUB_CATEGORY = 0;
     public static final int ON_PICK = 1;
     public static final int SELECT_ERROR = 2;
 

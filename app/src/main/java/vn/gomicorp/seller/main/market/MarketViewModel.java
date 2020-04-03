@@ -177,7 +177,7 @@ public class MarketViewModel extends ViewModel {
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
                     categorys.addAll(result.getResult().getMegaCateList());
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.CATAGORY, categorys));
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.MEGA_CATAGORY, categorys));
 
                     //collectionlist
                     for (Introduce.CollectionListBean collectionListBean : result.getResult().getCollectionList()) {

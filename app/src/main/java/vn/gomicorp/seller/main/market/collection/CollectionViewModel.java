@@ -19,7 +19,6 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
-import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
@@ -31,6 +30,7 @@ import vn.gomicorp.seller.event.ProductHandler;
  */
 public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
     private final int CODE_OK = 200;
+    private final int ALL = 0;
     private final int INIT_PAGE = 1;
     private int type;
     private int id;
@@ -72,9 +72,11 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     public OnLoadTabListener onLoadTabListener = new OnLoadTabListener() {
         @Override
         public void onLoaded(Category selectedCate) {
-            id = selectedCate.getId();
-            categoryType = CategoryType.CATEGORY;
-            onRefresh();
+            if (selectedCate.getId() == ALL)
+                onRefresh();
+            else {
+                openSubCategory(selectedCate);
+            }
         }
 
         @Override
@@ -84,9 +86,9 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         }
     };
 
-    private void updateToolbar(String name) {
-        CollectionEvent event = new CollectionEvent(CollectionEvent.UPDATE_TOOLBAR);
-        event.setData(name);
+    private void openSubCategory(Category selectedCate) {
+        CollectionEvent event = new CollectionEvent(CollectionEvent.OPEN_SUB_CATEGORY);
+        event.setData(selectedCate);
         cmd.call(event);
     }
 
@@ -136,7 +138,9 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         products.clear();
         updateProductList();
         switch (type) {
+            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
             case MarketListAdapter.CollectionType.CATAGORY:
+            case MarketListAdapter.CollectionType.SUB_CATAGORY:
                 initCategory();
                 break;
             case MarketListAdapter.CollectionType.NEW_PRODUCT:
@@ -154,7 +158,9 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         if (page >= totalPage) return;
         page++;
         switch (type) {
+            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
             case MarketListAdapter.CollectionType.CATAGORY:
+            case MarketListAdapter.CollectionType.SUB_CATAGORY:
                 loadMoreCategory();
                 break;
             case MarketListAdapter.CollectionType.NEW_PRODUCT:
@@ -245,6 +251,8 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
                 if (result.getCode() == CODE_OK) {
                     categories.setValue(result.getResult());
                     updateCategory();
+                    if (result.getResult().size() < 2)
+                        requestProductListByCategoryId(id);
                 }
             }
 
