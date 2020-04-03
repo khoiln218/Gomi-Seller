@@ -103,4 +103,25 @@ public class ProductRemoteDataSource implements ProductDataSource {
             }
         });
     }
+
+    @Override
+    public void findbyseen(CollectionByIdRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Product>>> call = client.findbyseen(request, page);
+        call.enqueue(new Callback<ResponseData<List<Product>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Product>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
 }

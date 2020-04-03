@@ -472,6 +472,11 @@ public class MockupProductDataSource implements ProductDataSource {
 
     }
 
+    @Override
+    public void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+
+    }
+
     private void exeIntroduce(final String jsonData, final ResultListener<ResponseData<Introduce>> callback) {
         new Handler().postDelayed(new Runnable() {
             @Override

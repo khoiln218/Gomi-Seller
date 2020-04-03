@@ -141,8 +141,24 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     }
 
     private void requestProductSeen() {
-        refreshed();
-        updateProductList();
+        adapter.setLoading();
+        CollectionByIdRequest request = new CollectionByIdRequest();
+        mProductRepository.findbyseen(request, page, new ResultListener<ResponseData<List<Product>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Product>> result) {
+                refreshed();
+                if (result.getCode() == CODE_OK) {
+                    products.addAll(result.getResult());
+                    totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    updateProductList();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                refreshed();
+            }
+        });
     }
 
     private void initCollection() {
@@ -151,7 +167,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
 
     private void requestProductListByCollectionId(int id) {
         adapter.setLoading();
-        final CollectionByIdRequest request = new CollectionByIdRequest();
+        CollectionByIdRequest request = new CollectionByIdRequest();
         request.setFindById(id);
         mProductRepository.findbycollection(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override

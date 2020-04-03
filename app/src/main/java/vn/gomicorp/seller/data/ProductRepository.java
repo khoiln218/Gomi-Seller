@@ -62,4 +62,9 @@ public class ProductRepository implements ProductDataSource {
     public void findbycategory(CategoryByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
         mProductDataSource.findbycategory(request, page, callback);
     }
+
+    @Override
+    public void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        mProductDataSource.findbyseen(request, page, callback);
+    }
 }

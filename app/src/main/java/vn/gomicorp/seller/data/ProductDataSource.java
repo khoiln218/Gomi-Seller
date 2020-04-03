@@ -21,4 +21,6 @@ public interface ProductDataSource {
     void findbycollection(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
 
     void findbycategory(CategoryByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
+
+    void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
 }

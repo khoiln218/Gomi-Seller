@@ -87,4 +87,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("utilities/findcatebytype")
     Call<ResponseData<List<Category>>> findcatebytype(@Body CategoryByIdRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbyseen/page={page}")
+    Call<ResponseData<List<Product>>> findbyseen(@Body CollectionByIdRequest request, @Path("page") int page);
 }
