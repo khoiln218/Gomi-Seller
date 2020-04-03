@@ -1,5 +1,7 @@
 package vn.gomicorp.seller.main.market.collection;
 
+import android.text.TextUtils;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,6 +17,7 @@ import vn.gomicorp.seller.data.ShopRepository;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -62,7 +65,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
 
         @Override
         public void onPick(Product product) {
-
+            pick(product);
         }
     };
 
@@ -85,6 +88,46 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
         CollectionEvent event = new CollectionEvent(CollectionEvent.UPDATE_TOOLBAR);
         event.setData(name);
         cmd.call(event);
+    }
+
+    private void pick(Product product) {
+        CollectionEvent event = new CollectionEvent(CollectionEvent.ON_PICK);
+        event.setData(product);
+        cmd.call(event);
+    }
+
+    public void requestPickProduct(Product product) {
+        ToggleProductRequest request = new ToggleProductRequest();
+        request.setIsSelling(product.getIsSelling());
+        request.setProductId(product.getId());
+        mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
+            @Override
+            public void onLoaded(ResponseData<Product> result) {
+                if (result.getCode() == CODE_OK)
+                    updateProduct(result.getResult());
+                else
+                    updateFail(result.getMessage());
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                updateFail(error);
+            }
+        });
+    }
+
+    private void updateFail(String message) {
+        cmd.call(new CollectionEvent(CollectionEvent.SELECT_ERROR, message));
+    }
+
+    private void updateProduct(Product product) {
+        for (Product item : products) {
+            if (TextUtils.equals(product.getId(), item.getId())) {
+                item.setIsSelling(product.getIsSelling());
+                adapter.notifyItemChanged(product);
+                break;
+            }
+        }
     }
 
     @Override

@@ -16,8 +16,12 @@ import java.util.Objects;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.data.source.model.data.CategoryType;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
+import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.utils.ToastUtils;
+import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class CollectionActivity extends AppCompatActivity {
     CollectionViewModel viewModel;
@@ -45,11 +49,31 @@ public class CollectionActivity extends AppCompatActivity {
         viewModel.getCmd().observe(this, new Observer<CollectionEvent>() {
             @Override
             public void onChanged(CollectionEvent event) {
-                if (event.code == CollectionEvent.UPDATE_TOOLBAR) {
-                    getSupportActionBar().setTitle((String) event.data);
+                switch (event.code) {
+                    case CollectionEvent.UPDATE_TOOLBAR:
+                        getSupportActionBar().setTitle((String) event.data);
+                        break;
+                    case CollectionEvent.ON_PICK:
+                        showDialogPickProduct((Product) event.getData());
+                        break;
+                    case CollectionEvent.SELECT_ERROR:
+                        ToastUtils.showToast(event.message);
+                        break;
                 }
             }
         });
+    }
+
+    private void showDialogPickProduct(Product product) {
+        final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
+        selectProductDialogFragment.setListener(new OnSelectedListener() {
+            @Override
+            public void onSelected(Product product) {
+                viewModel.requestPickProduct(product);
+                selectProductDialogFragment.dismiss();
+            }
+        });
+        selectProductDialogFragment.show(getSupportFragmentManager(), selectProductDialogFragment.getTag());
     }
 
     @Override
