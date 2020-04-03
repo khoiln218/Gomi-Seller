@@ -12,6 +12,11 @@ public class Banner implements Parcelable {
     private String ImagePath;
     private String WebAddress;
 
+    public Banner(int id, String imagePath) {
+        Id = id;
+        ImagePath = imagePath;
+    }
+
     protected Banner(Parcel in) {
         Id = in.readInt();
         Name = in.readString();

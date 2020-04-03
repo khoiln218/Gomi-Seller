@@ -18,11 +18,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:categoryHandler="@{viewModel.categoryHandler}"
-            app:collectionHandler="@{viewModel.collectionHandler}"
-            app:onProductAdapterInitListener="@{viewModel.onProductAdapterInitListener}"
-            app:productHandler="@{viewModel.productHandler}"
-            app:setCollections="@{viewModel.collections}" />
+            app:setCollectionAdapter="@{viewModel.marketListAdapter}" />
 
     </LinearLayout>
 </layout>

@@ -19,6 +19,7 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
+import vn.gomicorp.seller.data.source.model.data.Banner;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
@@ -66,9 +67,17 @@ public class MarketViewModel extends ViewModel {
         }
     };
 
+    private List<ProductItemAdapter> adapters = new ArrayList<>();
+    public List<Collection> collections = new ArrayList<>();
+    private MarketListAdapter adapter;
+
     private ProductRepository mProductRepository = ProductRepository.getInstance();
-    public MutableLiveData<List<Collection>> collections = new MutableLiveData<>();
-    List<ProductItemAdapter> adapters = new ArrayList<>();
+    public MutableLiveData<MarketListAdapter> marketListAdapter = new MutableLiveData<>();
+
+    public MarketViewModel() {
+        adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler, onProductAdapterInitListener);
+        marketListAdapter.setValue(adapter);
+    }
 
     public OnProductAdapterInitListener onProductAdapterInitListener = new OnProductAdapterInitListener() {
         @Override
@@ -126,12 +135,13 @@ public class MarketViewModel extends ViewModel {
     }
 
     private void updateProduct(Product product) {
-        for (Collection collection : collections.getValue()) {
+        for (Collection collection : collections) {
             for (Parcelable parcelable : collection.getData()) {
                 if (parcelable instanceof Product) {
                     Product item = (Product) parcelable;
                     if (TextUtils.equals(product.getId(), item.getId())) {
                         item.setIsSelling(product.getIsSelling());
+                        updateCollection();
                         for (ProductItemAdapter adapter : adapters)
                             adapter.notifyItemChanged(product);
                         break;
@@ -154,7 +164,14 @@ public class MarketViewModel extends ViewModel {
 
                     //banner
                     List<Parcelable> banners = new ArrayList<>();
-                    banners.addAll(result.getResult().getBannerList());
+                    //TODO: code demo
+                    if (result.getResult().getBannerList().size() == 0) {
+                        for (int i = 0; i < 5; i++) {
+                            banners.add(new Banner(i, i % 2 == 0 ? "http://192.168.1.37:2526/banner/elravie.jpg" : "http://192.168.1.37:2526/banner/booki.jpg"));
+                        }
+                    } else {
+                        banners.addAll(result.getResult().getBannerList());
+                    }
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, banners));
 
                     //category
@@ -175,7 +192,8 @@ public class MarketViewModel extends ViewModel {
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.SEEN_PRODUCT, EappsApplication.getInstance().getString(R.string.product_seen), productList));
 
                     //update collection
-                    collections.setValue(collectionList);
+                    collections = collectionList;
+                    updateCollection();
                 } else {
                     Log.d("reqCollections", "onLoaded-Fails: " + result.getMessage());
                 }
@@ -188,10 +206,13 @@ public class MarketViewModel extends ViewModel {
         });
     }
 
+    private void updateCollection() {
+        adapter.setCollections(collections);
+    }
+
     private void refresh() {
-        if (collections.getValue() != null)
-            collections.getValue().clear();
-        if (adapters.size() > 0)
-            adapters.clear();
+        collections.clear();
+        updateCollection();
+        adapters.clear();
     }
 }

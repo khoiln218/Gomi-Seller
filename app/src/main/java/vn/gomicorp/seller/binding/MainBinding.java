@@ -31,7 +31,6 @@ import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.CategoryHandler;
-import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.OnLoadTabListener;
 import vn.gomicorp.seller.event.OnProductAdapterInitListener;
@@ -131,17 +130,13 @@ public class MainBinding {
         sliderLayout.setScrollTimeSec(duration);
     }
 
-    @BindingAdapter({"setCollections", "productHandler", "categoryHandler", "collectionHandler", "onProductAdapterInitListener"})
-    public static void setCollections(RecyclerView recyclerView, List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, OnProductAdapterInitListener onProductAdapterInitListener) {
+    @BindingAdapter("setCollectionAdapter")
+    public static void setCollections(RecyclerView recyclerView, MarketListAdapter adapter) {
         if (recyclerView.getAdapter() == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-
-            MarketListAdapter adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler, onProductAdapterInitListener);
             recyclerView.setAdapter(adapter);
-        } else {
-            ((MarketListAdapter) recyclerView.getAdapter()).setCollections(collections);
         }
     }
 

@@ -25,6 +25,17 @@ public class MarketFragment extends Fragment {
     private FragmentMarketBinding binding;
     private MarketViewModel viewModel;
 
+    public static MarketFragment INSTANCE;
+
+    public static MarketFragment getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new MarketFragment();
+        return INSTANCE;
+    }
+
+    private MarketFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
