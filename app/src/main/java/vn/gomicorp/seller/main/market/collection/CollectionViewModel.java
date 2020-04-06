@@ -49,13 +49,12 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     private ShopRepository mShopRepository = ShopRepository.getInstance();
 
     public MutableLiveData<List<Category>> categories = new MutableLiveData<>();
-    public MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
     public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
 
     private MultableLiveEvent<CollectionEvent> cmd = new MultableLiveEvent<>();
 
     public CollectionViewModel() {
-        refreshed();
+        loaded();
         adapter = new ProductItemAdapter(products, productHandler, this);
         productItemAdapter.setValue(adapter);
     }
@@ -82,18 +81,19 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
                 onRefresh();
             } else if (categoryType == CategoryType.MEGA_CATEGORY) {
                 openSubCategory(selectedCate);
-            } else if (categoryType == CategoryType.CATEGORY) {
+            }/* else if (categoryType == CategoryType.CATEGORY) {
                 showProgressing();
                 selectCategoryType = categoryType + 1;
                 selectCategoryId = selectedCate.getId();
                 onRefresh();
-            }
+            }*/
         }
 
         @Override
         public void onLoadFails() {
             products.clear();
             updateProductList();
+            checkEmpty(products);
         }
     };
 
@@ -214,17 +214,18 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         mProductRepository.findbyseen(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
-                refreshed();
+                loaded();
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
+                    checkEmpty(products);
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                refreshed();
+                loaded();
                 checkConnection(error);
             }
         });
@@ -237,11 +238,12 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         mProductRepository.findbycollection(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
-                refreshed();
+                loaded();
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
+                    checkEmpty(products);
                 } else {
                     setErrorMessage(result.getMessage());
                 }
@@ -249,7 +251,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
 
             @Override
             public void onDataNotAvailable(String error) {
-                refreshed();
+                loaded();
                 checkConnection(error);
             }
         });
@@ -262,7 +264,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override
             public void onLoaded(ResponseData<List<Category>> result) {
-                refreshed();
+                loaded();
                 if (result.getCode() == CODE_OK) {
                     categories.setValue(result.getResult());
                     updateCategory();
@@ -273,10 +275,9 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
 
             @Override
             public void onDataNotAvailable(String error) {
-                refreshed();
+                loaded();
             }
         });
-
     }
 
     private void requestProductListByCategoryId(int id) {
@@ -287,11 +288,12 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         mProductRepository.findbycategory(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
-                refreshed();
+                loaded();
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
+                    checkEmpty(products);
                 } else {
                     setErrorMessage(result.getMessage());
                 }
@@ -299,7 +301,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
 
             @Override
             public void onDataNotAvailable(final String error) {
-                refreshed();
+                loaded();
                 checkConnection(error);
             }
         });
@@ -309,7 +311,6 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     }
 
     private void updateProductList() {
-        setErrorMessage(products.size() > 0 ? null : "Not Result");
         adapter.setProductList(products);
     }
 
@@ -317,9 +318,9 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         return cmd;
     }
 
-    private void refreshed() {
+    private void loaded() {
         hideProgressing();
-        refreshing.setValue(false);
+        refreshed();
     }
 
     public void setCollectionType(int collectionType) {

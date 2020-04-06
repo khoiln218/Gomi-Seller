@@ -26,11 +26,11 @@ import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class CollectionActivity extends AppCompatActivity {
-    CollectionViewModel viewModel;
-    ActivityCollectionBinding binding;
-    int type;
-    int id;
-    String name;
+    private CollectionViewModel viewModel;
+    private ActivityCollectionBinding binding;
+    private int type;
+    private int id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class CollectionActivity extends AppCompatActivity {
                 switch (event.code) {
                     case CollectionEvent.OPEN_SUB_CATEGORY:
                         Category category = (Category) event.getData();
-                        Intents.startCategoryActivity(CollectionActivity.this, type + 1, category.getId(), category.getName());
+                        Intents.startCategoryActivity(CollectionActivity.this, MarketListAdapter.CollectionType.CATAGORY, category.getId(), category.getName());
                         break;
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());

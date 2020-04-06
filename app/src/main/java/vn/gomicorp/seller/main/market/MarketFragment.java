@@ -68,11 +68,11 @@ public class MarketFragment extends Fragment {
                         break;
                     case MarketEvent.ONCLICK_CATEGORY:
                         Category category = (Category) event.getData();
-                        Intents.startCategoryActivity(getActivity(), MarketListAdapter.CollectionType.MEGA_CATAGORY, category.getId(), category.getName());
+                        Intents.startCollectionActivity(getActivity(), MarketListAdapter.CollectionType.MEGA_CATAGORY, category.getId(), category.getName());
                         break;
                     case MarketEvent.ONCLICK_COLLECTION:
                         Collection collection = (Collection) event.getData();
-                        Intents.startCategoryActivity(getActivity(), collection.getType(), collection.getType(), collection.getName());
+                        Intents.startCollectionActivity(getActivity(), collection.getType(), collection.getType(), collection.getName());
                         break;
                 }
             }

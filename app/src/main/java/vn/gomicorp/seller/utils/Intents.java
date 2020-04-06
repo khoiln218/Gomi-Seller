@@ -6,6 +6,7 @@ import android.content.Intent;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.market.collection.CollectionActivity;
+import vn.gomicorp.seller.main.market.collection.subcate.SubCategoryActivity;
 import vn.gomicorp.seller.shopinfo.ShopInformationActivity;
 
 /**
@@ -32,8 +33,17 @@ public class Intents {
         activity.finish();
     }
 
-    public static void startCategoryActivity(Activity activity, int type, int id, String title) {
+    public static void startCollectionActivity(Activity activity, int type, int id, String title) {
         Intent intent = new Intent(activity, CollectionActivity.class);
+        intent.putExtra(GomiConstants.EXTRA_TYPE, type);
+        intent.putExtra(GomiConstants.EXTRA_ID, id);
+        intent.putExtra(GomiConstants.EXTRA_TITLE, title);
+
+        activity.startActivity(intent);
+    }
+
+    public static void startCategoryActivity(Activity activity, int type, int id, String title) {
+        Intent intent = new Intent(activity, SubCategoryActivity.class);
         intent.putExtra(GomiConstants.EXTRA_TYPE, type);
         intent.putExtra(GomiConstants.EXTRA_ID, id);
         intent.putExtra(GomiConstants.EXTRA_TITLE, title);
