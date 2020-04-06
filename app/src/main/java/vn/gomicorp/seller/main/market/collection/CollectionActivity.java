@@ -41,9 +41,8 @@ public class CollectionActivity extends AppCompatActivity {
         initBinding();
         setupToolbar();
         setupCmd();
-        viewModel.setName(name);
-        viewModel.setId(id);
-        viewModel.setType(type);
+        viewModel.setCategoryId(id);
+        viewModel.setCollectionType(type);
 
         loadData();
     }
@@ -53,15 +52,15 @@ public class CollectionActivity extends AppCompatActivity {
         switch (type) {
             case MarketListAdapter.CollectionType.MEGA_CATAGORY:
                 viewModel.setCategoryType(CategoryType.MEGA_CATEGORY);
-                viewModel.requestCategory(id);
+                viewModel.requestCategory();
                 break;
             case MarketListAdapter.CollectionType.CATAGORY:
                 viewModel.setCategoryType(CategoryType.CATEGORY);
-                viewModel.requestCategory(id);
+                viewModel.requestCategory();
                 break;
             case MarketListAdapter.CollectionType.SUB_CATAGORY:
                 viewModel.setCategoryType(CategoryType.SUB_CATEGORY);
-                viewModel.requestCategory(id);
+                viewModel.requestCategory();
                 break;
             default:
                 viewModel.onRefresh();
@@ -76,8 +75,7 @@ public class CollectionActivity extends AppCompatActivity {
                 switch (event.code) {
                     case CollectionEvent.OPEN_SUB_CATEGORY:
                         Category category = (Category) event.getData();
-                        int cateType = type == MarketListAdapter.CollectionType.MEGA_CATAGORY ? MarketListAdapter.CollectionType.CATAGORY : MarketListAdapter.CollectionType.SUB_CATAGORY;
-                        Intents.startCategoryActivity(CollectionActivity.this, cateType, category.getId(), category.getName());
+                        Intents.startCategoryActivity(CollectionActivity.this, type + 1, category.getId(), category.getName());
                         break;
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());

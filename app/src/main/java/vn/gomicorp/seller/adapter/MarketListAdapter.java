@@ -83,9 +83,9 @@ public class MarketListAdapter extends RecyclerView.Adapter {
 
     public interface CollectionType {
         int SEEN_PRODUCT = -5;
-        int SUB_CATAGORY = -4;
+        int MEGA_CATAGORY = -4;
         int CATAGORY = -3;
-        int MEGA_CATAGORY = -2;
+        int SUB_CATAGORY = -2;
         int BANNER = -1;
         int VIEW_LOADING = 0;
         int NEW_PRODUCT = 1;

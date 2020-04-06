@@ -19,6 +19,7 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
+import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
@@ -32,12 +33,14 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     private final int CODE_OK = 200;
     private final int ALL = 0;
     private final int INIT_PAGE = 1;
-    private int type;
-    private int id;
-    private String name;
+    private int collectionType;
     private int page = INIT_PAGE;
     private int totalPage = 0;
     private int categoryType;
+    private int categoryId;
+
+    private int selectCategoryType;
+    private int selectCategoryId;
 
     private List<Product> products = new ArrayList<>();
     private ProductItemAdapter adapter;
@@ -72,10 +75,18 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     public OnLoadTabListener onLoadTabListener = new OnLoadTabListener() {
         @Override
         public void onLoaded(Category selectedCate) {
-            if (selectedCate.getId() == ALL)
+            if (selectedCate.getId() == ALL) {
+                showProgressing();
+                selectCategoryType = categoryType;
+                selectCategoryId = categoryId;
                 onRefresh();
-            else {
+            } else if (categoryType == CategoryType.MEGA_CATEGORY) {
                 openSubCategory(selectedCate);
+            } else if (categoryType == CategoryType.CATEGORY) {
+                showProgressing();
+                selectCategoryType = categoryType + 1;
+                selectCategoryId = selectedCate.getId();
+                onRefresh();
             }
         }
 
@@ -137,7 +148,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         page = INIT_PAGE;
         products.clear();
         updateProductList();
-        switch (type) {
+        switch (collectionType) {
             case MarketListAdapter.CollectionType.MEGA_CATAGORY:
             case MarketListAdapter.CollectionType.CATAGORY:
             case MarketListAdapter.CollectionType.SUB_CATAGORY:
@@ -153,11 +164,23 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         }
     }
 
+    private void initProductSeen() {
+        requestProductSeen();
+    }
+
+    private void initCollection() {
+        requestProductListByCollectionId(collectionType);
+    }
+
+    private void initCategory() {
+        requestProductListByCategoryId(selectCategoryId);
+    }
+
     @Override
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
-        switch (type) {
+        switch (collectionType) {
             case MarketListAdapter.CollectionType.MEGA_CATAGORY:
             case MarketListAdapter.CollectionType.CATAGORY:
             case MarketListAdapter.CollectionType.SUB_CATAGORY:
@@ -178,15 +201,11 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     }
 
     private void loadMoreCollection() {
-        requestProductListByCollectionId(type);
+        requestProductListByCollectionId(collectionType);
     }
 
     private void loadMoreCategory() {
-        requestProductListByCategoryId(id);
-    }
-
-    private void initProductSeen() {
-        requestProductSeen();
+        requestProductListByCategoryId(selectCategoryId);
     }
 
     private void requestProductSeen() {
@@ -209,10 +228,6 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
                 checkConnection(error);
             }
         });
-    }
-
-    private void initCollection() {
-        requestProductListByCollectionId(type);
     }
 
     private void requestProductListByCollectionId(int id) {
@@ -240,14 +255,10 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         });
     }
 
-    private void initCategory() {
-        requestProductListByCategoryId(id);
-    }
-
-    void requestCategory(final int id) {
+    void requestCategory() {
         CategoryByIdRequest request = new CategoryByIdRequest();
         request.setCategoryType(categoryType);
-        request.setFindById(id);
+        request.setFindById(selectCategoryId);
         mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override
             public void onLoaded(ResponseData<List<Category>> result) {
@@ -256,7 +267,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
                     categories.setValue(result.getResult());
                     updateCategory();
                     if (result.getResult().size() < 2)
-                        requestProductListByCategoryId(id);
+                        requestProductListByCategoryId(selectCategoryId);
                 }
             }
 
@@ -271,7 +282,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     private void requestProductListByCategoryId(int id) {
         adapter.setLoading();
         CategoryByIdRequest request = new CategoryByIdRequest();
-        request.setCategoryType(categoryType);
+        request.setCategoryType(selectCategoryType);
         request.setFindById(id);
         mProductRepository.findbycategory(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
@@ -311,16 +322,13 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         refreshing.setValue(false);
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setCollectionType(int collectionType) {
+        this.collectionType = collectionType;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+        this.selectCategoryId = categoryId;
     }
 
     public void setCategoryType(int categoryType) {
