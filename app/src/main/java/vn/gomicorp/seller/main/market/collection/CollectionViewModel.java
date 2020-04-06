@@ -3,12 +3,12 @@ package vn.gomicorp.seller.main.market.collection;
 import android.text.TextUtils;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
@@ -28,7 +28,7 @@ import vn.gomicorp.seller.event.ProductHandler;
 /**
  * Created by KHOI LE on 3/26/2020.
  */
-public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
     private final int CODE_OK = 200;
     private final int ALL = 0;
     private final int INIT_PAGE = 1;
@@ -206,6 +206,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
             @Override
             public void onDataNotAvailable(String error) {
                 refreshed();
+                checkConnection(error);
             }
         });
     }
@@ -226,12 +227,15 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
+                } else {
+                    setErrorMessage(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 refreshed();
+                checkConnection(error);
             }
         });
     }
@@ -277,12 +281,15 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     updateProductList();
+                } else {
+                    setErrorMessage(result.getMessage());
                 }
             }
 
             @Override
-            public void onDataNotAvailable(String error) {
+            public void onDataNotAvailable(final String error) {
                 refreshed();
+                checkConnection(error);
             }
         });
     }
@@ -291,6 +298,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     }
 
     private void updateProductList() {
+        setErrorMessage(products.size() > 0 ? null : "Not Result");
         adapter.setProductList(products);
     }
 
@@ -299,6 +307,7 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
     }
 
     private void refreshed() {
+        hideProgressing();
         refreshing.setValue(false);
     }
 
@@ -316,5 +325,9 @@ public class CollectionViewModel extends ViewModel implements SwipeRefreshLayout
 
     public void setCategoryType(int categoryType) {
         this.categoryType = categoryType;
+    }
+
+    void showLoading() {
+        showProgressing();
     }
 }

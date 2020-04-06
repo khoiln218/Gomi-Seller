@@ -5,11 +5,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
@@ -33,7 +33,7 @@ import vn.gomicorp.seller.event.ProductHandler;
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends ViewModel {
+public class MarketViewModel extends BaseViewModel {
     private final int CODE_OK = 200;
 
     public ProductHandler productHandler = new ProductHandler() {
@@ -110,7 +110,7 @@ public class MarketViewModel extends ViewModel {
         cmd.call(event);
     }
 
-    public void requestPickProduct(Product product) {
+    void requestPickProduct(Product product) {
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());
@@ -154,11 +154,13 @@ public class MarketViewModel extends ViewModel {
     }
 
     void requestCollections() {
+        showProgressing();
         refresh();
         final IntroduceRequest request = new IntroduceRequest();
         mProductRepository.introduce(request, new ResultListener<ResponseData<Introduce>>() {
             @Override
             public void onLoaded(ResponseData<Introduce> result) {
+                hideProgressing();
                 if (result.getCode() == CODE_OK) {
                     List<Collection> collectionList = new ArrayList<>();
 
@@ -195,18 +197,20 @@ public class MarketViewModel extends ViewModel {
                     collections = collectionList;
                     updateCollection();
                 } else {
-                    Log.d("reqCollections", "onLoaded-Fails: " + result.getMessage());
+                    setErrorMessage(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                Log.d("reqCollections", "onDataNotAvailable: " + error);
+                hideProgressing();
+                checkConnection(error);
             }
         });
     }
 
     private void updateCollection() {
+        setErrorMessage(collections.size() > 0 ? null : "Not Result");
         adapter.setCollections(collections);
     }
 

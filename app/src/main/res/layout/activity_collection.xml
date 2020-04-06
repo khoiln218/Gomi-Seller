@@ -55,15 +55,29 @@
             app:refreshing="@{viewModel.refreshing}"
             app:setOnRefreshListener="@{()->viewModel.onRefresh()}">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_product"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:paddingStart="@dimen/padding_medium"
-                android:paddingEnd="@dimen/padding_medium"
-                android:paddingBottom="@dimen/padding_medium"
-                app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:paddingStart="@dimen/padding_medium"
+                    android:paddingEnd="@dimen/padding_medium"
+                    android:paddingBottom="@dimen/padding_medium"
+                    app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+
+                <include
+                    layout="@layout/layout_empty"
+                    android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+                    app:msg="@{viewModel.errorMessage}" />
+
+                <include
+                    layout="@layout/layout_progress"
+                    android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
+            </RelativeLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

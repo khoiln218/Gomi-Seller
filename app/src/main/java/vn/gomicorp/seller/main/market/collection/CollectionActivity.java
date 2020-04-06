@@ -45,6 +45,11 @@ public class CollectionActivity extends AppCompatActivity {
         viewModel.setId(id);
         viewModel.setType(type);
 
+        loadData();
+    }
+
+    private void loadData() {
+        viewModel.showLoading();
         switch (type) {
             case MarketListAdapter.CollectionType.MEGA_CATAGORY:
                 viewModel.setCategoryType(CategoryType.MEGA_CATEGORY);
