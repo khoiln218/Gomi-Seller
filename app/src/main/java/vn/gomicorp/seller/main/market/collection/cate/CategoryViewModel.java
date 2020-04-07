@@ -100,6 +100,8 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
+        products.add(null);
+        updateProductList();
         loadMoreCategory();
     }
 
@@ -128,7 +130,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         });
     }
 
-    void requestProductListByCategoryId() {
+    private void requestProductListByCategoryId() {
         adapter.setLoading();
         CategoryByIdRequest request = new CategoryByIdRequest();
         request.setCategoryType(selectCategoryType);
@@ -140,6 +142,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 } else {

@@ -110,6 +110,8 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
+        products.add(null);
+        updateProductList();
         requestProductByCategory();
     }
 
@@ -125,6 +127,7 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 } else {

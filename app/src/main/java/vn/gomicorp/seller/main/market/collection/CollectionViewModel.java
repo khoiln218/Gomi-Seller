@@ -53,7 +53,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
         cmd.call(event);
     }
 
-    public void requestPickProduct(Product product) {
+    void requestPickProduct(Product product) {
         showLoading();
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
@@ -118,6 +118,8 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
+        products.add(null);
+        updateProductList();
         switch (collectionId) {
             case MarketListAdapter.CollectionType.NEW_PRODUCT:
             case MarketListAdapter.CollectionType.RECOMEND_PRODUCT:
@@ -147,6 +149,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 }
@@ -171,6 +174,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
                 if (result.getCode() == CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 } else {
