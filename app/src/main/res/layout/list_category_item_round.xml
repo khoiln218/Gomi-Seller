@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="category"
+            type="vn.gomicorp.seller.data.source.model.data.Category" />
+
+        <variable
+            name="categoryHandler"
+            type="vn.gomicorp.seller.event.CategoryHandler" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:background="@{category.isSelect?@drawable/button_primary_selector:@drawable/button_outline_selector}"
+        android:gravity="center"
+        android:onClick="@{(v)->categoryHandler.onClick(category)}"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="@dimen/padding_small"
+            android:text="@{category.name}"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@{category.isSelect?@color/colorPrimary:@color/colorPrimaryText}" />
+
+    </RelativeLayout>
+</layout>

@@ -48,7 +48,6 @@ public class ProductCategoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_product_category, container, false);
         if (binding == null)
             binding = FragmentProductCategoryBinding.bind(root);
-//        viewModel = ViewModelProviders.of(getActivity()).get(ProductCategoryViewModel.class);
         viewModel = new ProductCategoryViewModel();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getActivity());

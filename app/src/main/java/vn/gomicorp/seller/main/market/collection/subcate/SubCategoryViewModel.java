@@ -9,6 +9,7 @@ import vn.gomicorp.seller.data.ShopRepository;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Category;
+import vn.gomicorp.seller.data.source.model.data.CategoryType;
 
 /**
  * Created by KHOI LE on 4/6/2020.
@@ -18,9 +19,9 @@ public class SubCategoryViewModel extends ViewModel {
 
     private ShopRepository mShopRepository = ShopRepository.getInstance();
 
-    void requestCategory(int type, int id, final ResultListener<List<Category>> listener) {
+    void requestCategory(int id, final ResultListener<List<Category>> listener) {
         CategoryByIdRequest request = new CategoryByIdRequest();
-        request.setCategoryType(type);
+        request.setCategoryType(CategoryType.CATEGORY);
         request.setFindById(id);
         mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override

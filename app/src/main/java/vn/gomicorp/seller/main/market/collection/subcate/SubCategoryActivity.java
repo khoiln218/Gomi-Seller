@@ -32,15 +32,13 @@ public class SubCategoryActivity extends AppCompatActivity {
     private ActivitySubCategoryBinding binding;
     private SubCategoryViewModel viewModel;
     private int id;
-    private int type;
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
-            id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 1);
-            type = CategoryType.CATEGORY;
+            id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
             name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         }
 
@@ -78,14 +76,14 @@ public class SubCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         categoryItemList.clear();
-        viewModel.requestCategory(type, id, new ResultListener<List<Category>>() {
+        viewModel.requestCategory(id, new ResultListener<List<Category>>() {
             @Override
             public void onLoaded(List<Category> result) {
                 for (Category category : result) {
-                    int cateType = type + 1;
+                    int cateType = CategoryType.SUB_CATEGORY;
                     int cateId = category.getId();
                     if (category.getId() == 0) {
-                        cateType = type;
+                        cateType = CategoryType.CATEGORY;
                         cateId = id;
                     }
                     categoryItemList.add(new CategoryItem(cateType, cateId, category.getName()));

@@ -111,12 +111,14 @@ public class MarketViewModel extends BaseViewModel {
     }
 
     void requestPickProduct(Product product) {
+        showProgressing();
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());
         mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
             @Override
             public void onLoaded(ResponseData<Product> result) {
+                hideProgressing();
                 if (result.getCode() == CODE_OK)
                     updateProduct(result.getResult());
                 else
@@ -125,6 +127,7 @@ public class MarketViewModel extends BaseViewModel {
 
             @Override
             public void onDataNotAvailable(String error) {
+                hideProgressing();
                 updateFail(error);
             }
         });

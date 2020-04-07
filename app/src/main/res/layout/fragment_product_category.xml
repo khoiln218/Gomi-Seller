@@ -35,11 +35,17 @@
 
             <include
                 layout="@layout/layout_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?attr/actionBarSize"
                 android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
                 app:msg="@{viewModel.errorMessage}" />
 
             <include
                 layout="@layout/layout_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?attr/actionBarSize"
                 android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
         </RelativeLayout>
 

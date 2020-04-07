@@ -35,6 +35,7 @@ import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.OnLoadTabListener;
 import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
+import vn.gomicorp.seller.main.market.collection.cate.CategoryAdapter;
 import vn.gomicorp.seller.utils.Numbers;
 import vn.gomicorp.seller.utils.Utils;
 import vn.gomicorp.seller.widgets.slider.SliderLayout;
@@ -161,6 +162,16 @@ public class MainBinding {
             recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
         } else {
             ((CategoryItemAdapter) recyclerView.getAdapter()).setCategoryList(categoryList);
+        }
+    }
+
+    @BindingAdapter("setCategoryAdapter")
+    public static void setCategories(RecyclerView recyclerView, CategoryAdapter adapter) {
+        if (adapter != null && recyclerView.getAdapter() == null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter);
         }
     }
 

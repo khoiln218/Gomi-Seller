@@ -9,16 +9,17 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.market.collection.CollectionViewModel" />
+            type="vn.gomicorp.seller.main.market.collection.cate.CategoryViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".main.market.collection.CollectionActivity">
+        tools:context=".main.market.collection.cate.CategoryActivity">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:theme="@style/AppTheme.AppBarOverlay">
@@ -29,6 +30,15 @@
                 android:layout_height="?android:attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:setCategoryAdapter="@{viewModel.categoryAdapterLiveData}"
+                tools:listitem="@layout/list_category_item_round" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,7 +62,9 @@
                     android:paddingStart="@dimen/padding_medium"
                     android:paddingEnd="@dimen/padding_medium"
                     android:paddingBottom="@dimen/padding_medium"
-                    app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:setCollectionAdapter="@{viewModel.productItemAdapter}"
+                    tools:listitem="@layout/list_product_item" />
 
                 <include
                     layout="@layout/layout_empty"

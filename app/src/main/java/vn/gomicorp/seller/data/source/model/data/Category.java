@@ -16,6 +16,15 @@ public class Category implements Parcelable {
     private int Id;
     private String Name;
     private String Icon;
+    private boolean isSelect = false;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     protected Category(Parcel in) {
         Id = in.readInt();

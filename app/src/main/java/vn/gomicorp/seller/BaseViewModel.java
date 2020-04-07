@@ -36,6 +36,11 @@ public class BaseViewModel extends ViewModel {
         refreshing.setValue(false);
     }
 
+    protected void loaded() {
+        hideProgressing();
+        refreshed();
+    }
+
     protected void checkConnection(final String error) {
         ConnectionHelper.checkNetwork(new ConnectionHelper.OnCheckNetworkListener() {
             @Override

@@ -14,58 +14,35 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Objects;
 
 import vn.gomicorp.seller.R;
-import vn.gomicorp.seller.adapter.MarketListAdapter;
-import vn.gomicorp.seller.data.source.model.data.Category;
-import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
-import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class CollectionActivity extends AppCompatActivity {
     private CollectionViewModel viewModel;
     private ActivityCollectionBinding binding;
-    private int type;
     private int id;
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getIntent().getIntExtra(GomiConstants.EXTRA_TYPE, MarketListAdapter.CollectionType.VIEW_LOADING);
         name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
         initBinding();
         setupToolbar();
         setupCmd();
-        viewModel.setCategoryId(id);
-        viewModel.setCollectionType(type);
 
         loadData();
     }
 
     private void loadData() {
+        viewModel.setCollectionId(id);
         viewModel.showLoading();
-        switch (type) {
-            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
-                viewModel.setCategoryType(CategoryType.MEGA_CATEGORY);
-                viewModel.requestCategory();
-                break;
-            case MarketListAdapter.CollectionType.CATAGORY:
-                viewModel.setCategoryType(CategoryType.CATEGORY);
-                viewModel.requestCategory();
-                break;
-            case MarketListAdapter.CollectionType.SUB_CATAGORY:
-                viewModel.setCategoryType(CategoryType.SUB_CATEGORY);
-                viewModel.requestCategory();
-                break;
-            default:
-                viewModel.onRefresh();
-                break;
-        }
+        viewModel.onRefresh();
     }
 
     private void setupCmd() {
@@ -73,10 +50,6 @@ public class CollectionActivity extends AppCompatActivity {
             @Override
             public void onChanged(CollectionEvent event) {
                 switch (event.code) {
-                    case CollectionEvent.OPEN_SUB_CATEGORY:
-                        Category category = (Category) event.getData();
-                        Intents.startCategoryActivity(CollectionActivity.this, MarketListAdapter.CollectionType.CATAGORY, category.getId(), category.getName());
-                        break;
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
                         break;

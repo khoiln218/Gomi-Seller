@@ -62,12 +62,14 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
     }
 
     void requestPickProduct(Product product) {
+        showLoading();
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());
         mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
             @Override
             public void onLoaded(ResponseData<Product> result) {
+                loaded();
                 if (result.getCode() == CODE_OK)
                     updateProduct(result.getResult());
                 else
@@ -76,6 +78,7 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
 
             @Override
             public void onDataNotAvailable(String error) {
+                loaded();
                 updateFail(error);
             }
         });
@@ -135,11 +138,6 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
                 checkConnection(error);
             }
         });
-    }
-
-    private void loaded() {
-        hideProgressing();
-        refreshed();
     }
 
     private void updateProductList() {

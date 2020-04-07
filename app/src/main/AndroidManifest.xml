@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.market.collection.subcate.SubCategoryActivity"></activity>
+        <activity android:name=".main.market.collection.cate.CategoryActivity"></activity>
+        <activity android:name=".main.market.collection.subcate.SubCategoryActivity" />
         <activity android:name=".main.market.collection.CollectionActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
