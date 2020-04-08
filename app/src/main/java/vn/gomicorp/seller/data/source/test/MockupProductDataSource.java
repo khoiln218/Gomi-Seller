@@ -6,8 +6,12 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+
 import vn.gomicorp.seller.data.ProductDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
+import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
@@ -447,6 +451,135 @@ public class MockupProductDataSource implements ProductDataSource {
             "    \"TotalRows\": 0\n" +
             "}";
 
+    String jsonListProduct = "{\n" +
+            "   \"Status\":true,\n" +
+            "   \"Message\":\"OK\",\n" +
+            "   \"Code\":200,\n" +
+            "   \"Result\":[\n" +
+            "      {\n" +
+            "         \"Id\":\"347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "         \"Name\":\"Xịt Trị Mụn Lưng Aetem Cleanback Mist\",\n" +
+            "         \"Description\":null,\n" +
+            "         \"Thumbnail\":\"http://192.168.0.12:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg\",\n" +
+            "         \"Url\":\"xit-tri-mun-lung-aetem-cleanback-mist/347a551a-4744-4799-ba84-3613950362d3\",\n" +
+            "         \"BrandId\":0,\n" +
+            "         \"DetailId\":0,\n" +
+            "         \"BrandName\":null,\n" +
+            "         \"BrandCountry\":null,\n" +
+            "         \"Price\":339000,\n" +
+            "         \"MarketPrice\":339000,\n" +
+            "         \"SaleOff\":0,\n" +
+            "         \"Profit\":33900,\n" +
+            "         \"IsSelling\":1,\n" +
+            "         \"AvgRating\":0,\n" +
+            "         \"Purchases\":0,\n" +
+            "         \"VideoReviews\":0,\n" +
+            "         \"Comments\":0,\n" +
+            "         \"AlsoSell\":0,\n" +
+            "         \"Reviews\":0,\n" +
+            "         \"SellerVideo\":null,\n" +
+            "         \"ImageList\":null,\n" +
+            "         \"Type\":null,\n" +
+            "         \"AttributeList\":null,\n" +
+            "         \"VideoReviewList\":null,\n" +
+            "         \"VariantList\":null,\n" +
+            "         \"CommentList\":null,\n" +
+            "         \"TotalPage\":0\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":\"ff961d03-fa40-4988-967a-3cf4c087d176\",\n" +
+            "         \"Name\":\"Lăn Loại Bỏ Tế Bào Chết Và Dưỡng Ẩm Cho Bàn Chân - Athis BHA+ Foot Stick Softening\",\n" +
+            "         \"Description\":null,\n" +
+            "         \"Thumbnail\":\"http://192.168.0.12:2526/Product/gomi_0fea4887-8869-48b7-a6ae-1ea99aacaa95-637207134087729805.jpg\",\n" +
+            "         \"Url\":\"lan-loai-bo-te-bao-chet-va-duong-am-cho-ban-chan-athis-bha-foot-stick-softening/ff961d03-fa40-4988-967a-3cf4c087d176\",\n" +
+            "         \"BrandId\":0,\n" +
+            "         \"DetailId\":0,\n" +
+            "         \"BrandName\":null,\n" +
+            "         \"BrandCountry\":null,\n" +
+            "         \"Price\":199000,\n" +
+            "         \"MarketPrice\":199000,\n" +
+            "         \"SaleOff\":0,\n" +
+            "         \"Profit\":19900,\n" +
+            "         \"IsSelling\":1,\n" +
+            "         \"AvgRating\":0,\n" +
+            "         \"Purchases\":0,\n" +
+            "         \"VideoReviews\":0,\n" +
+            "         \"Comments\":0,\n" +
+            "         \"AlsoSell\":0,\n" +
+            "         \"Reviews\":0,\n" +
+            "         \"SellerVideo\":null,\n" +
+            "         \"ImageList\":null,\n" +
+            "         \"Type\":null,\n" +
+            "         \"AttributeList\":null,\n" +
+            "         \"VideoReviewList\":null,\n" +
+            "         \"VariantList\":null,\n" +
+            "         \"CommentList\":null,\n" +
+            "         \"TotalPage\":0\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":\"b561609b-7993-472c-a20c-acc3d02b4449\",\n" +
+            "         \"Name\":\"Neckle Ray\",\n" +
+            "         \"Description\":null,\n" +
+            "         \"Thumbnail\":\"http://192.168.0.12:2526/Product/gomi_915402da-f321-4f38-b4c3-21806bc80633-637207143980832383.jpg\",\n" +
+            "         \"Url\":\"neckle-ray/b561609b-7993-472c-a20c-acc3d02b4449\",\n" +
+            "         \"BrandId\":0,\n" +
+            "         \"DetailId\":0,\n" +
+            "         \"BrandName\":null,\n" +
+            "         \"BrandCountry\":null,\n" +
+            "         \"Price\":1.984E7,\n" +
+            "         \"MarketPrice\":1.984E7,\n" +
+            "         \"SaleOff\":0,\n" +
+            "         \"Profit\":1984000,\n" +
+            "         \"IsSelling\":0,\n" +
+            "         \"AvgRating\":0,\n" +
+            "         \"Purchases\":0,\n" +
+            "         \"VideoReviews\":0,\n" +
+            "         \"Comments\":0,\n" +
+            "         \"AlsoSell\":0,\n" +
+            "         \"Reviews\":0,\n" +
+            "         \"SellerVideo\":null,\n" +
+            "         \"ImageList\":null,\n" +
+            "         \"Type\":null,\n" +
+            "         \"AttributeList\":null,\n" +
+            "         \"VideoReviewList\":null,\n" +
+            "         \"VariantList\":null,\n" +
+            "         \"CommentList\":null,\n" +
+            "         \"TotalPage\":0\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":\"622f926b-1d54-4567-b761-bd8e24506a54\",\n" +
+            "         \"Name\":\"Xịt Dưỡng Da Căng Bóng Dalra Dramatic Shiny Mist\",\n" +
+            "         \"Description\":null,\n" +
+            "         \"Thumbnail\":\"http://192.168.0.12:2526/Product/gomi_de7d8b22-5339-4899-80af-138f540c9af6-637207158012552442.jpg\",\n" +
+            "         \"Url\":\"xit-duong-da-cang-bong-dalra-dramatic-shiny-mist/622f926b-1d54-4567-b761-bd8e24506a54\",\n" +
+            "         \"BrandId\":0,\n" +
+            "         \"DetailId\":0,\n" +
+            "         \"BrandName\":null,\n" +
+            "         \"BrandCountry\":null,\n" +
+            "         \"Price\":448000,\n" +
+            "         \"MarketPrice\":448000,\n" +
+            "         \"SaleOff\":0,\n" +
+            "         \"Profit\":44800,\n" +
+            "         \"IsSelling\":0,\n" +
+            "         \"AvgRating\":0,\n" +
+            "         \"Purchases\":0,\n" +
+            "         \"VideoReviews\":0,\n" +
+            "         \"Comments\":0,\n" +
+            "         \"AlsoSell\":0,\n" +
+            "         \"Reviews\":0,\n" +
+            "         \"SellerVideo\":null,\n" +
+            "         \"ImageList\":null,\n" +
+            "         \"Type\":null,\n" +
+            "         \"AttributeList\":null,\n" +
+            "         \"VideoReviewList\":null,\n" +
+            "         \"VariantList\":null,\n" +
+            "         \"CommentList\":null,\n" +
+            "         \"TotalPage\":0\n" +
+            "      }\n" +
+            "   ],\n" +
+            "   \"TotalRows\":0\n" +
+            "}";
+
     @Override
     public void introduce(IntroduceRequest request, ResultListener<ResponseData<Introduce>> callback) {
         exeIntroduce(jsonIntroduce, callback);
@@ -454,7 +587,23 @@ public class MockupProductDataSource implements ProductDataSource {
 
     @Override
     public void select(ToggleProductRequest request, ResultListener<ResponseData<Product>> callback) {
+        Log.d("exeProduct", "select: " + new Gson().toJson(request));
         exeProduct(jsonSelect, request, callback);
+    }
+
+    @Override
+    public void findbycollection(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        exeProductList(jsonListProduct, callback);
+    }
+
+    @Override
+    public void findbycategory(CategoryByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        exeProductList(jsonListProduct, callback);
+    }
+
+    @Override
+    public void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        exeProductList(jsonListProduct, callback);
     }
 
     private void exeIntroduce(final String jsonData, final ResultListener<ResponseData<Introduce>> callback) {
@@ -473,10 +622,22 @@ public class MockupProductDataSource implements ProductDataSource {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("exeProduct", "DATA: " + jsonData);
                 ResponseData<Product> res = new Gson().fromJson(jsonData, new TypeToken<ResponseData<Product>>() {
                 }.getType());
+                res.getResult().setId(request.getProductId());
                 res.getResult().setIsSelling(request.getIsSelling() == 1 ? 0 : 1);
+                Log.d("exeProduct", "DATA: " + new Gson().toJson(res.getResult()));
+                callback.onLoaded(res);
+            }
+        }, 400);
+    }
+
+    private void exeProductList(final String jsonData, final ResultListener<ResponseData<List<Product>>> callback) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ResponseData<List<Product>> res = new Gson().fromJson(jsonData, new TypeToken<ResponseData<List<Product>>>() {
+                }.getType());
                 callback.onLoaded(res);
             }
         }, 400);

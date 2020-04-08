@@ -79,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_medium"
+            android:background="@{product.isSelling == 1 ? @drawable/button_product_remove : @drawable/button_product_select}"
             android:onClick="@{(v)->listener.onSelected(product)}"
             android:text="@{product.isSelling==1 ? @string/sub_product : @string/add_product}" />
 

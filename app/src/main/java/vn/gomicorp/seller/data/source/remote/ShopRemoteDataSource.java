@@ -1,13 +1,17 @@
 package vn.gomicorp.seller.data.source.remote;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopDataSource;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 
 /**
@@ -52,6 +56,29 @@ public class ShopRemoteDataSource implements ShopDataSource {
 
             @Override
             public void onFailure(Call<ResponseData<Shop>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findcatebytype(CategoryByIdRequest request, final ResultListener<ResponseData<List<Category>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Category>>> call = client.findcatebytype(request);
+        call.enqueue(new Callback<ResponseData<List<Category>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Category>>> call, Response<ResponseData<List<Category>>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Category>>> call, Throwable t) {
                 callback.onDataNotAvailable(t.getMessage());
             }
         });

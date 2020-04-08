@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import vn.gomicorp.seller.data.source.model.data.Collection;
-import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ListProductBinding;
 import vn.gomicorp.seller.event.CollectionHandler;
+import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 
 public class ProductHolder extends RecyclerView.ViewHolder {
@@ -26,11 +26,11 @@ public class ProductHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void bind(Collection collection, ProductHandler productHandler, CollectionHandler collectionHandler, Product productChange) {
+    public void bind(Collection collection, ProductHandler productHandler, CollectionHandler collectionHandler, OnProductAdapterInitListener onProductAdapterInitListener) {
         binding.setCollection(collection);
         binding.setProductHandler(productHandler);
         binding.setCollectionHandler(collectionHandler);
-        binding.setProductChange(productChange);
+        binding.setOnProductAdapterInitListener(onProductAdapterInitListener);
         binding.executePendingBindings();
     }
 }

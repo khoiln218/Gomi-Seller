@@ -1,8 +1,12 @@
 package vn.gomicorp.seller.data;
 
+import java.util.List;
+
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 import vn.gomicorp.seller.data.source.remote.ShopRemoteDataSource;
 import vn.gomicorp.seller.data.source.test.MockShopDataSource;
@@ -49,5 +53,10 @@ public class ShopRepository implements ShopDataSource {
     public void create(CreateShopRequest request, ResultListener<ResponseData<Shop>> callback) {
         checkNotNull(callback);
         mRemoteDataSource.create(request, callback);
+    }
+
+    @Override
+    public void findcatebytype(CategoryByIdRequest request, ResultListener<ResponseData<List<Category>>> callback) {
+        mRemoteDataSource.findcatebytype(request, callback);
     }
 }

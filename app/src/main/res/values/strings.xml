@@ -58,14 +58,12 @@
 
     <!--Main-->
     <string name="view">Xem thêm</string>
-
     <string name="banner">banner</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_product">Thêm sản phẩm</string>
     <string name="sub_product">Xóa sản phẩm</string>
     <string name="product_seen">Sản phẩm đã xem</string>
     <string name="no_result">Empty</string>
     <string name="product_attribute">Thông tin chi tiết</string>
+    <string name="empty">Not Result</string>
+    <string name="network_error">Network Not Available</string>
 </resources>

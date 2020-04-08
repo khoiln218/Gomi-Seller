@@ -8,6 +8,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
+import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
@@ -19,6 +21,7 @@ import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Location;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -72,4 +75,20 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("product/select")
     Call<ResponseData<Product>> select(@Body ToggleProductRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbycollection/page={page}")
+    Call<ResponseData<List<Product>>> findbycollection(@Body CollectionByIdRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbycategory/page={page}")
+    Call<ResponseData<List<Product>>> findbycategory(@Body CategoryByIdRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("utilities/findcatebytype")
+    Call<ResponseData<List<Category>>> findcatebytype(@Body CategoryByIdRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbyseen/page={page}")
+    Call<ResponseData<List<Product>>> findbyseen(@Body CollectionByIdRequest request, @Path("page") int page);
 }
