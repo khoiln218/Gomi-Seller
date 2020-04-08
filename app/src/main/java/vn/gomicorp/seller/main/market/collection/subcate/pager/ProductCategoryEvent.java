@@ -8,6 +8,7 @@ import vn.gomicorp.seller.event.Event;
 public class ProductCategoryEvent extends Event {
     public static final int SELECT_ERROR = 1;
     public static final int ON_PICK = 2;
+    public static final int ON_SHOW = 3;
 
     public ProductCategoryEvent(int code) {
         this.code = code;

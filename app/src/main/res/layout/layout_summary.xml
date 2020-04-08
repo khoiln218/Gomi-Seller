@@ -7,6 +7,10 @@
         <variable
             name="product"
             type="vn.gomicorp.seller.data.source.model.data.Product" />
+
+        <variable
+            name="productHandler"
+            type="vn.gomicorp.seller.event.ProductHandler" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -41,6 +45,7 @@
                     android:layout_width="@dimen/icon_size_large"
                     android:layout_height="@dimen/icon_size_large"
                     android:background="@null"
+                    android:onClick="@{(v)->productHandler.onPick(product)}"
                     android:scaleType="fitCenter"
                     android:src="@{product.isSelling == 1 ? @drawable/ic_subtraction : @drawable/ic_add}"
                     app:layout_constraintBottom_toBottomOf="parent"

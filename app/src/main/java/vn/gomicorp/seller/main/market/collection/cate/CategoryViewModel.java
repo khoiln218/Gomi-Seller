@@ -183,7 +183,11 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
 
     @Override
     public void onShow(Product product) {
+        showDetail(product);
+    }
 
+    private void showDetail(Product product) {
+        listener.show(product);
     }
 
     @Override

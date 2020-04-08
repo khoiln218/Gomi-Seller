@@ -66,4 +66,12 @@
     <string name="product_attribute">Thông tin chi tiết</string>
     <string name="empty">Not Result</string>
     <string name="network_error">Network Not Available</string>
+    <string name="view_detail">Xem chi tiết</string>
+    <string name="product_description">Mô tả sản phẩm</string>
+
+    <string name="html" translatable="false"><![CDATA[<!DOCTYPE html><html><head>
+                                <meta http-equiv="content-type" content="text/html; charset=utf-8">
+                                <meta name="viewport" content="width={width}, initial-scale=0.65" />
+                                <style>img{display: inline; height: auto; max-width: 100%;}</style>
+                                </head><body>{body_content}</body></html>]]></string>
 </resources>

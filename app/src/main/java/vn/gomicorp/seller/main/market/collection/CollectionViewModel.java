@@ -53,6 +53,12 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
         cmd.call(event);
     }
 
+    private void showDetail(Product product) {
+        CollectionEvent event = new CollectionEvent(CollectionEvent.ON_SHOW);
+        event.setData(product);
+        cmd.call(event);
+    }
+
     void requestPickProduct(Product product) {
         showLoading();
         ToggleProductRequest request = new ToggleProductRequest();
@@ -208,7 +214,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
 
     @Override
     public void onShow(Product product) {
-
+        showDetail(product);
     }
 
     @Override

@@ -58,6 +58,9 @@ public class Product implements Parcelable {
     private List<Attribute> AttributeList;
     private int TotalPage;
 
+    public Product() {
+    }
+
     protected Product(Parcel in) {
         Id = in.readString();
         Name = in.readString();

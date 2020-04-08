@@ -13,6 +13,7 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
@@ -91,4 +92,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("product/findbyseen/page={page}")
     Call<ResponseData<List<Product>>> findbyseen(@Body CollectionByIdRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbyid")
+    Call<ResponseData<Product>> findbyid(@Body ProductDetailRequest request);
 }

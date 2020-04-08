@@ -78,6 +78,11 @@ public class CategoryActivity extends AppCompatActivity implements CategoryListe
         showDialogPickProduct(product);
     }
 
+    @Override
+    public void show(Product product) {
+        Intents.startProductDetailActivity(this, product.getId());
+    }
+
     private void showDialogPickProduct(Product product) {
         final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
         selectProductDialogFragment.setListener(new OnSelectedListener() {

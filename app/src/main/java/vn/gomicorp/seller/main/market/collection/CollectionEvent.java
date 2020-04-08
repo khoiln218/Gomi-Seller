@@ -7,7 +7,8 @@ import vn.gomicorp.seller.event.Event;
  */
 public class CollectionEvent extends Event {
     public static final int ON_PICK = 0;
-    public static final int SELECT_ERROR = 1;
+    public static final int ON_SHOW = 1;
+    public static final int SELECT_ERROR = 2;
 
     public CollectionEvent(int code) {
         this.code = code;

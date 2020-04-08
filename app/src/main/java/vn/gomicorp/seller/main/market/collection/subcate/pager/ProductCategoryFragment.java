@@ -13,6 +13,7 @@ import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentProductCategoryBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
@@ -75,6 +76,10 @@ public class ProductCategoryFragment extends Fragment {
                         break;
                     case ProductCategoryEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
+                        break;
+                    case ProductCategoryEvent.ON_SHOW:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(getActivity(), product.getId());
                         break;
                 }
             }

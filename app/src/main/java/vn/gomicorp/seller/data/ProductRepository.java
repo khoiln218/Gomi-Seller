@@ -5,6 +5,7 @@ import java.util.List;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
@@ -66,5 +67,10 @@ public class ProductRepository implements ProductDataSource {
     @Override
     public void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
         mProductDataSource.findbyseen(request, page, callback);
+    }
+
+    @Override
+    public void findbyid(ProductDetailRequest request, ResultListener<ResponseData<Product>> callback) {
+        mProductDataSource.findbyid(request, callback);
     }
 }

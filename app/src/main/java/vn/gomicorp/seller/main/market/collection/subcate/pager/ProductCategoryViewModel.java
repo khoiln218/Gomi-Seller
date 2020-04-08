@@ -47,7 +47,13 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
 
     @Override
     public void onShow(Product product) {
+        showDetail(product);
+    }
 
+    private void showDetail(Product product) {
+        ProductCategoryEvent event = new ProductCategoryEvent(ProductCategoryEvent.ON_SHOW);
+        event.setData(product);
+        cmd.call(event);
     }
 
     @Override

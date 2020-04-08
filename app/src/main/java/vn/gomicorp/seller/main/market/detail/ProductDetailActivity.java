@@ -9,12 +9,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityProductDetailBinding;
+import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class ProductDetailActivity extends AppCompatActivity {
-    String productId;
-    ProductDetailViewModel viewModel;
+public class ProductDetailActivity extends AppCompatActivity implements ProductDetialListener {
+    private String productId;
+    private ProductDetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +27,14 @@ public class ProductDetailActivity extends AppCompatActivity {
             finish();
         initBinding();
         initToolbar();
+        viewModel.setProductId(productId);
+        viewModel.setListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.requestProductById(productId);
+        viewModel.requestProductById();
     }
 
     @Override
@@ -57,5 +62,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+    }
+
+    @Override
+    public void pick(Product product) {
+        showDialogPickProduct(product);
+    }
+
+    private void showDialogPickProduct(Product product) {
+        final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
+        selectProductDialogFragment.setListener(new OnSelectedListener() {
+            @Override
+            public void onSelected(Product product) {
+                viewModel.requestPickProduct(product);
+                selectProductDialogFragment.dismiss();
+            }
+        });
+        selectProductDialogFragment.show(getSupportFragmentManager(), selectProductDialogFragment.getTag());
     }
 }

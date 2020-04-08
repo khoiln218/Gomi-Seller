@@ -110,16 +110,13 @@ public class MainBinding {
         textView.setText(String.format("-%d%%", saleOff));
     }
 
-    @BindingAdapter("setProduct")
-    public static void setProduct(RecyclerView recyclerView, Product product) {
-        if (recyclerView.getAdapter() == null) {
+    @BindingAdapter("setProductDetailAdapter")
+    public static void setProduct(RecyclerView recyclerView, ProductDetailAdapter adapter) {
+        if (adapter != null && recyclerView.getAdapter() == null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-            ProductDetailAdapter adapter = new ProductDetailAdapter(product);
             recyclerView.setAdapter(adapter);
-        } else {
-            ((ProductDetailAdapter) recyclerView.getAdapter()).setProduct(product);
         }
 
     }

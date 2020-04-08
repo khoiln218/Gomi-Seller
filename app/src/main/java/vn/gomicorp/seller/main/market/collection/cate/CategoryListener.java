@@ -9,4 +9,6 @@ public interface CategoryListener {
     void openCategory(int type, int id, String name);
 
     void pick(Product product);
+
+    void show(Product product);
 }

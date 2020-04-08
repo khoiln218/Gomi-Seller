@@ -18,6 +18,7 @@ import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
@@ -36,11 +37,10 @@ public class CollectionActivity extends AppCompatActivity {
         setupToolbar();
         setupCmd();
 
-        loadData();
+        viewModel.setCollectionId(id);
     }
 
     private void loadData() {
-        viewModel.setCollectionId(id);
         viewModel.showLoading();
         viewModel.onRefresh();
     }
@@ -52,6 +52,10 @@ public class CollectionActivity extends AppCompatActivity {
                 switch (event.code) {
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
+                        break;
+                    case CollectionEvent.ON_SHOW:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(CollectionActivity.this, product.getId());
                         break;
                     case CollectionEvent.SELECT_ERROR:
                         ToastUtils.showToast(event.message);
@@ -86,6 +90,7 @@ public class CollectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadData();
     }
 
     private void setupToolbar() {
