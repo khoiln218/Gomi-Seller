@@ -19,9 +19,9 @@
         android:gravity="center"
         android:onClick="@{(v)->listener.onClick(category)}"
         android:orientation="vertical"
-        android:paddingStart="@dimen/padding_xlarge"
+        android:paddingStart="@dimen/padding_medium"
         android:paddingTop="@dimen/padding_medium"
-        android:paddingEnd="@dimen/padding_xlarge"
+        android:paddingEnd="@dimen/padding_medium"
         android:paddingBottom="@dimen/padding_small">
 
         <ImageView

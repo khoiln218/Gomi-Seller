@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.nav_market:
-                loadFragment(new MarketFragment());
+                loadFragment(MarketFragment.getInstance());
                 return true;
 
             case R.id.nav_notify:
