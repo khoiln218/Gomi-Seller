@@ -1,12 +1,15 @@
 package vn.gomicorp.seller.main.home;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import vn.gomicorp.seller.BaseViewModel;
+import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.data.source.model.data.Shop;
@@ -16,41 +19,36 @@ import vn.gomicorp.seller.event.ProductHandler;
 /**
  * Created by KHOI LE on 3/30/2020.
  */
-public class HomeViewModel extends ViewModel implements OnLoadMoreListener, TabLayout.OnTabSelectedListener {
+public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLoadMoreListener, TabLayout.OnTabSelectedListener {
     public MutableLiveData<Shop> shop = new MutableLiveData<>();
     public MutableLiveData<List<Category>> categories = new MutableLiveData<>();
-    public MutableLiveData<List<Product>> products = new MutableLiveData<>();
+    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
 
-    public MutableLiveData<Boolean> processing = new MutableLiveData<>();
+    private ProductItemAdapter adapter;
+    private List<Product> products;
+    private List<Category> categoryList;
+
+    private int categoryId;
+    private Shop mShop;
 
     public HomeViewModel() {
-        processing(false);
+        products = new ArrayList<>();
+        categoryList = new ArrayList<>();
+        adapter = new ProductItemAdapter(products, this, this);
+        productItemAdapter.setValue(adapter);
     }
-
-    public ProductHandler productHandler = new ProductHandler() {
-        @Override
-        public void onShow(Product product) {
-
-        }
-
-        @Override
-        public void onPick(Product product) {
-
-        }
-    };
 
     @Override
     public void onLoadMore() {
 
     }
 
-    private void processing(boolean isShow) {
-        processing.setValue(isShow);
-    }
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getPosition() > categoryList.size())
+            return;
 
+        selectCategory(tab.getPosition());
     }
 
     @Override
@@ -60,6 +58,52 @@ public class HomeViewModel extends ViewModel implements OnLoadMoreListener, TabL
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+        if (tab.getPosition() > categoryList.size())
+            return;
 
+        selectCategory(tab.getPosition());
+    }
+
+    private void selectCategory(int position) {
+        Category selectedCategory = categoryList.get(position);
+        categoryId = selectedCategory.getId();
+        requestProduct();
+    }
+
+    @Override
+    public void onShow(Product product) {
+
+    }
+
+    @Override
+    public void onPick(Product product) {
+
+    }
+
+    void requestShopInfomation() {
+        String shopId = EappsApplication.getPreferences().getShopId();
+        updateShopInformation();
+        requestMegaCategory();
+    }
+
+    private void updateShopInformation() {
+        EappsApplication.getPreferences().setShop(mShop);
+        shop.setValue(mShop);
+    }
+
+    private void requestMegaCategory() {
+        updateMegaCategory();
+    }
+
+    private void updateMegaCategory() {
+        categories.setValue(categoryList);
+    }
+
+    private void requestProduct() {
+        updateProductList();
+    }
+
+    private void updateProductList() {
+        adapter.setProductList(products);
     }
 }

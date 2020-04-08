@@ -16,9 +16,15 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private static HomeFragment INSTANCE;
+
+    public static HomeFragment getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new HomeFragment();
+        return INSTANCE;
+    }
+
+    private HomeFragment() {
     }
 
     @Override
@@ -31,5 +37,11 @@ public class HomeFragment extends Fragment {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.requestShopInfomation();
     }
 }

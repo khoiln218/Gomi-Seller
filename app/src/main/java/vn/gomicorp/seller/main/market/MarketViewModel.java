@@ -2,7 +2,6 @@ package vn.gomicorp.seller.main.market;
 
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 

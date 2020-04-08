@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_main);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new HomeFragment());
+        loadFragment(HomeFragment.getInstance());
     }
 
     private void loadFragment(Fragment fragment) {
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
-                loadFragment(new HomeFragment());
+                loadFragment(HomeFragment.getInstance());
                 return true;
 
             case R.id.nav_market:
