@@ -90,4 +90,6 @@
     <string name="account_number">Số tài khoản</string>
     <string name="btn_complete">Xong</string>
     <string name="bank_management">Quản lý tài khoản</string>
+    <string name="network_connected">Đã có kết nối mạng</string>
+    <string name="network_lost">Không có kết nối mạng</string>
 </resources>

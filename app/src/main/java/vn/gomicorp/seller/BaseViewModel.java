@@ -42,7 +42,7 @@ public class BaseViewModel extends ViewModel {
     }
 
     protected void checkConnection(final String error) {
-        ConnectionHelper.checkNetwork(new ConnectionHelper.OnCheckNetworkListener() {
+        ConnectionHelper.getInstance().checkNetwork(new ConnectionHelper.OnCheckNetworkListener() {
             @Override
             public void onCheck(boolean isOnline) {
                 if (!isOnline)
