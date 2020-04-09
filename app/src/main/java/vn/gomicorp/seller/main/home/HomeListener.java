@@ -5,4 +5,6 @@ package vn.gomicorp.seller.main.home;
  */
 public interface HomeListener {
     void withdrawn();
+
+    void shareSNS(String content);
 }

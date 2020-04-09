@@ -66,4 +66,14 @@ public class Intents {
 
         activity.startActivity(intent);
     }
+
+    public static void startActionSend(Activity activity, String title, String subject, String text) {
+        Intent target = new Intent(Intent.ACTION_SEND);
+        target.setType("text/plain");
+
+        target.putExtra(Intent.EXTRA_SUBJECT, subject);
+        target.putExtra(Intent.EXTRA_TEXT, text);
+
+        activity.startActivity(Intent.createChooser(target, title));
+    }
 }

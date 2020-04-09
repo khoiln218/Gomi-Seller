@@ -12,6 +12,7 @@ import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
 import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
+import vn.gomicorp.seller.utils.Intents;
 
 public class HomeFragment extends Fragment implements HomeListener {
 
@@ -51,5 +52,10 @@ public class HomeFragment extends Fragment implements HomeListener {
     @Override
     public void withdrawn() {
         startActivity(new Intent(getActivity(), WithdrawnActivity.class));
+    }
+
+    @Override
+    public void shareSNS(String content) {
+        Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
     }
 }

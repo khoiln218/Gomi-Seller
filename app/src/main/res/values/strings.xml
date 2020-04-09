@@ -92,4 +92,6 @@
     <string name="bank_management">Quản lý tài khoản</string>
     <string name="network_connected">Đã có kết nối mạng</string>
     <string name="network_lost">Không có kết nối mạng</string>
+    <string name="share">Share</string>
+    <string name="share_sub">[AD]Gomi Corporation</string>
 </resources>

@@ -58,6 +58,7 @@
                         android:layout_marginEnd="24dp"
                         android:adjustViewBounds="true"
                         android:background="@null"
+                        android:onClick="@{(v)->viewModel.shareSNS()}"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_share"
                         android:tint="@android:color/white"

@@ -91,6 +91,13 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
             listener.withdrawn();
     }
 
+    //TODO: debug
+    public void shareSNS() {
+        if (listener != null) {
+            listener.shareSNS(String.format("%s%s", EappsApplication.getPreferences().getSellerUrl(), "khoile000"));
+        }
+    }
+
     void requestShopInfomation() {
         String shopId = EappsApplication.getPreferences().getShopId();
         updateShopInformation();
