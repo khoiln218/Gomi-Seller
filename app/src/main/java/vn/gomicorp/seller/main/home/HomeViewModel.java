@@ -28,6 +28,12 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     private List<Product> products;
     private List<Category> categoryList;
 
+    private HomeListener listener;
+
+    public void setListener(HomeListener listener) {
+        this.listener = listener;
+    }
+
     private int categoryId;
     private Shop mShop;
 
@@ -80,6 +86,11 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
 
     }
 
+    public void withdrawn() {
+        if (listener != null)
+            listener.withdrawn();
+    }
+
     void requestShopInfomation() {
         String shopId = EappsApplication.getPreferences().getShopId();
         updateShopInformation();
@@ -87,7 +98,7 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     }
 
     private void updateShopInformation() {
-        EappsApplication.getPreferences().setShop(mShop);
+//        EappsApplication.getPreferences().setShop(mShop);
         shop.setValue(mShop);
     }
 

@@ -17,8 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".main.home.withdrawn.bank.BankListActivity"></activity>
+        <activity android:name=".main.home.withdrawn.bank.BankAccountInformationActivity" />
+        <activity android:name=".main.home.withdrawn.coupon.CouponActivity" />
+        <activity android:name=".main.home.withdrawn.WithdrawnActivity" />
         <activity android:name=".main.market.detail.ProductDetailActivity" />
-        <activity android:name=".main.market.collection.cate.CategoryActivity"></activity>
+        <activity android:name=".main.market.collection.cate.CategoryActivity" />
         <activity android:name=".main.market.collection.subcate.SubCategoryActivity" />
         <activity android:name=".main.market.collection.CollectionActivity" />
         <activity

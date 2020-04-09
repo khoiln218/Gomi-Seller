@@ -76,4 +76,18 @@
                                 <meta name="viewport" content="width={width}, initial-scale=0.65" />
                                 <style>img{display: inline; height: auto; max-width: 100%;}</style>
                                 </head><body>{body_content}</body></html>]]></string>
+    <string name="withdrawn_bank">Rút tiền về tài khoản của bạn</string>
+    <string name="withdrawn_coupon">Chọn phiếu giảm giá</string>
+    <string name="btn_continue">Tiếp tục</string>
+    <string name="receiving_account">Đã xác thực</string>
+    <string name="amount">Số tiền</string>
+    <string name="transaction_fee">Phí giao dịch</string>
+    <string name="receive">Số tiền nhận được</string>
+    <string name="receive_note">Chuyển tiền sẽ được hoàn thành trong 2 ngày làm việc.</string>
+    <string name="btn_back">Trở lại</string>
+    <string name="select_bank">Chọn ngân hàng</string>
+    <string name="account_holder">Chủ tài khoản</string>
+    <string name="account_number">Số tài khoản</string>
+    <string name="btn_complete">Xong</string>
+    <string name="bank_management">Quản lý tài khoản</string>
 </resources>

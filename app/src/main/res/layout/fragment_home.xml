@@ -133,6 +133,7 @@
                         android:layout_height="@dimen/button_height_small"
                         android:layout_margin="@dimen/padding_large"
                         android:background="@drawable/button_outline_light"
+                        android:onClick="@{(v)->viewModel.withdrawn()}"
                         android:text="@string/withdrawn"
                         android:textColor="@android:color/white"
                         app:layout_constraintBottom_toBottomOf="parent"

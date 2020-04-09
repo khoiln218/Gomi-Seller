@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,9 @@ import androidx.fragment.app.Fragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
 import vn.gomicorp.seller.main.MainActivity;
+import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeListener {
 
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
@@ -34,6 +36,7 @@ public class HomeFragment extends Fragment {
         if (binding == null)
             binding = FragmentHomeBinding.bind(view);
         viewModel = (HomeViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.HOME);
+        viewModel.setListener(this);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -43,5 +46,10 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         viewModel.requestShopInfomation();
+    }
+
+    @Override
+    public void withdrawn() {
+        startActivity(new Intent(getActivity(), WithdrawnActivity.class));
     }
 }
