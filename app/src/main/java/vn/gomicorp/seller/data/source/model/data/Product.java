@@ -56,6 +56,10 @@ public class Product implements Parcelable {
     private int IsSelling;
     private List<String> ImageList;
     private List<Attribute> AttributeList;
+    private int TotalPage;
+
+    public Product() {
+    }
 
     protected Product(Parcel in) {
         Id = in.readString();
@@ -73,6 +77,7 @@ public class Product implements Parcelable {
         IsSelling = in.readInt();
         ImageList = in.createStringArrayList();
         AttributeList = in.createTypedArrayList(Attribute.CREATOR);
+        TotalPage = in.readInt();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -229,5 +234,14 @@ public class Product implements Parcelable {
         dest.writeInt(IsSelling);
         dest.writeStringList(ImageList);
         dest.writeTypedList(AttributeList);
+        dest.writeInt(TotalPage);
+    }
+
+    public int getTotalPage() {
+        return TotalPage;
+    }
+
+    public void setTotalPage(int TotalPage) {
+        this.TotalPage = TotalPage;
     }
 }

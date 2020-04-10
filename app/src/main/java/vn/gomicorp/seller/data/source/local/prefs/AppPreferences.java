@@ -44,6 +44,8 @@ public class AppPreferences {
     private static final String REFERRAL_CODE = "REFERRAL_CODE";
     private static final String SELLER_LEVEl = "SELLER_LEVEl";
     private static final String SHOP_ID = "SHOP_ID";
+    private static final String SHOP_WEB_ADDRESS = "SHOP_WEB_ADDRESS";
+    private static final String BALANCE = "BALANCE";
 
     public void setAccount(Account account) {
         editor.putString(SELLER_URL, account.getSellerUrl());
@@ -59,6 +61,8 @@ public class AppPreferences {
 
     public void setShop(Shop shop) {
         editor.putString(SHOP_ID, shop.getId());
+        editor.putString(SHOP_WEB_ADDRESS, shop.getWebAddress());
+        editor.putInt(BALANCE, (int) shop.getPointBalance());
         editor.commit();
     }
 

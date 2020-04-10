@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import vn.gomicorp.seller.R;
-import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -24,6 +23,17 @@ public class MarketFragment extends Fragment {
 
     private FragmentMarketBinding binding;
     private MarketViewModel viewModel;
+
+    public static MarketFragment INSTANCE;
+
+    public static MarketFragment getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new MarketFragment();
+        return INSTANCE;
+    }
+
+    private MarketFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,11 +67,11 @@ public class MarketFragment extends Fragment {
                         break;
                     case MarketEvent.ONCLICK_CATEGORY:
                         Category category = (Category) event.getData();
-                        Intents.startCategoryActivity(getActivity(), MarketListAdapter.CollectionType.CATAGORY, category.getId(), category.getName());
+                        Intents.startCategoryActivity(getActivity(), category.getId(), category.getName());
                         break;
                     case MarketEvent.ONCLICK_COLLECTION:
                         Collection collection = (Collection) event.getData();
-                        Intents.startCategoryActivity(getActivity(), collection.getType(), collection.getType(), collection.getName());
+                        Intents.startCollectionActivity(getActivity(), collection.getType(), collection.getName());
                         break;
                     case MarketEvent.SHOW_DETAIL:
                         Product product = (Product) event.getData();

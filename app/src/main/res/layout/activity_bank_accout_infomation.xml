@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="vn.gomicorp.seller.main.home.withdrawn.bank.BankAccountInformationViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.home.withdrawn.bank.BankAccountInformationActivity">
+
+        <include layout="@layout/layout_action_bar" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_xlarge">
+
+                <LinearLayout
+                    android:id="@+id/select_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    android:background="@drawable/border_layout"
+                    android:gravity="center"
+                    android:onClick="@{(v)->viewModel.selectBank()}"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/padding_medium"
+                    android:paddingTop="@dimen/padding_small"
+                    android:paddingEnd="@dimen/padding_medium"
+                    android:paddingBottom="@dimen/padding_small">
+
+                    <ImageView
+                        android:id="@+id/image_avatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="@dimen/padding_small"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter" />
+
+                    <TextView
+                        android:id="@+id/text_bank_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingTop="@dimen/padding_small"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:text="@string/select_bank"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorPrimaryText" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/colorHintText" />
+                </LinearLayout>
+
+                <!--Account Holder-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account_holder"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    app:hintEnabled="false">
+
+                    <EditText
+                        android:id="@+id/input_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/account_holder"
+                        android:inputType="textCapCharacters"
+                        android:singleLine="true"
+                        android:textAppearance="?android:textAppearance" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--Account nNumber-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account_number"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_medium"
+                    app:hintEnabled="false">
+
+                    <EditText
+                        android:id="@+id/input_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/account_number"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textAppearance="?android:textAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    style="@style/AppTheme.ButtonPrimary"
+                    android:layout_width="@dimen/button_width_180"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{(v)->viewModel.submit()}"
+                    android:text="@string/btn_complete" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

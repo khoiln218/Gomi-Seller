@@ -7,11 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopDataSource;
+import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
 
 /**
@@ -53,6 +57,80 @@ public class MockShopDataSource implements ShopDataSource {
             "    \"TotalRows\": 0\n" +
             "}";
 
+    String jsonCategory = "{\n" +
+            "   \"Status\":true,\n" +
+            "   \"Message\":\"OK\",\n" +
+            "   \"Code\":200,\n" +
+            "   \"Result\":[\n" +
+            "      {\n" +
+            "         \"Id\":1,\n" +
+            "         \"Name\":\"Trang sức - Phụ kiện\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_trang-suc-phu-kien.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":2,\n" +
+            "         \"Name\":\"Thời trang - Phụ kiện\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_thoi-trang-phu-kien.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":3,\n" +
+            "         \"Name\":\"Làm đẹp - Sức khỏe\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_lam-dep-suc-khoe.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":4,\n" +
+            "         \"Name\":\"Nhà cửa đời sống\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_nha-cua-doi-song.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":5,\n" +
+            "         \"Name\":\"Dành cho thú cưng\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_danh-cho-thu-cung.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":6,\n" +
+            "         \"Name\":\"Laptop - Thiết bị IT\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_laptop-thiet-bi-it.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":7,\n" +
+            "         \"Name\":\"Phụ kiện - Thiết bị số\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_phu-kien-thiet-bi-so.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":8,\n" +
+            "         \"Name\":\"Thể thao - Dã ngoại\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_the-thao-da-ngoai.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":9,\n" +
+            "         \"Name\":\"Điện thoại - Máy tính bảng\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_dien-thoai-may-tinh-bang.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":10,\n" +
+            "         \"Name\":\"Đồ chơi - Mẹ & Bé\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_do-choi-me-be.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":11,\n" +
+            "         \"Name\":\"Điện gia dụng\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_dien-gia-dung.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":12,\n" +
+            "         \"Name\":\"Thực phẩm\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_thuc-pham.png\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "         \"Id\":13,\n" +
+            "         \"Name\":\"Hỗ trợ tình dục\",\n" +
+            "         \"Icon\":\"http://192.168.0.12:2526/Category/Icon/ic_ho-tro-tinh-duc.png\"\n" +
+            "      }\n" +
+            "   ],\n" +
+            "   \"TotalRows\":0\n" +
+            "}";
+
     @Override
     public void verifySellerUrl(VerifyUrlRequest request, final ResultListener<ResponseData> callback) {
         new Handler().postDelayed(new Runnable() {
@@ -66,6 +144,23 @@ public class MockShopDataSource implements ShopDataSource {
     @Override
     public void create(CreateShopRequest request, ResultListener<ResponseData<Shop>> callback) {
         excute(createJson, callback);
+    }
+
+    @Override
+    public void findcatebytype(CategoryByIdRequest request, final ResultListener<ResponseData<List<Category>>> callback) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("excute", "DATA: " + jsonCategory);
+                Gson gson = new GsonBuilder()
+                        .enableComplexMapKeySerialization()
+                        .serializeNulls()
+                        .setPrettyPrinting()
+                        .create();
+                callback.onLoaded(gson.<ResponseData<List<Category>>>fromJson(jsonCategory, new TypeToken<ResponseData<List<Category>>>() {
+                }.getType()));
+            }
+        }, 400);
     }
 
     private void excute(final String jsonData, final ResultListener<ResponseData<Shop>> callback) {

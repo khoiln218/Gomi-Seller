@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
             type="vn.gomicorp.seller.main.market.MarketViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".main.market.MarketFragment">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:categoryHandler="@{viewModel.categoryHandler}"
-            app:collectionHandler="@{viewModel.collectionHandler}"
-            app:productHandler="@{viewModel.productHandler}"
-            app:selectChange="@{viewModel.productChange}"
-            app:setCollections="@{viewModel.collections}" />
+            app:setCollectionAdapter="@{viewModel.marketListAdapter}" />
 
-    </LinearLayout>
+        <include
+            layout="@layout/layout_empty"
+            android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+            app:msg="@{viewModel.errorMessage}" />
+
+        <include
+            layout="@layout/layout_progress"
+            android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
+    </RelativeLayout>
 </layout>

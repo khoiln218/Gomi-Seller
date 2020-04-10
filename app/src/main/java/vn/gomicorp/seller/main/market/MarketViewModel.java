@@ -2,17 +2,17 @@ package vn.gomicorp.seller.main.market;
 
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
@@ -26,12 +26,13 @@ import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.MultableLiveEvent;
+import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends ViewModel {
+public class MarketViewModel extends BaseViewModel {
     private final int CODE_OK = 200;
 
     public ProductHandler productHandler = new ProductHandler() {
@@ -67,9 +68,24 @@ public class MarketViewModel extends ViewModel {
         }
     };
 
+    private List<ProductItemAdapter> adapters = new ArrayList<>();
+    public List<Collection> collections = new ArrayList<>();
+    private MarketListAdapter adapter;
+
     private ProductRepository mProductRepository = ProductRepository.getInstance();
-    public MutableLiveData<List<Collection>> collections = new MutableLiveData<>();
-    public MutableLiveData<Product> productChange = new MutableLiveData<>();
+    public MutableLiveData<MarketListAdapter> marketListAdapter = new MutableLiveData<>();
+
+    public MarketViewModel() {
+        adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler, onProductAdapterInitListener);
+        marketListAdapter.setValue(adapter);
+    }
+
+    public OnProductAdapterInitListener onProductAdapterInitListener = new OnProductAdapterInitListener() {
+        @Override
+        public void init(ProductItemAdapter adapter) {
+            adapters.add(adapter);
+        }
+    };
 
     public MultableLiveEvent<MarketEvent> getCmd() {
         return cmd;
@@ -87,13 +103,15 @@ public class MarketViewModel extends ViewModel {
         cmd.call(event);
     }
 
-    public void requestPickProduct(Product product) {
+    void requestPickProduct(Product product) {
+        showProgressing();
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());
         mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
             @Override
             public void onLoaded(ResponseData<Product> result) {
+                hideProgressing();
                 if (result.getCode() == CODE_OK)
                     updateProduct(result.getResult());
                 else
@@ -102,6 +120,7 @@ public class MarketViewModel extends ViewModel {
 
             @Override
             public void onDataNotAvailable(String error) {
+                hideProgressing();
                 updateFail(error);
             }
         });
@@ -112,13 +131,15 @@ public class MarketViewModel extends ViewModel {
     }
 
     private void updateProduct(Product product) {
-        for (Collection collection : collections.getValue()) {
+        for (Collection collection : collections) {
             for (Parcelable parcelable : collection.getData()) {
                 if (parcelable instanceof Product) {
                     Product item = (Product) parcelable;
                     if (TextUtils.equals(product.getId(), item.getId())) {
-                        collection.getData().set(collection.getData().indexOf(item), product);
-                        productChange.setValue(product);
+                        item.setIsSelling(product.getIsSelling());
+                        updateCollection();
+                        for (ProductItemAdapter adapter : adapters)
+                            adapter.notifyItemChanged(product);
                         break;
                     }
                 } else {
@@ -129,54 +150,69 @@ public class MarketViewModel extends ViewModel {
     }
 
     void requestCollections() {
+        showProgressing();
+        refresh();
         final IntroduceRequest request = new IntroduceRequest();
         mProductRepository.introduce(request, new ResultListener<ResponseData<Introduce>>() {
             @Override
             public void onLoaded(ResponseData<Introduce> result) {
+                hideProgressing();
                 if (result.getCode() == CODE_OK) {
                     List<Collection> collectionList = new ArrayList<>();
 
                     //banner
                     List<Parcelable> banners = new ArrayList<>();
-                    for (Banner banner : result.getResult().getBannerList()) {
-                        banners.add(banner);
+                    //TODO: code demo
+                    if (result.getResult().getBannerList().size() == 0) {
+                        for (int i = 0; i < 5; i++) {
+                            banners.add(new Banner(i, i % 2 == 0 ? "http://192.168.1.30:2526/banner/elravie.jpg" : "http://192.168.1.30:2526/banner/booki.jpg"));
+                        }
+                    } else {
+                        banners.addAll(result.getResult().getBannerList());
                     }
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, banners));
 
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
-                    for (Category category : result.getResult().getMegaCateList()) {
-                        categorys.add(category);
-                    }
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.CATAGORY, categorys));
+                    categorys.addAll(result.getResult().getMegaCateList());
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.MEGA_CATAGORY, categorys));
 
                     //collectionlist
                     for (Introduce.CollectionListBean collectionListBean : result.getResult().getCollectionList()) {
                         List<Parcelable> productParcelableList = new ArrayList<>();
-                        for (Product product : collectionListBean.getProductList()) {
-                            productParcelableList.add(product);
-                        }
+                        productParcelableList.addAll(collectionListBean.getProductList());
                         collectionList.add(new Collection(collectionListBean.getId(), collectionListBean.getName(), productParcelableList));
                     }
 
                     //product seen
                     List<Parcelable> productList = new ArrayList<>();
-                    for (Product product : result.getResult().getProductSeen().getProductList()) {
-                        productList.add(product);
-                    }
+                    productList.addAll(result.getResult().getProductSeen().getProductList());
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.SEEN_PRODUCT, EappsApplication.getInstance().getString(R.string.product_seen), productList));
 
                     //update collection
-                    collections.setValue(collectionList);
+                    collections = collectionList;
+                    updateCollection();
                 } else {
-                    Log.d("reqCollections", "onLoaded-Fails: " + result.getMessage());
+                    setErrorMessage(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                Log.d("reqCollections", "onDataNotAvailable: " + error);
+                hideProgressing();
+                checkConnection(error);
             }
         });
+    }
+
+    private void updateCollection() {
+        setErrorMessage(collections.size() > 0 ? null : "Not Result");
+        adapter.setCollections(collections);
+    }
+
+    private void refresh() {
+        collections.clear();
+        updateCollection();
+        adapters.clear();
     }
 }

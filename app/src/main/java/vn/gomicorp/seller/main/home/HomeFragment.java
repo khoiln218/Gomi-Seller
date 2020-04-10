@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +11,23 @@ import androidx.fragment.app.Fragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
 import vn.gomicorp.seller.main.MainActivity;
+import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
+import vn.gomicorp.seller.utils.Intents;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeListener {
 
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private static HomeFragment INSTANCE;
+
+    public static HomeFragment getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new HomeFragment();
+        return INSTANCE;
+    }
+
+    private HomeFragment() {
     }
 
     @Override
@@ -28,8 +37,25 @@ public class HomeFragment extends Fragment {
         if (binding == null)
             binding = FragmentHomeBinding.bind(view);
         viewModel = (HomeViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.HOME);
+        viewModel.setListener(this);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.requestShopInfomation();
+    }
+
+    @Override
+    public void withdrawn() {
+        startActivity(new Intent(getActivity(), WithdrawnActivity.class));
+    }
+
+    @Override
+    public void shareSNS(String content) {
+        Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
     }
 }

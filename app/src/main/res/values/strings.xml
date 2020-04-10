@@ -58,11 +58,7 @@
 
     <!--Main-->
     <string name="view">Xem thêm</string>
-
     <string name="banner">banner</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_product">Thêm sản phẩm</string>
     <string name="sub_product">Xóa sản phẩm</string>
     <string name="product_seen">Sản phẩm đã xem</string>
@@ -75,4 +71,32 @@
     <string name="invite">Invite</string>
     <string name="coupon">Coupon</string>
     <string name="bank_management">Bank Management</string>
+    <string name="empty">Not Result</string>
+    <string name="network_error">Network Not Available</string>
+    <string name="view_detail">Xem chi tiết</string>
+    <string name="product_description">Mô tả sản phẩm</string>
+
+    <string name="html" translatable="false"><![CDATA[<!DOCTYPE html><html><head>
+                                <meta http-equiv="content-type" content="text/html; charset=utf-8">
+                                <meta name="viewport" content="width={width}, initial-scale=0.65" />
+                                <style>img{display: inline; height: auto; max-width: 100%;}</style>
+                                </head><body>{body_content}</body></html>]]></string>
+    <string name="withdrawn_bank">Rút tiền về tài khoản của bạn</string>
+    <string name="withdrawn_coupon">Chọn phiếu giảm giá</string>
+    <string name="btn_continue">Tiếp tục</string>
+    <string name="receiving_account">Đã xác thực</string>
+    <string name="amount">Số tiền</string>
+    <string name="transaction_fee">Phí giao dịch</string>
+    <string name="receive">Số tiền nhận được</string>
+    <string name="receive_note">Chuyển tiền sẽ được hoàn thành trong 2 ngày làm việc.</string>
+    <string name="btn_back">Trở lại</string>
+    <string name="select_bank">Chọn ngân hàng</string>
+    <string name="account_holder">Chủ tài khoản</string>
+    <string name="account_number">Số tài khoản</string>
+    <string name="btn_complete">Xong</string>
+    <string name="bank_management">Quản lý tài khoản</string>
+    <string name="network_connected">Đã có kết nối mạng</string>
+    <string name="network_lost">Không có kết nối mạng</string>
+    <string name="share">Share</string>
+    <string name="share_sub">[AD]Gomi Corporation</string>
 </resources>

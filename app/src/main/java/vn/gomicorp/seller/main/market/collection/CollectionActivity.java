@@ -14,40 +14,67 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Objects;
 
 import vn.gomicorp.seller.R;
-import vn.gomicorp.seller.adapter.MarketListAdapter;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
+import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.utils.Intents;
+import vn.gomicorp.seller.utils.ToastUtils;
+import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class CollectionActivity extends AppCompatActivity {
-    CollectionViewModel viewModel;
-    ActivityCollectionBinding binding;
-    int type;
-    int id;
-    String name;
+    private CollectionViewModel viewModel;
+    private ActivityCollectionBinding binding;
+    private int id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getIntent().getIntExtra(GomiConstants.EXTRA_TYPE, MarketListAdapter.CollectionType.VIEW_LOADING);
         name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
         initBinding();
         setupToolbar();
         setupCmd();
-        viewModel.setName(name);
-        viewModel.setId(id);
-        viewModel.setType(type);
+
+        viewModel.setCollectionId(id);
+    }
+
+    private void loadData() {
+        viewModel.showLoading();
+        viewModel.onRefresh();
     }
 
     private void setupCmd() {
         viewModel.getCmd().observe(this, new Observer<CollectionEvent>() {
             @Override
             public void onChanged(CollectionEvent event) {
-                if (event.code == CollectionEvent.UPDATE_TOOLBAR) {
-                    getSupportActionBar().setTitle((String) event.data);
+                switch (event.code) {
+                    case CollectionEvent.ON_PICK:
+                        showDialogPickProduct((Product) event.getData());
+                        break;
+                    case CollectionEvent.ON_SHOW:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(CollectionActivity.this, product.getId());
+                        break;
+                    case CollectionEvent.SELECT_ERROR:
+                        ToastUtils.showToast(event.message);
+                        break;
                 }
             }
         });
+    }
+
+    private void showDialogPickProduct(Product product) {
+        final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
+        selectProductDialogFragment.setListener(new OnSelectedListener() {
+            @Override
+            public void onSelected(Product product) {
+                viewModel.requestPickProduct(product);
+                selectProductDialogFragment.dismiss();
+            }
+        });
+        selectProductDialogFragment.show(getSupportFragmentManager(), selectProductDialogFragment.getTag());
     }
 
     @Override
@@ -63,7 +90,7 @@ public class CollectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.onRefresh();
+        loadData();
     }
 
     private void setupToolbar() {

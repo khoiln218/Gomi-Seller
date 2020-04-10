@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ListProductItemBinding;
 import vn.gomicorp.seller.event.ProductHandler;
@@ -28,9 +27,9 @@ public class ProductItemHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void bind(Product product, ProductHandler listener) {
+    public void bind(Product product, ProductHandler productHandler) {
         binding.setProduct(product);
-        binding.setProductHandler(listener);
+        binding.setProductHandler(productHandler);
         binding.executePendingBindings();
     }
 }

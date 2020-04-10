@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import vn.gomicorp.seller.EappsApplication;
@@ -114,5 +115,17 @@ public final class Utils {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
         else
             return Html.fromHtml(source);
+    }
+
+    /**
+     * Hide Soft Keyboard
+     *
+     * @param activity
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        if (activity.getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

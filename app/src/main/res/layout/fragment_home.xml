@@ -58,6 +58,7 @@
                         android:layout_marginEnd="24dp"
                         android:adjustViewBounds="true"
                         android:background="@null"
+                        android:onClick="@{(v)->viewModel.shareSNS()}"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_share"
                         android:tint="@android:color/white"
@@ -69,7 +70,7 @@
                         android:id="@+id/text_shop_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding_large"
+                        android:layout_marginStart="@dimen/padding_large"
                         android:layout_marginTop="24dp"
                         android:singleLine="true"
                         android:text="@{viewModel.shop.shopName}"
@@ -86,7 +87,7 @@
                         android:id="@+id/text_shop_url"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/padding_large"
+                        android:layout_marginStart="@dimen/padding_large"
                         android:singleLine="true"
                         android:textAlignment="textStart"
                         android:textAppearance="?android:textAppearance"
@@ -133,6 +134,7 @@
                         android:layout_height="@dimen/button_height_small"
                         android:layout_margin="@dimen/padding_large"
                         android:background="@drawable/button_outline_light"
+                        android:onClick="@{(v)->viewModel.withdrawn()}"
                         android:text="@string/withdrawn"
                         android:textColor="@android:color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -165,13 +167,11 @@
             android:paddingStart="@dimen/padding_medium"
             android:paddingEnd="@dimen/padding_medium"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:onLoadMoreListener="@{viewModel}"
-            app:productHandler="@{viewModel.productHandler}"
-            app:setCategoryProducts="@{viewModel.products}" />
+            app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
 
         <include
             layout="@layout/layout_progress"
-            android:visibility="@{viewModel.processing ? View.VISIBLE : View.GONE, default = gone}" />
+            android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default = gone}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
