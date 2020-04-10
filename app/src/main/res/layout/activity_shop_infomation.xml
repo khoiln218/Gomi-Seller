@@ -1,9 +1,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
+        <import type="vn.gomicorp.seller.utils.GomiConstants" />
 
         <variable
             name="viewModel"
@@ -12,23 +17,27 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".shopinfo.ShopInformationActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_bottom"
+            app:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+                android:layout_height="?android:attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <ImageView
-                    android:id="@+id/img_action_bar"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_action_bar" />
 
             </androidx.appcompat.widget.Toolbar>
@@ -38,257 +47,318 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:background="@color/colorDivider"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/img_cover"
-                    android:layout_width="0dp"
+                <!--Banner-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_home_banner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:setImageView="@{viewModel.coverUrl}" />
+                    android:layout_marginBottom="@dimen/padding_small"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="2dp">
 
-                <ImageButton
-                    android:id="@+id/imb_camera"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/banner_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:initBannerContainer="@{null}">
+
+                        <ImageView
+                            android:id="@+id/image_cover"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/img_home_banner"
+                            app:setImageView="@{viewModel.coverUrl}" />
+
+                        <TextView
+                            android:id="@+id/text_shop_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/padding_large"
+                            android:paddingTop="@dimen/padding_large"
+                            android:paddingEnd="@dimen/padding_large"
+                            android:text="@{TextUtils.isEmpty(viewModel.shopName)?@string/shop_name:viewModel.shopName}"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/text_shop_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/text_shop_name"
+                            android:paddingStart="@dimen/padding_large"
+                            android:paddingEnd="@dimen/padding_large"
+                            android:text="@{viewModel.fullSellerUrl}"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@android:color/white" />
+
+                        <ImageButton
+                            android:id="@+id/btn_change_cover"
+                            android:layout_width="@dimen/button_height_small"
+                            android:layout_height="@dimen/button_height_small"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="@dimen/padding_medium"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/circle_with_border_36"
+                            android:onClick="@{()->viewModel.changeCover()}"
+                            android:src="@drawable/ic_camera"
+                            android:tint="@color/colorSecondary" />
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!--Shop Information-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/circle_with_border_36"
-                    android:onClick="@{()->viewModel.changeCover()}"
-                    android:src="@drawable/ic_camera"
-                    android:tint="@color/colorSecondary"
-                    app:layout_constraintBottom_toBottomOf="@id/img_cover"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:layout_marginBottom="@dimen/padding_small"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="2dp">
 
-                <TextView
-                    android:id="@+id/tv_shop_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Khoi Le"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_location"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/img_cover"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Quận 1, TP HCM"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_seller_url"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_shop_name"
-                    app:layout_constraintVertical_chainStyle="spread_inside" />
-
-                <TextView
-                    android:id="@+id/tv_seller_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="http://gomistore.vn/khoile"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_cover"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_location" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_shop_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:hint="@string/hint_shop_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/img_cover"
-                    app:setError="@{viewModel.errorShopName}"
-                    app:setErrorEnabled="@{viewModel.enableErrorShopName}">
-
-                    <EditText
-                        android:id="@+id/txt_shop_name"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:afterTextChanged="@{(s) -> viewModel.afterTextChanged()}"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.shopName}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:background="@android:color/white"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large">
 
-                <TextView
-                    android:id="@+id/tv_domain"
-                    android:layout_width="0dp"
+                        <!--Shop Name-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shop_name"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/input_layout_shop_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:hintEnabled="false"
+                            app:setError="@{viewModel.errorShopName}"
+                            app:setErrorEnabled="@{viewModel.enableErrorShopName}">
+
+                            <EditText
+                                android:id="@+id/input_shop_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:afterTextChanged="@{(s) -> viewModel.afterTextChanged()}"
+                                android:hint="@string/hint_shop_name"
+                                android:inputType="textCapWords"
+                                android:singleLine="true"
+                                android:text="@={viewModel.shopName}"
+                                android:textAppearance="?android:textAppearance" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <!--Shop Url-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="URL"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/input_layout_shop_url"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:hintEnabled="false"
+                                app:setError="@{viewModel.errorUrl}"
+                                app:setErrorEnabled="@{viewModel.enableErrorUrl}">
+
+                                <vn.gomicorp.seller.widgets.PrefixEditText
+                                    android:id="@+id/input_shop_url"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:afterTextChanged="@{(s) -> viewModel.afterUrlChanged()}"
+                                    android:inputType="textUri"
+                                    android:singleLine="true"
+                                    android:text="@={viewModel.sellerUrl}"
+                                    android:textAppearance="?android:textAppearance"
+                                    app:init="@{null}"
+                                    app:requestFocus="@{viewModel.requestFocusUrl}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <Button
+                                    android:id="@+id/btn_verify_url"
+                                    style="@style/AppTheme.ButtonOutline"
+                                    android:layout_width="@dimen/button_width_108"
+                                    android:layout_height="@dimen/button_height_small"
+                                    android:layout_centerInParent="true"
+                                    android:enabled="@{viewModel.sellerUrl.length()>2?true:false, default=false}"
+                                    android:onClick="@{()->viewModel.verifyUrl()}"
+                                    android:text="@string/verify_url"
+                                    android:visibility="@{viewModel.verifyIsShow?View.VISIBLE:View.INVISIBLE, default=visible}" />
+
+                                <ImageView
+                                    android:id="@+id/img_verify_url"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="@dimen/padding_medium"
+                                    android:layout_marginEnd="@dimen/padding_medium"
+                                    android:adjustViewBounds="true"
+                                    android:src="@drawable/ic_check"
+                                    android:tint="@color/colorGreen"
+                                    android:visibility="@{viewModel.checkOkIsShow?View.VISIBLE:View.INVISIBLE, default=visible}" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <Spinner
+                                android:id="@+id/spn_country"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_medium"
+                                android:backgroundTint="@color/colorAccent"
+                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectCountry(pos)}"
+                                android:onTouch="@{(v, event)->viewModel.onTouchCountry(event)}"
+                                app:setLocationAdapter="@{viewModel.countryAdapterMutableLiveData}" />
+
+                            <Spinner
+                                android:id="@+id/spn_province"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_medium"
+                                android:backgroundTint="@color/colorAccent"
+                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectProvince(pos)}"
+                                android:onTouch="@{(v, event)->viewModel.onTouchProvince(event)}"
+                                app:setLocationAdapter="@{viewModel.provinceAdapterMutableLiveData}" />
+
+                            <Spinner
+                                android:id="@+id/spn_district"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@color/colorAccent"
+                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectDistrict(pos)}"
+                                android:onTouch="@{(v, event)->viewModel.onTouchDistrict(event)}"
+                                app:setLocationAdapter="@{viewModel.districtAdapterMutableLiveData}" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!--Shop Description-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:text="http://gomistore.vn/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    app:layout_constraintEnd_toStartOf="@+id/input_layout_shop_url"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:layout_constraintHorizontal_weight="30"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/input_layout_shop_name" />
+                    android:layout_marginBottom="@dimen/padding_small"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="2dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_shop_url"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_domain"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_verify"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="30"
-                    app:layout_constraintStart_toEndOf="@+id/tv_domain"
-                    app:layout_constraintTop_toTopOf="@+id/tv_domain"
-                    app:setError="@{viewModel.errorUrl}"
-                    app:setErrorEnabled="@{viewModel.enableErrorUrl}">
-
-                    <EditText
-                        android:id="@+id/txt_shop_url"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:afterTextChanged="@{(s) -> viewModel.afterUrlChanged()}"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.sellerUrl}"
-                        app:requestFocus="@{viewModel.requestFocusUrl}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btn_verify"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
-                    android:onClick="@{()->viewModel.verifyUrl()}"
-                    android:text="@string/verify_url"
-                    android:visibility="@{viewModel.verifyIsShow?View.VISIBLE:View.INVISIBLE, default=visible}"
-                    app:layout_constraintBottom_toBottomOf="@+id/input_layout_shop_url"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="20"
-                    app:layout_constraintStart_toEndOf="@+id/input_layout_shop_url"
-                    app:layout_constraintTop_toTopOf="@+id/input_layout_shop_url" />
-
-                <ImageView
-                    android:id="@+id/img_check_ok"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
-                    android:src="@drawable/ic_check"
-                    android:tint="@color/colorGreen"
-                    android:visibility="@{viewModel.checkOkIsShow?View.VISIBLE:View.INVISIBLE, default=visible}"
-                    app:layout_constraintBottom_toBottomOf="@+id/input_layout_shop_url"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_weight="20"
-                    app:layout_constraintStart_toEndOf="@+id/input_layout_shop_url"
-                    app:layout_constraintTop_toTopOf="@+id/input_layout_shop_url" />
-
-                <Spinner
-                    android:id="@+id/spn_country"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.countryItemSelectedListener.onItemSelected(pos)}"
-                    android:onTouch="@{(v, event)->viewModel.countryTouchListener.onTouch(event)}"
-                    app:countries="@{viewModel.countries}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_domain" />
-
-                <Spinner
-                    android:id="@+id/spn_province"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.provinceItemSelectedListener.onItemSelected(pos)}"
-                    android:onTouch="@{(v, event)->viewModel.provinceTouchListener.onTouch(event)}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spn_country"
-                    app:provinces="@{viewModel.provinces}" />
-
-                <Spinner
-                    android:id="@+id/spn_district"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:onItemSelected="@{(p, v, pos, id) -> viewModel.districtItemSelectedListener.onItemSelected(pos)}"
-                    android:onTouch="@{(v, event)->viewModel.districtTouchListener.onTouch(event)}"
-                    app:districts="@{viewModel.districts}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spn_province" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spn_district">
-
-                    <EditText
-                        android:id="@+id/txt_description"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_description"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.description}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_small"
+                            android:text="@string/shop_des"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border_layout"
+                            android:orientation="vertical"
+                            android:padding="@dimen/padding_small">
+
+                            <EditText
+                                android:id="@+id/input_shop_desc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:afterTextChanged="@{(s) -> viewModel.descriptionTextChange()}"
+                                android:background="@null"
+                                android:gravity="start|top"
+                                android:inputType="textMultiLine"
+                                android:lines="6"
+                                android:selectAllOnFocus="true"
+                                android:text="@={viewModel.description}"
+                                android:textAppearance="?android:textAppearance"
+                                app:requestFocus="@{viewModel.requestFocusDes}"
+                                app:setHintShopDesc="@{@string/hint_shop_des}" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/text_count_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_xsmall"
+                            android:text="@{viewModel.countDesc}"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@{viewModel.description.length()>GomiConstants.MAX_CHAR?@color/colorRed:@color/colorHighlight}" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
 
                 <Button
                     android:id="@+id/btn_submit"
                     style="@style/AppTheme.ButtonPrimary"
                     android:layout_width="@dimen/button_width_180"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="32dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_large"
                     android:enabled="@{viewModel.enableBtnSubmit, default=false}"
                     android:onClick="@{()->viewModel.createShop()}"
-                    android:text="@string/submit"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/input_layout_description" />
+                    android:text="@string/btn_complete" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default = gone}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

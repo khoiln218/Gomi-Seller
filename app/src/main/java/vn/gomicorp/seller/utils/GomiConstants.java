@@ -1,15 +1,16 @@
 package vn.gomicorp.seller.utils;
 
 public interface GomiConstants {
-    public final boolean TEST = false;
+    boolean TEST = false;
 
-    public static final String SIMPLE_DATE_FORMAT = "yyyy.MM.dd";
+    String SIMPLE_DATE_FORMAT = "yyyy.MM.dd";
+    int MAX_CHAR = 400;
 
     // REQUEST
-    public static final int REQUEST_PERMISSION_SETTING = 100;
-    public static final int REQUEST_CAMERA = 102;
-    public static final int REQUEST_GALLERY = 103;
-    public static final int REQUEST_APP_UPDATE = 104;
+    int REQUEST_PERMISSION_SETTING = 100;
+    int REQUEST_CAMERA = 102;
+    int REQUEST_GALLERY = 103;
+    int REQUEST_APP_UPDATE = 104;
 
     //REQUEST CODE
     int RC_SELLER_BANK = 201;

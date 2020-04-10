@@ -349,7 +349,7 @@ public class SignUpViewModel extends ViewModel {
     @BindingAdapter("locations")
     public static void setAdapter(Spinner spinner, List<Location> locations) {
         if (adapter == null) {
-            adapter = new LocationAdapter(spinner.getContext(), new ArrayList<Location>());
+            adapter = new LocationAdapter(new ArrayList<Location>());
             spinner.setAdapter(adapter);
         } else {
             adapter.setData(locations);

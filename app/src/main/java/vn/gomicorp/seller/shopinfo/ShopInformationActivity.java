@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +15,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.IOException;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityShopInfomationBinding;
 import vn.gomicorp.seller.event.OnClickListener;
@@ -24,29 +24,26 @@ import vn.gomicorp.seller.utils.MediaHelper;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
-public class ShopInformationActivity extends AppCompatActivity {
-    private ShopInformationViewModel viewModel;
+public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDataBinding();
+        initBinding();
         initCmd();
     }
 
     private void initCmd() {
-        viewModel.getCmd().observe(this, new Observer<ShopInfoEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<ShopInfoEvent>() {
             @Override
             public void onChanged(ShopInfoEvent event) {
                 switch (event.code) {
                     case ShopInfoEvent.CREATE_ERROR:
+                    case ShopInfoEvent.VERIFY_ERROR:
                         ToastUtils.showToast(event.message);
                         break;
                     case ShopInfoEvent.CREATE_SUCCESS:
                         createSuccess();
-                        break;
-                    case ShopInfoEvent.VERIFY_ERROR:
-                        ToastUtils.showToast(event.message);
                         break;
                     case ShopInfoEvent.VERIFY_SUCCESS:
                         break;
@@ -56,7 +53,6 @@ public class ShopInformationActivity extends AppCompatActivity {
                     case ShopInfoEvent.SHOW_IMAGE_OPTION:
                         showImageOptions();
                         break;
-
                 }
             }
         });
@@ -66,29 +62,24 @@ public class ShopInformationActivity extends AppCompatActivity {
         Intents.directToMainActivity(this);
     }
 
-    private void initDataBinding() {
-        ActivityShopInfomationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_infomation);
+    @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_infomation);
         viewModel = ViewModelProviders.of(this).get(ShopInformationViewModel.class);
-        binding.setViewModel(viewModel);
+        ((ActivityShopInfomationBinding) binding).setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.requestLocationCountryId();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        viewModel.releaseAdapter();
+        getViewModel().requestLocationCountryId();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        viewModel.onActivityResult(requestCode, resultCode, data);
+        getViewModel().onActivityResult(requestCode, resultCode, data);
     }
 
     private void cropImage(Uri uri) {
@@ -117,7 +108,7 @@ public class ShopInformationActivity extends AppCompatActivity {
                 try {
                     File file = MediaHelper.createImageFile();
                     Uri imageUri = MediaHelper.uriFromFile(file);
-                    viewModel.setCover(imageUri);
+                    getViewModel().setCover(imageUri);
                     MediaHelper.dispatchTakePictureIntent(ShopInformationActivity.this, file);
                 } catch (IOException e) {
                     e.printStackTrace();

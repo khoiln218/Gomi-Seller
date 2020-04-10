@@ -46,7 +46,7 @@
     <!--Shop-->
     <string name="hint_description">Description</string>
     <string name="err_shop_name">Shop Name Error</string>
-    <string name="err_input_url">Web Address Error</string>
+    <string name="err_input_url">Chỉ các chữ cái (a&#8211;z), số (0&#8211;9) và (-) được cho phép.</string>
     <string name="shop_name">Shop Name</string>
     <string name="hint_shop_name">Shop Name</string>
     <string name="verify_url">Verify</string>
@@ -98,4 +98,6 @@
     <string name="network_lost">Không có kết nối mạng</string>
     <string name="share">Share</string>
     <string name="share_sub">[AD]Gomi Corporation</string>
+    <string name="shop_des">Mô tả cửa hàng</string>
+    <string name="hint_shop_des">Mô tả cửa hàng có thể dài tới %s ký tự</string>
 </resources>

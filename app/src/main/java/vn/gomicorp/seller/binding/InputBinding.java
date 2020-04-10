@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.binding;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.databinding.BindingAdapter;
@@ -19,6 +20,7 @@ public class InputBinding {
 
     @BindingAdapter("setError")
     public static void setError(TextInputLayout inputLayout, String msg) {
+        if (TextUtils.isEmpty(msg)) return;
         inputLayout.setError(msg);
         Utils.playVibrate(inputLayout.getContext());
     }
@@ -26,6 +28,7 @@ public class InputBinding {
     @BindingAdapter("requestFocus")
     public static void requestFocus(View txt, boolean requestFocus) {
         if (requestFocus) {
+            txt.clearFocus();
             txt.setFocusableInTouchMode(true);
             txt.requestFocus();
         }

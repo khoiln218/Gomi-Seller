@@ -17,7 +17,7 @@ import vn.gomicorp.seller.utils.ToastUtils;
 /**
  * Created by KHOI LE on 4/9/2020.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity<T> extends AppCompatActivity {
     protected static final String TAG = BaseActivity.class.getName();
 
     protected ViewDataBinding binding;
@@ -51,6 +51,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setTitle(name);
         }
+    }
+
+    public T getViewModel() {
+        return (T) viewModel;
     }
 
     void networkConnected() {
