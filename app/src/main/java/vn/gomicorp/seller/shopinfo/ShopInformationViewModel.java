@@ -59,6 +59,8 @@ public class ShopInformationViewModel extends BaseViewModel {
     public MutableLiveData<String> errorUrl = new MutableLiveData<>();
     public MutableLiveData<String> errorShopName = new MutableLiveData<>();
 
+    public MutableLiveData<Uri> coverUrl = new MutableLiveData<>();
+
     public MutableLiveData<LocationAdapter> countryAdapterMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<LocationAdapter> provinceAdapterMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<LocationAdapter> districtAdapterMutableLiveData = new MutableLiveData<>();
@@ -109,7 +111,7 @@ public class ShopInformationViewModel extends BaseViewModel {
     }
 
     private boolean checkLenghtDes() {
-        if (description.getValue().length() > GomiConstants.MAX_CHAR) {
+        if (description.getValue() != null && description.getValue().length() > GomiConstants.MAX_CHAR) {
             requestFocusDes.setValue(true);
             return false;
         }
@@ -118,7 +120,7 @@ public class ShopInformationViewModel extends BaseViewModel {
 
     private boolean validateSellerUrl() {
         String url = fullSellerUrl.getValue();
-        if (!Patterns.WEB_URL.matcher(url).matches()) {
+        if (!TextUtils.isEmpty(url) && !Patterns.WEB_URL.matcher(url).matches()) {
             urlError();
             return false;
         }
@@ -164,9 +166,8 @@ public class ShopInformationViewModel extends BaseViewModel {
         requestPermission();
     }
 
-    //TODO: implement permission
     private void requestPermission() {
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.SHOW_IMAGE_OPTION));
+        cmd.call(new ShopInfoEvent(ShopInfoEvent.REQUEST_PERMISSION));
     }
 
     private void saveShopInfo(Shop shop) {
@@ -325,19 +326,27 @@ public class ShopInformationViewModel extends BaseViewModel {
 
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     if (result != null && result.getUri() != null) {
-                        imageUri = result.getUri();
-                        setCover(imageUri);
+                        setCover(result.getUri());
+                    } else {
+                        setCover(null);
                     }
+                    break;
+            }
+        } else {
+            switch (requestCode) {
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                case GomiConstants.REQUEST_CAMERA:
+                case GomiConstants.REQUEST_GALLERY:
+                    setCover(null);
                     break;
             }
         }
     }
 
     void setCover(Uri coverUrl) {
-        this.coverUrl.setValue(coverUrl);
+        imageUri = coverUrl;
+        this.coverUrl.setValue(imageUri);
     }
-
-    public MutableLiveData<Uri> coverUrl = new MutableLiveData<>();
 
     private void cropImage(Uri uri) {
         ShopInfoEvent<Uri> event = new ShopInfoEvent<>(ShopInfoEvent.START_CROPPER);

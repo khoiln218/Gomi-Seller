@@ -1,9 +1,11 @@
 package vn.gomicorp.seller.shopinfo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -19,18 +21,24 @@ import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityShopInfomationBinding;
 import vn.gomicorp.seller.event.OnClickListener;
+import vn.gomicorp.seller.utils.AlertDialogs;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.MediaHelper;
+import vn.gomicorp.seller.utils.PermissionHelper;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
 public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel> {
+    private PermissionHelper permissionHelper;
+    private boolean dialogShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
         initCmd();
+        permissionHelper = new PermissionHelper(this, PermissionHelper.photo_permissions);
+        getViewModel().requestLocationCountryId();
     }
 
     private void initCmd() {
@@ -50,8 +58,8 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
                     case ShopInfoEvent.START_CROPPER:
                         cropImage((Uri) event.getData());
                         break;
-                    case ShopInfoEvent.SHOW_IMAGE_OPTION:
-                        showImageOptions();
+                    case ShopInfoEvent.REQUEST_PERMISSION:
+                        requestPermission();
                         break;
                 }
             }
@@ -71,9 +79,10 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        getViewModel().requestLocationCountryId();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionHelper != null)
+            permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -128,5 +137,53 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
             public void onRemovePhoto() {
             }
         });
+    }
+
+    /**
+     * Check Photo Permissions
+     */
+    private void requestPermission() {
+        permissionHelper.request(new PermissionHelper.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                showImageOptions();
+            }
+
+            @Override
+            public void onIndividualPermissionGranted(String[] grantedPermission) {
+                showPermissionDialog();
+            }
+
+            @Override
+            public void onPermissionDenied() {
+                showPermissionDialog();
+            }
+
+            @Override
+            public void onPermissionDeniedBySystem() {
+                showPermissionDialog();
+            }
+        });
+    }
+
+    private void showPermissionDialog() {
+        if (!dialogShowing) {
+            dialogShowing = true;
+
+            AlertDialogs.show(this, String.format(getString(R.string.title_need_camera_permission), getString(R.string.app_name)), getString(R.string.msg_need_camera_permission), getString(R.string.btn_cancel), getString(R.string.btn_setting), new AlertDialogs.OnClickListener() {
+                @Override
+                public void onNegativeButtonClick(DialogInterface dialog, int which) {
+                    dialogShowing = false;
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onPositiveButtonClick(DialogInterface dialog, int which) {
+                    dialogShowing = false;
+                    permissionHelper.launchAppDetailsSettings();
+                    dialog.dismiss();
+                }
+            });
+        }
     }
 }

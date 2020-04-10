@@ -11,7 +11,7 @@ public class ShopInfoEvent<T> extends Event {
     public static final int VERIFY_ERROR = 2;
     public static final int VERIFY_SUCCESS = 3;
     public static final int START_CROPPER = 4;
-    public static final int SHOW_IMAGE_OPTION = 5;
+    public static final int REQUEST_PERMISSION = 5;
 
     public ShopInfoEvent(int code) {
         this.code = code;

@@ -4,7 +4,7 @@ public interface GomiConstants {
     boolean TEST = false;
 
     String SIMPLE_DATE_FORMAT = "yyyy.MM.dd";
-    int MAX_CHAR = 400;
+    int MAX_CHAR = 500;
 
     // REQUEST
     int REQUEST_PERMISSION_SETTING = 100;
