@@ -7,6 +7,7 @@ import java.util.List;
 
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.utils.ConnectionHelper;
+import vn.gomicorp.seller.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 4/6/2020.
@@ -50,6 +51,10 @@ public class BaseViewModel extends ViewModel {
                 else errorMessage.setValue(error);
             }
         });
+    }
+
+    protected void showToast(String msg) {
+        ToastUtils.showToast(msg);
     }
 
     @Override

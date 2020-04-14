@@ -3,38 +3,43 @@ package vn.gomicorp.seller.authen.signin;
 import android.text.Editable;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Strings;
 import vn.gomicorp.seller.utils.Utils;
 
-public class SignInViewModel extends ViewModel {
-    private final int LOGIN_SUCCESS = 200;
-    private final int ACCOUNT_LOCK = 1021;
+public class SignInViewModel extends BaseViewModel {
 
     private AccountRepository mAppRepository = AccountRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
 
     public MutableLiveData<String> userName = new MutableLiveData<>();
-    public MutableLiveData<String> password = new MutableLiveData<>();
-    public MutableLiveData<Boolean> loadding = new MutableLiveData<>();
-    public MutableLiveData<Boolean> enableLoginBtn = new MutableLiveData<>();
+    public MutableLiveData<String> userNameError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> userNameEnableError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> userNameRequestFocus = new MutableLiveData<>();
 
-    public SignInViewModel() {
-    }
+    public MutableLiveData<String> password = new MutableLiveData<>();
+    public MutableLiveData<String> passwordError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> passwordEnableError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> passwordRequestFocus = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> enableLoginBtn = new MutableLiveData<>();
 
     private final MultableLiveEvent<SignInEvent> mLogInCommand = new MultableLiveEvent<>();
 
     public void signIn() {
+        hideKeyboard();
         submitForm();
     }
 
@@ -71,55 +76,39 @@ public class SignInViewModel extends ViewModel {
         return !Strings.isNullOrEmpty(userName.getValue()) && userName.getValue().length() > 3;
     }
 
-    private void showProgressing() {
-        loadding.setValue(true);
-    }
-
-    private void hideProgressing() {
-        loadding.setValue(false);
-    }
-
     public void forgetPassword() {
-        gotoForgetPassword();
-    }
-
-    public void signUp() {
-        gotoSignUp();
-    }
-
-    private void gotoForgetPassword() {
+        hideKeyboard();
         mLogInCommand.call(new SignInEvent(SignInEvent.FORGET_PASSWORD));
     }
 
-    public void loginSuccess() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.LOG_IN_SUCCESS));
-    }
-
-    private void loginFalse(String error) {
-        mLogInCommand.call(new SignInEvent(SignInEvent.LOG_IN_FALSE, error));
-    }
-
-    public void gotoSignUp() {
+    public void signUp() {
+        hideKeyboard();
         mLogInCommand.call(new SignInEvent(SignInEvent.GOTO_SIGN_UP));
     }
 
-    public void userNameError() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.USERNAME_INPUT_ERROR));
+    private void hideKeyboard() {
+        mLogInCommand.call(new SignInEvent(SignInEvent.HIDE_KEYBOARD));
     }
 
-    public void userNameSuccess() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.USERNAME_INPUT_SUCCESS));
+    private void userNameError() {
+        userNameError.setValue(EappsApplication.getInstance().getString(R.string.err_input_username));
+        userNameRequestFocus.setValue(true);
     }
 
-    public void passwordError() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.PASSWORD_INPUT_ERROR));
+    private void userNameSuccess() {
+        userNameEnableError.setValue(false);
     }
 
-    public void passwordSuccess() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.PASSWORD_INPUT_SUCCESS));
+    private void passwordError() {
+        passwordError.setValue(EappsApplication.getInstance().getString(R.string.err_input_password));
+        passwordEnableError.setValue(true);
     }
 
-    public MultableLiveEvent<SignInEvent> getLoginCommand() {
+    private void passwordSuccess() {
+        passwordEnableError.setValue(false);
+    }
+
+    MultableLiveEvent<SignInEvent> getLoginCommand() {
         return mLogInCommand;
     }
 
@@ -134,26 +123,23 @@ public class SignInViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<Account> res) {
                 hideProgressing();
-                if (res.getCode() == LOGIN_SUCCESS) {
+                if (res.getCode() == ResultCode.CODE_OK) {
                     saveAccount(res.getResult());
                     loginSuccess();
-                } else if (res.getCode() == ACCOUNT_LOCK) {
-                    saveAccount(res.getResult());
-                    accountLock(res.getMessage());
                 } else
-                    loginFalse(res.getMessage());
+                    showToast(res.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 hideProgressing();
-                loginFalse(error);
+                showToast(error);
             }
         });
     }
 
-    private void accountLock(String msg) {
-        mLogInCommand.call(new SignInEvent(SignInEvent.ACCOUNT_LOCK, msg));
+    private void loginSuccess() {
+        mLogInCommand.call(new SignInEvent(SignInEvent.LOG_IN_SUCCESS));
     }
 
     private void saveAccount(Account account) {

@@ -1,21 +1,16 @@
 package vn.gomicorp.seller.authen.signup;
 
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.Spinner;
 
-import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.LocationAdapter;
@@ -28,18 +23,15 @@ import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.data.source.model.data.Location;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Utils;
 
-public class SignUpViewModel extends ViewModel {
-    private final int CODE_OK = 200;
-
+public class SignUpViewModel extends BaseViewModel {
     private AccountRepository accountRepository = AccountRepository.getInstance();
     private LocationRepository locationRepository = LocationRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
-
-    private int countryCode;
 
     public MutableLiveData<String> fullName = new MutableLiveData<>();
     public MutableLiveData<String> email = new MutableLiveData<>();
@@ -59,27 +51,34 @@ public class SignUpViewModel extends ViewModel {
     public MutableLiveData<Boolean> requestFocusPhoneNumber = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusPwd = new MutableLiveData<>();
 
-    public MutableLiveData<Boolean> loading = new MutableLiveData<>();
     public MutableLiveData<Boolean> countDownIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableBtnSigup = new MutableLiveData<>();
     public MutableLiveData<String> countDown = new MutableLiveData<>();
 
-    @SuppressLint("StaticFieldLeak")
-    private static LocationAdapter adapter;
-    public MutableLiveData<List<Location>> countries = new MutableLiveData<>();
+    public MutableLiveData<LocationAdapter> locationAdapter = new MutableLiveData<>();
 
     private final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
+    private LocationAdapter adapter;
+    private List<Location> countries;
+    private int countryCode;
+    private Timer timer;
+
     public SignUpViewModel() {
         showVerifyBtn();
+        countries = new ArrayList<>();
+        adapter = new LocationAdapter(countries);
+        locationAdapter.setValue(adapter);
     }
 
     public void signUp() {
+        hideKeyboard();
         submitForm();
     }
 
     public void verify() {
+        hideKeyboard();
         submitCertificationCode();
     }
 
@@ -93,25 +92,29 @@ public class SignUpViewModel extends ViewModel {
     }
 
     void requestCountryId() {
+        showProgressing();
         locationRepository.getLocationCountry(new ResultListener<ResponseData<List<Location>>>() {
             @Override
             public void onLoaded(ResponseData<List<Location>> result) {
-                if (result.getCode() == CODE_OK) {
-                    updateCountry(result.getResult());
+                hideProgressing();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    countries = result.getResult();
+                    updateCountry();
                 } else {
-                    Log.d("requestCountryId", "onLoaded: " + result.getMessage());
+                    showToast(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                Log.d("requestCountryId", "onDataNotAvailable: " + error);
+                hideProgressing();
+                showToast(error);
             }
         });
     }
 
-    private void updateCountry(List<Location> locs) {
-        countries.postValue(locs);
+    private void updateCountry() {
+        adapter.setData(countries);
     }
 
     private void requestVerifyPhoneNumber() {
@@ -121,21 +124,14 @@ public class SignUpViewModel extends ViewModel {
         accountRepository.verifyPhoneNumber(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
-                if (result.getCode() == CODE_OK) {
-                    verifySuccess();
-                } else
-                    verifyError(result.getMessage());
+                showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                verifyError(error);
+                showToast(error);
             }
         });
-    }
-
-    private void setCountryCode(int position) {
-        this.countryCode = Objects.requireNonNull(countries.getValue()).get(position).getId();
     }
 
     private void showVerifyBtn() {
@@ -145,8 +141,6 @@ public class SignUpViewModel extends ViewModel {
         if (timer != null)
             timer.cancel();
     }
-
-    private Timer timer;
 
     private void showCountDown() {
         timer = new Timer();
@@ -165,14 +159,6 @@ public class SignUpViewModel extends ViewModel {
                 }
             }
         }, 0, 1000);
-    }
-
-    private void verifyError(String error) {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.VERIFY_ERROR, error));
-    }
-
-    private void verifySuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.VERIFY_SUCCESS));
     }
 
     private void submitForm() {
@@ -227,15 +213,8 @@ public class SignUpViewModel extends ViewModel {
         requestFocusEmail.setValue(true);
     }
 
-    private void showProgressing() {
-        loading.setValue(true);
-    }
-
-    private void hideProgressing() {
-        loading.setValue(false);
-    }
-
     public void signIn() {
+        hideKeyboard();
         gotoSignIn();
     }
 
@@ -254,17 +233,17 @@ public class SignUpViewModel extends ViewModel {
             @Override
             public void onLoaded(ResponseData<Account> result) {
                 hideProgressing();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     saveAccount(result.getResult());
                     signUpSuccess();
                 } else
-                    signUpFalse(result.getMessage());
+                    showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 hideProgressing();
-                signUpFalse(error);
+                showToast(error);
             }
         });
     }
@@ -281,8 +260,8 @@ public class SignUpViewModel extends ViewModel {
         mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_SUCCESS));
     }
 
-    private void signUpFalse(String error) {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_FALSE, error));
+    private void hideKeyboard() {
+        mSignUpCommand.call(new SignUpEvent(SignUpEvent.HIDE_KEYBOARD));
     }
 
     MultableLiveEvent<SignUpEvent> getSignInCommand() {
@@ -322,38 +301,16 @@ public class SignUpViewModel extends ViewModel {
         return !TextUtils.isEmpty(fullName.getValue());
     }
 
-    public OnItemSelectedListener itemSelectedListener = new OnItemSelectedListener();
-
-    public OnTouchListener touchListener = new OnTouchListener();
-
-    public class OnItemSelectedListener {
-        public void onItemSelected(int position) {
-            setCountryCode(position);
-        }
+    public void onItemSelected(int position) {
+        this.countryCode = countries.get(position).getId();
     }
 
-    public class OnTouchListener {
-        public boolean onTouch(MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (countries.getValue() == null || countries.getValue().size() == 0)
-                    requestCountryId();
-            }
-            return false;
+    public boolean onTouch(MotionEvent event) {
+        hideKeyboard();
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (countries.size() == 0)
+                requestCountryId();
         }
-    }
-
-    void releaseAdapter() {
-        adapter = null;
-    }
-
-    @BindingAdapter("locations")
-    public static void setAdapter(Spinner spinner, List<Location> locations) {
-        if (adapter == null) {
-            adapter = new LocationAdapter(new ArrayList<Location>());
-            spinner.setAdapter(adapter);
-        } else {
-            adapter.setData(locations);
-            adapter.notifyDataSetChanged();
-        }
+        return false;
     }
 }

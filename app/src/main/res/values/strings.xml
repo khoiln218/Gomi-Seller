@@ -29,14 +29,14 @@
     <string name="err_input_phone_number">Error Input Phone Number</string>
     <string name="err_input_contry_id">Error Input Contry ID</string>
 
-    <string name="forget_password">Forget Password</string>
+    <string name="forget_password">Quên mật khẩu</string>
     <string name="reset_password">Reset Password</string>
     <string name="send_code">Send Code</string>
     <string name="reset">Reset</string>
-    <string name="login">Log In</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="login">Đăng nhập</string>
+    <string name="sign_up">Đăng ký</string>
     <string name="verify_phone_number">Verify</string>
-    <string name="no_have_account">Add new account</string>
+    <string name="no_have_account">Chưa có tài khoản</string>
 
     <string name="popup_submit">Are you sure, You wanted to make decision</string>
     <string name="submit">Submit</string>

@@ -23,7 +23,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@drawable/img_login_banner"
-            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!--TODO: Login Form-->
@@ -34,9 +34,10 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="32dp"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_banner">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_banner"
+            app:setError="@{signInViewModel.userNameError}"
+            app:setErrorEnabled="@{signInViewModel.userNameEnableError}">
 
             <EditText
                 android:id="@+id/input_user_name"
@@ -47,7 +48,8 @@
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:text="@={signInViewModel.userName}"
-                android:textAppearance="?android:textAppearance" />
+                android:textAppearance="?android:textAppearance"
+                app:requestFocus="@{signInViewModel.userNameRequestFocus}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,10 +60,11 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="@dimen/padding_medium"
             android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout_user_name"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:setError="@{signInViewModel.passwordError}"
+            app:setErrorEnabled="@{signInViewModel.passwordEnableError}">
 
             <EditText
                 android:id="@+id/input_password"
@@ -72,7 +75,8 @@
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:text="@={signInViewModel.password}"
-                android:textAppearance="?android:textAppearance" />
+                android:textAppearance="?android:textAppearance"
+                app:requestFocus="@{signInViewModel.passwordRequestFocus}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,13 +85,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
             android:background="@null"
             android:onClick="@{()->signInViewModel.forgetPassword()}"
             android:stateListAnimator="@null"
             android:text="@string/forget_password"
             android:textAppearance="?android:textAppearance"
             android:textColor="@color/colorPrimaryText"
-            app:layout_constraintEnd_toEndOf="@+id/input_layout_password"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
 
         <Button
@@ -100,8 +105,8 @@
             android:onClick="@{()->signInViewModel.signIn()}"
             android:stateListAnimator="@null"
             android:text="@string/login"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_forget_password" />
 
         <Button
@@ -113,19 +118,14 @@
             android:stateListAnimator="@null"
             android:text="@string/no_have_account"
             android:textColor="@color/colorAccent"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
         <include
             android:id="@+id/include"
             layout="@layout/layout_progress"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="@{signInViewModel.loadding?View.VISIBLE:View.GONE, default=gone}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{signInViewModel.isProgressing?View.VISIBLE:View.GONE, default=gone}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

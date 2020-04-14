@@ -7,10 +7,8 @@ import vn.gomicorp.seller.event.Event;
  */
 public class SignUpEvent extends Event {
     public static final int SIGN_UP_SUCCESS = 0;
-    public static final int SIGN_UP_FALSE = 1;
+    public static final int HIDE_KEYBOARD = 1;
     public static final int GOTO_LOGIN = 2;
-    public static final int VERIFY_SUCCESS = 3;
-    public static final int VERIFY_ERROR = 4;
 
     public SignUpEvent(int code) {
         this.code = code;

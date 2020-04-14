@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityResetPaswordBinding;
+import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
@@ -27,13 +28,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        try {
-            userId = getIntent().getStringExtra("UserId");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        if (getIntent() == null)
+            finish();
+        userId = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
         initDataBinding();
         setupToolbar();
         setupCmd();

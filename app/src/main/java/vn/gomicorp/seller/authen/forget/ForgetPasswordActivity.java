@@ -13,9 +13,10 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Objects;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.authen.forget.reset.ResetPasswordActivity;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.databinding.ActivityForgetPasswordBinding;
-import vn.gomicorp.seller.authen.forget.reset.ResetPasswordActivity;
+import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 
@@ -62,7 +63,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     private void fogetSuccess(Account account) {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
-        intent.putExtra("UserId", account.getUserId());
+        intent.putExtra(GomiConstants.EXTRA_ID, account.getUserId());
         startActivity(intent);
         finish();
     }

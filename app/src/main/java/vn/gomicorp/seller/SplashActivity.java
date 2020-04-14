@@ -1,7 +1,7 @@
 package vn.gomicorp.seller;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,8 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import vn.gomicorp.seller.authen.signin.SignInActivity;
-import vn.gomicorp.seller.authen.signup.SignUpActivity;
+import vn.gomicorp.seller.utils.Intents;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -29,16 +28,16 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getDeviceToken();
-//        startSigUp();
-        startSigIn();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startSigIn();
+            }
+        }, 1500);
     }
 
     private void startSigIn() {
-        startActivity(new Intent(this, SignInActivity.class));
-    }
-
-    private void startSigUp() {
-        startActivity(new Intent(this, SignUpActivity.class));
+        Intents.startLoginActivity(this);
     }
 
     private void getDeviceToken() {
