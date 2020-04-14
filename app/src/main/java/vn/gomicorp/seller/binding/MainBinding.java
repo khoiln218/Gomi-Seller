@@ -93,13 +93,6 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter("selectChange")
-    public static void selectChange(RecyclerView recyclerView, Product product) {
-        if (recyclerView.getAdapter() != null) {
-            ((ProductItemAdapter) recyclerView.getAdapter()).notifyItemChanged(product);
-        }
-    }
-
     @BindingAdapter({"setTitle", "isShow"})
     public static void setTitleCollapsing(CollapsingToolbarLayout collapsing, String title, boolean isShow) {
         collapsing.setTitle(isShow ? title : "");
@@ -136,50 +129,6 @@ public class MainBinding {
     @BindingAdapter("refreshing")
     public static void setRefreshing(SwipeRefreshLayout swipeRefreshLayout, boolean isRefreshing) {
         swipeRefreshLayout.setRefreshing(isRefreshing);
-    }
-
-    @BindingAdapter({"setCollectionCategories", "onLoadTabListener"})
-    public static void setupTab(TabLayout tabLayout, final List<Category> categories, final OnLoadTabListener onLoadTabListener) {
-        if (categories == null)
-            return;
-        for (Category cate : categories)
-            tabLayout.addTab(tabLayout.newTab().setText(cate.getName()));
-
-        if (tabLayout.getTabCount() > 0) {
-            Category selectedCategory = categories.get(tabLayout.getSelectedTabPosition());
-            if (onLoadTabListener != null)
-                onLoadTabListener.onLoaded(selectedCategory);
-
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    if (tab.getPosition() > categories.size())
-                        return;
-
-                    Category selectedCategory = categories.get(tab.getPosition());
-                    if (onLoadTabListener != null)
-                        onLoadTabListener.onLoaded(selectedCategory);
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-                    if (tab.getPosition() > categories.size())
-                        return;
-
-                    Category selectedCategory = categories.get(tab.getPosition());
-                    if (onLoadTabListener != null)
-                        onLoadTabListener.onLoaded(selectedCategory);
-                }
-            });
-        } else {
-            if (onLoadTabListener != null)
-                onLoadTabListener.onLoadFails();
-        }
     }
 
     @BindingAdapter("setLayoutLoading")
