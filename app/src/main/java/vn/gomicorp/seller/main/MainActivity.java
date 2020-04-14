@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
+
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.main.home.HomeFragment;
 import vn.gomicorp.seller.main.home.HomeViewModel;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_main);
@@ -56,14 +58,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public static ViewModel obtainViewModel(FragmentActivity activity, int screen) {
         switch (screen) {
-            case HOME:
-                return ViewModelProviders.of(activity).get(HomeViewModel.class);
             case MARKET:
                 return ViewModelProviders.of(activity).get(MarketViewModel.class);
             case MY_PAGE:
                 return ViewModelProviders.of(activity).get(MyPageViewModel.class);
             default:
-                return null;
+                return ViewModelProviders.of(activity).get(HomeViewModel.class);
         }
     }
 

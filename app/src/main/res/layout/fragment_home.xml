@@ -160,14 +160,24 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_product"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingStart="@dimen/padding_medium"
             android:paddingEnd="@dimen/padding_medium"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+
+            <include
+                layout="@layout/layout_empty"
+                android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+                app:msg="@{viewModel.errorMessage}" />
+        </RelativeLayout>
 
         <include
             layout="@layout/layout_progress"

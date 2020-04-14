@@ -12,6 +12,7 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -142,6 +143,27 @@ public class ProductRemoteDataSource implements ProductDataSource {
 
             @Override
             public void onFailure(Call<ResponseData<Product>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyshop(ShopRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Product>>> call = client.findbyshop(request, page);
+        call.enqueue(new Callback<ResponseData<List<Product>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Product>>> call, Throwable t) {
                 callback.onDataNotAvailable(t.getMessage());
             }
         });

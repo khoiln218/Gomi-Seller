@@ -7,6 +7,7 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
 import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -31,7 +32,7 @@ public class ProductRepository implements ProductDataSource {
 
     public static ProductRepository getInstance() {
         if (INSTANCE == null) {
-            synchronized (AccountRepository.class) {
+            synchronized (ProductRepository.class) {
                 if (INSTANCE == null) {
                     INSTANCE = new ProductRepository();
                 }
@@ -72,5 +73,10 @@ public class ProductRepository implements ProductDataSource {
     @Override
     public void findbyid(ProductDetailRequest request, ResultListener<ResponseData<Product>> callback) {
         mProductDataSource.findbyid(request, callback);
+    }
+
+    @Override
+    public void findbyshop(ShopRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+        mProductDataSource.findbyshop(request, page, callback);
     }
 }

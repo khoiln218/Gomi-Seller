@@ -84,6 +84,14 @@ public class ProductItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             notifyItemChanged(pos);
     }
 
+    public void notifyItemRemoved(Product product) {
+        int pos = getPosition(product);
+        if (pos != NOT_FOUND) {
+            productList.remove(pos);
+            notifyItemRemoved(pos);
+        }
+    }
+
     public void setProductList(List<Product> productList) {
         this.productList = productList;
         notifyDataSetChanged();

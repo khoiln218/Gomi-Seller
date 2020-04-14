@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.binding;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class HomeBinding {
 
     @BindingAdapter("setTextShopUrl")
     public static void setTextShopUrl(TextView textView, String webAddress) {
-        textView.setText(String.format("%s%s", EappsApplication.getPreferences().getSellerUrl(), webAddress));
+        textView.setText(String.format("%s%s", EappsApplication.getPreferences().getSellerUrl(), TextUtils.isEmpty(webAddress) ? "" : webAddress));
     }
 
     @BindingAdapter("setDateRange")
@@ -72,23 +73,21 @@ public class HomeBinding {
                 .load(iconUrl)
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(imageView);
     }
 
     @BindingAdapter({"setHomeCategories", "onTabSelectedListener"})
     public static void initHomeTab(TabLayout tabLayout, List<Category> categories, TabLayout.OnTabSelectedListener onTabSelectedListener) {
-        if (categories == null)
+        if (categories == null || tabLayout.getTabCount() > 0)
             return;
         for (Category category : categories) {
             LayoutInflater inflater = LayoutInflater.from(tabLayout.getContext());
             TabCategoryItemBinding binding = TabCategoryItemBinding.inflate(inflater, null, false);
             binding.setCategory(category);
-
             tabLayout.addTab(tabLayout.newTab().setCustomView(binding.getRoot()));
-            if (onTabSelectedListener != null)
-                tabLayout.addOnTabSelectedListener(onTabSelectedListener);
         }
+        if (onTabSelectedListener != null)
+            tabLayout.addOnTabSelectedListener(onTabSelectedListener);
     }
 }

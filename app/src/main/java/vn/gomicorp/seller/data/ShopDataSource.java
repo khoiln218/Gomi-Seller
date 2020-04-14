@@ -4,7 +4,9 @@ import java.util.List;
 
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
+import vn.gomicorp.seller.data.source.model.api.MegaCategoryRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
@@ -18,4 +20,8 @@ public interface ShopDataSource {
     void create(CreateShopRequest request, ResultListener<ResponseData<Shop>> callback);
 
     void findcatebytype(CategoryByIdRequest request, ResultListener<ResponseData<List<Category>>> callback);
+
+    void megacategory(MegaCategoryRequest request, ResultListener<ResponseData<List<Category>>> callback);
+
+    void findbyid(ShopRequest request, ResultListener<ResponseData<Shop>> callback);
 }

@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
+import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
 import vn.gomicorp.seller.utils.Intents;
+import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class HomeFragment extends Fragment implements HomeListener {
 
@@ -46,7 +49,23 @@ public class HomeFragment extends Fragment implements HomeListener {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.requestShopInfomation();
+        viewModel.onRefreshProduct();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.setListener(null);
+    }
+
+    @Override
+    public void show(Product product) {
+        Intents.startProductDetailActivity(getActivity(), product.getId());
+    }
+
+    @Override
+    public void remove(Product product) {
+        showDialogPickProduct(product);
     }
 
     @Override
@@ -56,6 +75,20 @@ public class HomeFragment extends Fragment implements HomeListener {
 
     @Override
     public void shareSNS(String content) {
-        Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
+        if (getActivity() != null)
+            Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
+    }
+
+    private void showDialogPickProduct(Product product) {
+        if (getFragmentManager() == null) return;
+        final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
+        selectProductDialogFragment.setListener(new OnSelectedListener() {
+            @Override
+            public void onSelected(Product product) {
+                viewModel.requestRemoveProduct(product);
+                selectProductDialogFragment.dismiss();
+            }
+        });
+        selectProductDialogFragment.show(getFragmentManager(), getTag());
     }
 }
