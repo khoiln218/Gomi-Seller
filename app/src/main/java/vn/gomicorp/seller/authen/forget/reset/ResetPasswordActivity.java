@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.forget.reset;
+package vn.gomicorp.seller.authen.forget.reset;
 
 import android.os.Bundle;
 import android.view.MenuItem;

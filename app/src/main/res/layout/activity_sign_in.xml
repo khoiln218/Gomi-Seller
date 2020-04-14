@@ -8,7 +8,7 @@
 
         <variable
             name="signInViewModel"
-            type="vn.gomicorp.seller.signin.SignInViewModel" />
+            type="vn.gomicorp.seller.authen.signin.SignInViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

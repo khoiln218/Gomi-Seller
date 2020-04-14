@@ -12,8 +12,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import vn.gomicorp.seller.signin.SignInActivity;
-import vn.gomicorp.seller.signup.SignUpActivity;
+import vn.gomicorp.seller.authen.signin.SignInActivity;
+import vn.gomicorp.seller.authen.signup.SignUpActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

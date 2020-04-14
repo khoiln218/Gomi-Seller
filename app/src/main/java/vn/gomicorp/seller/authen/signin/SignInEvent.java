@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.signin;
+package vn.gomicorp.seller.authen.signin;
 
 import vn.gomicorp.seller.event.Event;
 

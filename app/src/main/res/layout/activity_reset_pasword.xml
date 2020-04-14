@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.forget.reset.ResetPasswordViewModel" />
+            type="vn.gomicorp.seller.authen.forget.reset.ResetPasswordViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".forget.reset.ResetPasswordActivity">
+        tools:context=".authen.forget.reset.ResetPasswordActivity">
 
         <include
             android:id="@+id/appbar"

@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.forget;
+package vn.gomicorp.seller.authen.forget;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.databinding.ActivityForgetPasswordBinding;
-import vn.gomicorp.seller.forget.reset.ResetPasswordActivity;
+import vn.gomicorp.seller.authen.forget.reset.ResetPasswordActivity;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 

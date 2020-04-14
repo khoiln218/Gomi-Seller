@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.signup;
+package vn.gomicorp.seller.authen.signup;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;

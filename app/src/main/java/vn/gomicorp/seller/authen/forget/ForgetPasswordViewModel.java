@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.forget;
+package vn.gomicorp.seller.authen.forget;
 
 import android.text.TextUtils;
 

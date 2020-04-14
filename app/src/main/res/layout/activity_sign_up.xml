@@ -9,7 +9,7 @@
 
         <variable
             name="signUpViewModel"
-            type="vn.gomicorp.seller.signup.SignUpViewModel" />
+            type="vn.gomicorp.seller.authen.signup.SignUpViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -20,7 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".signup.views.SignUpActivity">
+            tools:context=".authen.signup.views.SignUpActivity">
 
             <!--TODO: Banner Image-->
 

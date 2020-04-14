@@ -1,4 +1,4 @@
-package vn.gomicorp.seller.signin;
+package vn.gomicorp.seller.authen.signin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignInBinding;
-import vn.gomicorp.seller.forget.ForgetPasswordActivity;
-import vn.gomicorp.seller.signup.SignUpActivity;
+import vn.gomicorp.seller.authen.forget.ForgetPasswordActivity;
+import vn.gomicorp.seller.authen.signup.SignUpActivity;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
