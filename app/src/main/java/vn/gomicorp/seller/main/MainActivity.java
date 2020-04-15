@@ -2,6 +2,7 @@ package vn.gomicorp.seller.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,17 @@ import vn.gomicorp.seller.main.market.MarketViewModel;
 import vn.gomicorp.seller.main.mypage.MyPageFragment;
 import vn.gomicorp.seller.main.mypage.MyPageViewModel;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
+import vn.gomicorp.seller.utils.ToastUtils;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     public static final int HOME = 1;
     public static final int MARKET = 2;
     public static final int NOTIFICATION = 3;
     public static final int MY_PAGE = 4;
+
+    private boolean isExit = false;
+    private Handler handler;
+    private Runnable exitApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_main);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
+
+        handler = new Handler();
+        exitApp = new Runnable() {
+            @Override
+            public void run() {
+                isExit = false;
+            }
+        };
 
         loadFragment(HomeFragment.getInstance());
     }
@@ -101,7 +115,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onBackPressed() {
-        finish();
-        super.onBackPressed();
+        if (isExit) {
+            handler.removeCallbacks(exitApp);
+            finish();
+        } else {
+            isExit = true;
+            ToastUtils.showToast(getString(R.string.exit_app));
+            handler.removeCallbacks(exitApp);
+            handler.postDelayed(exitApp, 2000);
+        }
     }
 }

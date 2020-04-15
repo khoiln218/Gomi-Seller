@@ -107,4 +107,5 @@
     <string name="title_need_camera_permission">Bạn có cho phép %s truy cập vào camera không?</string>
     <string name="msg_need_camera_permission">Gomi Seller cần truy cập máy ảnh. Vui lòng sửa nó trong tab cài đặt.</string>
     <string name="change_password_succsess">Đổi mật khẩu thành công</string>
+    <string name="exit_app">Tiếp tục nhấn phím BACK để thoát</string>
 </resources>

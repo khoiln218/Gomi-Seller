@@ -32,12 +32,12 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     private static final int INIT_PAGE = 1;
     private static final int ALL = 0;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
-    private ShopRepository mShopRepository = ShopRepository.getInstance();
+    private ProductRepository mProductRepository;
+    private ShopRepository mShopRepository;
 
-    public MutableLiveData<Shop> shop = new MutableLiveData<>();
-    public MutableLiveData<List<Category>> categories = new MutableLiveData<>();
-    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
+    public MutableLiveData<Shop> shop;
+    public MutableLiveData<List<Category>> categories;
+    public MutableLiveData<ProductItemAdapter> productItemAdapter;
 
     private ProductItemAdapter adapter;
     private List<Product> products;
@@ -55,6 +55,11 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     private int totalPage;
 
     public HomeViewModel() {
+        mShopRepository = ShopRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance();
+        shop = new MutableLiveData<>();
+        categories = new MutableLiveData<>();
+        productItemAdapter = new MutableLiveData<>();
         products = new ArrayList<>();
         categoryList = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);

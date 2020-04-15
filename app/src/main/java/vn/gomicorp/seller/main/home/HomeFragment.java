@@ -6,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
+import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
@@ -17,11 +16,7 @@ import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class HomeFragment extends Fragment implements HomeListener {
-
-    private FragmentHomeBinding binding;
-    private HomeViewModel viewModel;
-
+public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBinding> implements HomeListener {
     private static HomeFragment INSTANCE;
 
     public static HomeFragment getInstance() {
@@ -39,9 +34,9 @@ public class HomeFragment extends Fragment implements HomeListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         if (binding == null)
             binding = FragmentHomeBinding.bind(view);
-        viewModel = (HomeViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.HOME);
-        viewModel.setListener(this);
-        binding.setViewModel(viewModel);
+        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.HOME);
+        getViewModel().setListener(this);
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -49,13 +44,13 @@ public class HomeFragment extends Fragment implements HomeListener {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.onRefreshProduct();
+        getViewModel().onRefreshProduct();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.setListener(null);
+        getViewModel().setListener(null);
     }
 
     @Override
@@ -85,7 +80,7 @@ public class HomeFragment extends Fragment implements HomeListener {
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestRemoveProduct(product);
+                getViewModel().requestRemoveProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });
