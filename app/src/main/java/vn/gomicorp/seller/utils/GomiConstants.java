@@ -11,6 +11,9 @@ public interface GomiConstants {
     int REQUEST_CAMERA = 102;
     int REQUEST_GALLERY = 103;
     int REQUEST_APP_UPDATE = 104;
+    int REQUEST_SIGN_UP = 105;
+    int REQUEST_FORGET_PASSWORD = 106;
+    int REQUEST_RESET_PASSWORD = 107;
 
     //REQUEST CODE
     int RC_SELLER_BANK = 201;

@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders;
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
-import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.Utils;
 
 public class SignUpActivity extends BaseActivity<SignUpViewModel, ActivitySignUpBinding> {
@@ -39,7 +38,8 @@ public class SignUpActivity extends BaseActivity<SignUpViewModel, ActivitySignUp
                         finish();
                         break;
                     case SignUpEvent.SIGN_UP_SUCCESS:
-                        Intents.directToMainActivity(SignUpActivity.this);
+                        setResult(RESULT_OK);
+                        finish();
                         break;
                     case SignUpEvent.HIDE_KEYBOARD:
                         Utils.hideSoftKeyboard(SignUpActivity.this);

@@ -9,7 +9,8 @@ public class SignInEvent extends Event {
     public static final int LOG_IN_SUCCESS = 0;
     public static final int GOTO_SIGN_UP = 1;
     public static final int FORGET_PASSWORD = 2;
-    public static final int HIDE_KEYBOARD = 3;
+    public static final int RESET_PASSWORD = 3;
+    public static final int HIDE_KEYBOARD = 4;
 
     public SignInEvent(int code) {
         this.code = code;

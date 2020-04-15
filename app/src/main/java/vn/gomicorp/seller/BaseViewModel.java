@@ -33,7 +33,7 @@ public class BaseViewModel extends ViewModel {
         setErrorMessage(products.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.empty));
     }
 
-    protected void refreshed() {
+    private void refreshed() {
         refreshing.setValue(false);
     }
 

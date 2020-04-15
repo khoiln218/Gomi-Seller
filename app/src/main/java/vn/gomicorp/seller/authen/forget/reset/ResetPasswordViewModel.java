@@ -3,38 +3,39 @@ package vn.gomicorp.seller.authen.forget.reset;
 import android.text.TextUtils;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import vn.gomicorp.seller.BaseViewModel;
+import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.Inputs;
 
 /**
  * Created by KHOI LE on 3/16/2020.
  */
-public class ResetPasswordViewModel extends ViewModel {
-    private final int RESET_SUCCESS = 200;
-
+public class ResetPasswordViewModel extends BaseViewModel {
     private AccountRepository mAccountRepository = AccountRepository.getInstance();
 
-    public MutableLiveData<String> verifyCode = new MutableLiveData<>();
     public MutableLiveData<String> newPassword = new MutableLiveData<>();
-    public MutableLiveData<Boolean> enableBtn = new MutableLiveData<>();
-    public MutableLiveData<Boolean> loading = new MutableLiveData<>();
+    public MutableLiveData<String> newPasswordError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> newPasswordErrorEnable = new MutableLiveData<>();
+    public MutableLiveData<Boolean> newPasswordRequestFocus = new MutableLiveData<>();
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    public MutableLiveData<String> verifyCode = new MutableLiveData<>();
+    public MutableLiveData<Boolean> enableBtn = new MutableLiveData<>();
 
     private String userId;
 
     private MultableLiveEvent<ResetEvent> cmd = new MultableLiveEvent<>();
 
     public void reset() {
+        hideKeyboard();
         submitForm();
     }
 
@@ -49,15 +50,16 @@ public class ResetPasswordViewModel extends ViewModel {
     }
 
     private void newPasswordError() {
-        cmd.call(new ResetEvent(ResetEvent.NEW_PASSWORD_ERROR));
+        newPasswordError.setValue(EappsApplication.getInstance().getString(R.string.err_input_password));
+        newPasswordRequestFocus.setValue(true);
     }
 
     private void newPasswordSuccess() {
-        cmd.call(new ResetEvent(ResetEvent.NEW_PASSWORD_SUCCESS));
+        newPasswordErrorEnable.setValue(false);
     }
 
     private void requestResetPwd() {
-        showProccessing();
+        showProgressing();
         ResetPwdRequest request = new ResetPwdRequest();
         request.setVerifyCode(verifyCode.getValue());
         request.setNewPassword(newPassword.getValue());
@@ -65,35 +67,28 @@ public class ResetPasswordViewModel extends ViewModel {
         mAccountRepository.resetPwd(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
-                hideProcessing();
-                if (result.getCode() == RESET_SUCCESS)
+                loaded();
+                if (result.getCode() == ResultCode.CODE_OK) {
                     resetPwdSuccess();
-                else
-                    resetPwdError(result.getMessage());
+                } else {
+                    showToast(result.getMessage());
+                }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                hideProcessing();
-                resetPwdError(error);
+                loaded();
+                showToast(error);
             }
         });
-    }
-
-    private void resetPwdError(String error) {
-        cmd.call(new ResetEvent(ResetEvent.RESET_EEROR, error));
     }
 
     private void resetPwdSuccess() {
         cmd.call(new ResetEvent(ResetEvent.RESET_SUCCESS));
     }
 
-    private void hideProcessing() {
-        loading.setValue(false);
-    }
-
-    private void showProccessing() {
-        loading.setValue(true);
+    private void hideKeyboard() {
+        cmd.call(new ResetEvent(ResetEvent.HIDE_KEYBOARD));
     }
 
     public void afterTextChanged() {
@@ -112,5 +107,9 @@ public class ResetPasswordViewModel extends ViewModel {
 
     public MultableLiveEvent<ResetEvent> getCmd() {
         return cmd;
+    }
+
+    void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -18,12 +18,16 @@ import vn.gomicorp.seller.shopinfo.ShopInformationActivity;
 public class Intents {
     public static void directToMainActivity(Activity activity) {
         if (Strings.isNullOrEmpty(EappsApplication.getPreferences().getShopId()))
-            startNewTaskActivity(activity, ShopInformationActivity.class);
+            startShopInformationActivity(activity);
         else
             startMainActivity(activity);
     }
 
-    public static void startMainActivity(Activity activity) {
+    private static void startShopInformationActivity(Activity activity) {
+        startNewTaskActivity(activity, ShopInformationActivity.class);
+    }
+
+    private static void startMainActivity(Activity activity) {
         startNewTaskActivity(activity, MainActivity.class);
     }
 

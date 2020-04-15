@@ -1,5 +1,7 @@
 package vn.gomicorp.seller.authen.signin;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.text.Editable;
 
 import androidx.lifecycle.MutableLiveData;
@@ -15,6 +17,7 @@ import vn.gomicorp.seller.data.source.model.api.SignInRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
+import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Inputs;
 import vn.gomicorp.seller.utils.Strings;
 import vn.gomicorp.seller.utils.Utils;
@@ -144,5 +147,30 @@ public class SignInViewModel extends BaseViewModel {
 
     private void saveAccount(Account account) {
         mAppPreferences.setAccount(account);
+    }
+
+    void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case GomiConstants.REQUEST_SIGN_UP:
+                    loginSuccess();
+                    break;
+
+                case GomiConstants.REQUEST_FORGET_PASSWORD:
+                    if (data != null && data.getStringExtra(GomiConstants.EXTRA_ID) != null) {
+                        forgetSuccess(data.getStringExtra(GomiConstants.EXTRA_ID));
+                    }
+                    break;
+                case GomiConstants.REQUEST_RESET_PASSWORD:
+                    showToast(EappsApplication.getInstance().getString(R.string.change_password_succsess));
+                    break;
+            }
+        }
+    }
+
+    private void forgetSuccess(String userId) {
+        SignInEvent event = new SignInEvent(SignInEvent.RESET_PASSWORD);
+        event.setData(userId);
+        mLogInCommand.call(event);
     }
 }

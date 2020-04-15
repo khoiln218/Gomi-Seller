@@ -3,7 +3,6 @@ package vn.gomicorp.seller.authen.forget.reset;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -11,77 +10,49 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityResetPaswordBinding;
 import vn.gomicorp.seller.utils.GomiConstants;
-import vn.gomicorp.seller.utils.Intents;
-import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.utils.Utils;
 
-public class ResetPasswordActivity extends AppCompatActivity {
-
-    private ActivityResetPaswordBinding binding;
-    private ResetPasswordViewModel viewModel;
-
-    private String userId;
+public class ResetPasswordActivity extends BaseActivity<ResetPasswordViewModel, ActivityResetPaswordBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent() == null)
+        if (getIntent() == null || getIntent().getStringExtra(GomiConstants.EXTRA_ID) == null)
             finish();
-        userId = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
-        initDataBinding();
+        String userId = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
+        initBinding();
         setupToolbar();
         setupCmd();
 
-        viewModel.setUserId(userId);
+        getViewModel().setUserId(userId);
     }
 
     private void setupCmd() {
-        viewModel.getCmd().observe(this, new Observer<ResetEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<ResetEvent>() {
             @Override
             public void onChanged(ResetEvent event) {
                 switch (event.code) {
-                    case ResetEvent.NEW_PASSWORD_ERROR:
-                        newPwdError();
-                        break;
-                    case ResetEvent.NEW_PASSWORD_SUCCESS:
-                        newPwdSuccess();
-                        break;
-                    case ResetEvent.RESET_EEROR:
-                        resetError(event.message);
-                        break;
                     case ResetEvent.RESET_SUCCESS:
-                        resetSuccess();
+                        setResult(RESULT_OK);
+                        finish();
+                        break;
+                    case ResetEvent.HIDE_KEYBOARD:
+                        Utils.hideSoftKeyboard(ResetPasswordActivity.this);
                         break;
                 }
             }
         });
     }
 
-    private void resetSuccess() {
-        Intents.directToMainActivity(this);
-    }
-
-    private void resetError(String error) {
-        ToastUtils.showToast(error);
-    }
-
-    private void newPwdSuccess() {
-        binding.inputLayoutNewPassword.setErrorEnabled(false);
-    }
-
-    private void newPwdError() {
-        binding.inputLayoutNewPassword.setError(getString(R.string.err_input_password));
-        Utils.requestFocus(this, binding.inputNewPasword);
-        Utils.playVibrate(this);
-    }
-
-    private void initDataBinding() {
+    @Override
+    protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reset_pasword);
         viewModel = ViewModelProviders.of(this).get(ResetPasswordViewModel.class);
-        binding.setViewModel(viewModel);
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 
@@ -95,12 +66,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
