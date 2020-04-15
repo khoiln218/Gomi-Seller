@@ -15,7 +15,7 @@ import vn.gomicorp.seller.databinding.ActivitySignInBinding;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.Utils;
 
-public class SignInActivity extends BaseActivity<SignInViewModel> {
+public class SignInActivity extends BaseActivity<SignInViewModel, ActivitySignInBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class SignInActivity extends BaseActivity<SignInViewModel> {
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
         viewModel = ViewModelProviders.of(this).get(SignInViewModel.class);
-        ((ActivitySignInBinding) binding).setSignInViewModel(getViewModel());
+        getBinding().setSignInViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 

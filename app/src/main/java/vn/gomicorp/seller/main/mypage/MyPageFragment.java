@@ -5,15 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
+import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentMypageBinding;
 import vn.gomicorp.seller.main.MainActivity;
 
-public class MyPageFragment extends Fragment {
-    FragmentMypageBinding binding;
-    MyPageViewModel viewModel;
+public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypageBinding> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,8 +23,8 @@ public class MyPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
         if (binding == null)
             binding = FragmentMypageBinding.bind(view);
-        viewModel = (MyPageViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.MY_PAGE);
-        binding.setViewModel(viewModel);
+        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.MY_PAGE);
+        getBinding().setViewModel(getViewModel());
         return binding.getRoot();
     }
 

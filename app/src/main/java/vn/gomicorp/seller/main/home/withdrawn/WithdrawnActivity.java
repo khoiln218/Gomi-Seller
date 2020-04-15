@@ -10,14 +10,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
-import vn.gomicorp.seller.databinding.ActivityWithdrawnBinding;
 import vn.gomicorp.seller.data.source.model.data.BankAccount;
+import vn.gomicorp.seller.databinding.ActivityWithdrawnBinding;
 import vn.gomicorp.seller.main.home.withdrawn.bank.BankAccountInformationActivity;
 import vn.gomicorp.seller.main.home.withdrawn.coupon.CouponActivity;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.widgets.dialog.WithdrawnBankDialogFragment;
 
-public class WithdrawnActivity extends BaseActivity implements WithdrawnListener {
+public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, ActivityWithdrawnBinding> implements WithdrawnListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class WithdrawnActivity extends BaseActivity implements WithdrawnListener
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_withdrawn);
         viewModel = ViewModelProviders.of(this).get(WithdrawnViewModel.class);
-        ((ActivityWithdrawnBinding) binding).setViewModel((WithdrawnViewModel) viewModel);
-        ((WithdrawnViewModel) viewModel).setListener(this);
+        getBinding().setViewModel(getViewModel());
+        getViewModel().setListener(this);
         binding.setLifecycleOwner(this);
     }
 
@@ -47,7 +47,7 @@ public class WithdrawnActivity extends BaseActivity implements WithdrawnListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ((WithdrawnViewModel) viewModel).setListener(null);
+        getViewModel().setListener(null);
     }
 
     @Override

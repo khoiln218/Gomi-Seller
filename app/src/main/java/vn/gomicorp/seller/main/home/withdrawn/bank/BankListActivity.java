@@ -10,7 +10,7 @@ import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityBankListBinding;
 
-public class BankListActivity extends BaseActivity {
+public class BankListActivity extends BaseActivity<BankListViewModel, ActivityBankListBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +23,15 @@ public class BankListActivity extends BaseActivity {
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bank_list);
         viewModel = ViewModelProviders.of(this).get(BankListViewModel.class);
-        ((ActivityBankListBinding) binding).setViewModel((BankListViewModel) viewModel);
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ((BankListViewModel) viewModel).showLoading();
-        ((BankListViewModel) viewModel).onRefresh();
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 
     @Override

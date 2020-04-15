@@ -12,7 +12,7 @@ import vn.gomicorp.seller.databinding.ActivitySignUpBinding;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.Utils;
 
-public class SignUpActivity extends BaseActivity<SignUpViewModel> {
+public class SignUpActivity extends BaseActivity<SignUpViewModel, ActivitySignUpBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class SignUpActivity extends BaseActivity<SignUpViewModel> {
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
         viewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
-        ((ActivitySignUpBinding) binding).setSignUpViewModel(getViewModel());
+        getBinding().setSignUpViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 

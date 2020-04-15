@@ -28,7 +28,7 @@ import vn.gomicorp.seller.utils.PermissionHelper;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
-public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel> {
+public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel, ActivityShopInfomationBinding> {
     private PermissionHelper permissionHelper;
     private boolean dialogShowing = false;
 
@@ -74,7 +74,7 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_infomation);
         viewModel = ViewModelProviders.of(this).get(ShopInformationViewModel.class);
-        ((ActivityShopInfomationBinding) binding).setViewModel(getViewModel());
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 

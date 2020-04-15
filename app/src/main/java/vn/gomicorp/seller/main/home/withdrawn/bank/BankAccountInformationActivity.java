@@ -14,7 +14,7 @@ import vn.gomicorp.seller.databinding.ActivityBankAccoutInfomationBinding;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Utils;
 
-public class BankAccountInformationActivity extends BaseActivity implements BankAccountInformationListener {
+public class BankAccountInformationActivity extends BaseActivity<BankAccountInformationViewModel, ActivityBankAccoutInfomationBinding> implements BankAccountInformationListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +28,8 @@ public class BankAccountInformationActivity extends BaseActivity implements Bank
     protected void initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bank_accout_infomation);
         viewModel = ViewModelProviders.of(this).get(BankAccountInformationViewModel.class);
-        ((ActivityBankAccoutInfomationBinding) binding).setViewModel((BankAccountInformationViewModel) viewModel);
-        ((BankAccountInformationViewModel) viewModel).setListener(this);
+        getBinding().setViewModel(getViewModel());
+        getViewModel().setListener(this);
         binding.setLifecycleOwner(this);
     }
 
@@ -55,12 +55,12 @@ public class BankAccountInformationActivity extends BaseActivity implements Bank
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ((BankAccountInformationViewModel) viewModel).onActivityResult(requestCode, resultCode, data);
+        getViewModel().onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ((BankAccountInformationViewModel) viewModel).setListener(null);
+        getViewModel().setListener(null);
     }
 }
