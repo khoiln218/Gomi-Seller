@@ -2,9 +2,11 @@ package vn.gomicorp.seller.binding;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 
 import vn.gomicorp.seller.utils.Utils;
@@ -32,5 +34,12 @@ public class InputBinding {
             txt.setFocusableInTouchMode(true);
             txt.requestFocus();
         }
+    }
+
+    @BindingAdapter("flag")
+    public static void loadImage(ImageView imageView, String imageUrl) {
+        Glide.with(imageView)
+                .load(imageUrl)
+                .into(imageView);
     }
 }

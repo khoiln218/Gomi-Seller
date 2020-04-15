@@ -19,10 +19,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.AttributeAdapter;
@@ -37,7 +37,6 @@ import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
-import vn.gomicorp.seller.event.OnLoadTabListener;
 import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 import vn.gomicorp.seller.main.market.collection.cate.CategoryAdapter;
@@ -100,7 +99,7 @@ public class MainBinding {
 
     @BindingAdapter("setSaleOff")
     public static void setSaleOff(TextView textView, int saleOff) {
-        textView.setText(String.format("-%d%%", saleOff));
+        textView.setText(String.format(Locale.getDefault(), "-%d%%", saleOff));
     }
 
     @BindingAdapter("setProductDetailAdapter")
@@ -248,38 +247,38 @@ public class MainBinding {
     }
 
     @BindingAdapter("setImageCategory")
-    public static void setImageCategory(ImageView view, String icon) {
-        Glide.with(view.getContext())
+    public static void setImageCategory(ImageView imageView, String icon) {
+        Glide.with(imageView)
                 .load(icon)
                 .apply(new RequestOptions()
                         .fitCenter()
                         .diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(view);
+                .into(imageView);
     }
 
     @BindingAdapter("setImageSelectDialog")
-    public static void setImageSelectDialog(ImageView view, String imageUrl) {
-        Glide.with(view.getContext())
+    public static void setImageSelectDialog(ImageView imageView, String imageUrl) {
+        Glide.with(imageView)
                 .load(imageUrl)
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.ic_place_holder)
                         .override(Utils.getScreenWidth() / 3)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(view);
+                .into(imageView);
     }
 
     @BindingAdapter("setImage")
-    public static void setImage(ImageView view, String thumbnail) {
+    public static void setImage(ImageView imageView, String thumbnail) {
         int width = Utils.getScreenWidth() / INTRODUCE_ROW;
-        Glide.with(view.getContext())
+        Glide.with(imageView)
                 .load(thumbnail)
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.ic_place_holder)
                         .override(width)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(view);
+                .into(imageView);
     }
 
     @BindingAdapter("setPrice")

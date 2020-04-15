@@ -50,8 +50,8 @@ public class ShopBinding {
     }
 
     @BindingAdapter("setImageView")
-    public static void loadImage(ImageView view, Uri imageUrl) {
-        Glide.with(view.getContext())
+    public static void loadImage(ImageView imageView, Uri imageUrl) {
+        Glide.with(imageView)
                 .load(imageUrl)
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.img_home_banner)
@@ -59,6 +59,6 @@ public class ShopBinding {
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true))
-                .into(view);
+                .into(imageView);
     }
 }

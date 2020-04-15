@@ -55,11 +55,4 @@ public class Location {
     public void setName(String Name) {
         this.Name = Name;
     }
-
-    @BindingAdapter("flag")
-    public static void loadImage(ImageView view, String imageUrl) {
-        Glide.with(view.getContext())
-                .load(imageUrl)
-                .into(view);
-    }
 }
