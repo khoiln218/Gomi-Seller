@@ -5,13 +5,13 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCategoryBinding;
@@ -20,9 +20,7 @@ import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class CategoryActivity extends AppCompatActivity implements CategoryListener {
-    ActivityCategoryBinding binding;
-    CategoryViewModel viewModel;
+public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCategoryBinding> implements CategoryListener {
 
     private int id;
     private String name;
@@ -41,16 +39,24 @@ public class CategoryActivity extends AppCompatActivity implements CategoryListe
     }
 
     @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_category);
+        viewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        getBinding().setViewModel(getViewModel());
+        binding.setLifecycleOwner(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        viewModel.onRefresh();
+        getViewModel().onRefresh();
     }
 
     protected void loadData() {
-        viewModel.setCategoryId(id);
-        viewModel.setListener(this);
-        viewModel.showLoading();
-        viewModel.requestCategory();
+        getViewModel().setCategoryId(id);
+        getViewModel().setListener(this);
+        getViewModel().showLoading();
+        getViewModel().requestCategory();
     }
 
     private void initToolbar() {
@@ -59,13 +65,6 @@ public class CategoryActivity extends AppCompatActivity implements CategoryListe
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle(TextUtils.isEmpty(name) ? "" : name);
-    }
-
-    private void initBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_category);
-        viewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class CategoryActivity extends AppCompatActivity implements CategoryListe
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestPickProduct(product);
+                getViewModel().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });
@@ -97,11 +96,9 @@ public class CategoryActivity extends AppCompatActivity implements CategoryListe
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 }

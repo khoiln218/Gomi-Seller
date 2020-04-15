@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
@@ -19,12 +19,9 @@ import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class MarketFragment extends Fragment {
+public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarketBinding> {
 
-    private FragmentMarketBinding binding;
-    private MarketViewModel viewModel;
-
-    public static MarketFragment INSTANCE;
+    private static MarketFragment INSTANCE;
 
     public static MarketFragment getInstance() {
         if (INSTANCE == null)
@@ -46,8 +43,8 @@ public class MarketFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_market, container, false);
         if (binding == null)
             binding = FragmentMarketBinding.bind(root);
-        viewModel = (MarketViewModel) MainActivity.obtainViewModel(getActivity(), MainActivity.MARKET);
-        binding.setViewModel(viewModel);
+        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.MARKET);
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(getActivity());
         initCmd();
 
@@ -55,7 +52,7 @@ public class MarketFragment extends Fragment {
     }
 
     private void initCmd() {
-        viewModel.getCmd().observe(this, new Observer<MarketEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<MarketEvent>() {
             @Override
             public void onChanged(MarketEvent event) {
                 switch (event.code) {
@@ -83,11 +80,12 @@ public class MarketFragment extends Fragment {
     }
 
     private void showDialogPickProduct(Product product) {
+        if (getFragmentManager() == null) return;
         final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestPickProduct(product);
+                getViewModel().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });
@@ -97,6 +95,6 @@ public class MarketFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.requestCollections();
+        getViewModel().requestCollections();
     }
 }

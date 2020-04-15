@@ -23,6 +23,7 @@ import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.MultableLiveEvent;
@@ -32,75 +33,25 @@ import vn.gomicorp.seller.event.ProductHandler;
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends BaseViewModel {
-    private final int CODE_OK = 200;
+public class MarketViewModel extends BaseViewModel implements ProductHandler, CategoryHandler, CollectionHandler, OnProductAdapterInitListener {
 
-    public ProductHandler productHandler = new ProductHandler() {
-        @Override
-        public void onShow(Product product) {
-            MarketEvent event = new MarketEvent(MarketEvent.SHOW_DETAIL);
-            event.setData(product);
-            cmd.call(event);
-        }
+    private ProductRepository mProductRepository;
+    public MutableLiveData<MarketListAdapter> marketListAdapter;
 
-        @Override
-        public void onPick(Product product) {
-            pick(product);
-        }
-    };
+    private MultableLiveEvent<MarketEvent> cmd;
 
-    public CategoryHandler categoryHandler = new CategoryHandler() {
-        @Override
-        public void onClick(Category category) {
-            MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_CATEGORY);
-            event.setData(category);
-            cmd.call(event);
-        }
-    };
-
-    public CollectionHandler collectionHandler = new CollectionHandler() {
-        @Override
-        public void onSelect(Collection collection) {
-            MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_COLLECTION);
-            collection.getData().clear();
-            event.setData(collection);
-            cmd.call(event);
-        }
-    };
-
-    private List<ProductItemAdapter> adapters = new ArrayList<>();
-    public List<Collection> collections = new ArrayList<>();
+    private List<ProductItemAdapter> adapters;
+    private List<Collection> collections;
     private MarketListAdapter adapter;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
-    public MutableLiveData<MarketListAdapter> marketListAdapter = new MutableLiveData<>();
-
     public MarketViewModel() {
-        adapter = new MarketListAdapter(collections, productHandler, categoryHandler, collectionHandler, onProductAdapterInitListener);
+        mProductRepository = ProductRepository.getInstance();
+        marketListAdapter = new MutableLiveData<>();
+        adapters = new ArrayList<>();
+        cmd = new MultableLiveEvent<>();
+        collections = new ArrayList<>();
+        adapter = new MarketListAdapter(collections, this);
         marketListAdapter.setValue(adapter);
-    }
-
-    public OnProductAdapterInitListener onProductAdapterInitListener = new OnProductAdapterInitListener() {
-        @Override
-        public void init(ProductItemAdapter adapter) {
-            adapters.add(adapter);
-        }
-    };
-
-    public MultableLiveEvent<MarketEvent> getCmd() {
-        return cmd;
-    }
-
-    public MultableLiveEvent<MarketEvent> cmd = new MultableLiveEvent<>();
-
-    private void pick(Product product) {
-        onPick(product);
-    }
-
-    private void onPick(Product product) {
-        MarketEvent event = new MarketEvent(MarketEvent.ON_PICK);
-        event.setData(product);
-        cmd.call(event);
     }
 
     void requestPickProduct(Product product) {
@@ -112,7 +63,7 @@ public class MarketViewModel extends BaseViewModel {
             @Override
             public void onLoaded(ResponseData<Product> result) {
                 hideProgressing();
-                if (result.getCode() == CODE_OK)
+                if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
                     updateFail(result.getMessage());
@@ -157,7 +108,7 @@ public class MarketViewModel extends BaseViewModel {
             @Override
             public void onLoaded(ResponseData<Introduce> result) {
                 hideProgressing();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     List<Collection> collectionList = new ArrayList<>();
 
                     //banner
@@ -175,7 +126,7 @@ public class MarketViewModel extends BaseViewModel {
                     //category
                     List<Parcelable> categorys = new ArrayList<>();
                     categorys.addAll(result.getResult().getMegaCateList());
-                    collectionList.add(new Collection(MarketListAdapter.CollectionType.MEGA_CATAGORY, categorys));
+                    collectionList.add(new Collection(MarketListAdapter.CollectionType.MEGA_CATEGORY, categorys));
 
                     //collectionlist
                     for (Introduce.CollectionListBean collectionListBean : result.getResult().getCollectionList()) {
@@ -206,13 +157,51 @@ public class MarketViewModel extends BaseViewModel {
     }
 
     private void updateCollection() {
-        setErrorMessage(collections.size() > 0 ? null : "Not Result");
+        setErrorMessage(collections.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.not_result));
         adapter.setCollections(collections);
+    }
+
+    public MultableLiveEvent<MarketEvent> getCmd() {
+        return cmd;
     }
 
     private void refresh() {
         collections.clear();
         updateCollection();
         adapters.clear();
+    }
+
+    @Override
+    public void onShow(Product product) {
+        MarketEvent event = new MarketEvent(MarketEvent.SHOW_DETAIL);
+        event.setData(product);
+        cmd.call(event);
+    }
+
+    @Override
+    public void onPick(Product product) {
+        MarketEvent event = new MarketEvent(MarketEvent.ON_PICK);
+        event.setData(product);
+        cmd.call(event);
+    }
+
+    @Override
+    public void onClick(Category category) {
+        MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_CATEGORY);
+        event.setData(category);
+        cmd.call(event);
+    }
+
+    @Override
+    public void onSelect(Collection collection) {
+        MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_COLLECTION);
+        collection.getData().clear();
+        event.setData(collection);
+        cmd.call(event);
+    }
+
+    @Override
+    public void init(ProductItemAdapter adapter) {
+        adapters.add(adapter);
     }
 }

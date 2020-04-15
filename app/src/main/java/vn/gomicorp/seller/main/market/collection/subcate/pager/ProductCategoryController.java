@@ -8,7 +8,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.gomicorp.seller.BaseViewModel;
+import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
@@ -16,21 +17,26 @@ import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.ProductHandler;
+import vn.gomicorp.seller.utils.ConnectionHelper;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class ProductCategoryViewModel extends BaseViewModel implements ProductHandler, OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
-    private static final int CODE_OK = 200;
+public class ProductCategoryController implements ProductHandler, OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private static final int INIT_PAGE = 1;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
+    private ProductRepository mProductRepository;
 
-    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
-    private MultableLiveEvent<ProductCategoryEvent> cmd = new MultableLiveEvent<>();
+    public MutableLiveData<Boolean> isProgressing;
+    public MutableLiveData<String> errorMessage;
+    public MutableLiveData<Boolean> refreshing;
+
+    public MutableLiveData<ProductItemAdapter> productItemAdapter;
+    private MultableLiveEvent<ProductCategoryEvent> cmd;
 
     private ProductItemAdapter adapter;
     private List<Product> products;
@@ -39,7 +45,13 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
     private int page;
     private int totalPage;
 
-    ProductCategoryViewModel() {
+    ProductCategoryController() {
+        mProductRepository = ProductRepository.getInstance();
+        productItemAdapter = new MutableLiveData<>();
+        isProgressing = new MutableLiveData<>();
+        errorMessage = new MutableLiveData<>();
+        refreshing = new MutableLiveData<>();
+        cmd = new MultableLiveEvent<>();
         products = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
@@ -76,7 +88,7 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
             @Override
             public void onLoaded(ResponseData<Product> result) {
                 loaded();
-                if (result.getCode() == CODE_OK)
+                if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
                     updateFail(result.getMessage());
@@ -130,7 +142,7 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     products.remove(null);
@@ -167,5 +179,41 @@ public class ProductCategoryViewModel extends BaseViewModel implements ProductHa
 
     void showLoading() {
         showProgressing();
+    }
+
+    protected void showProgressing() {
+        isProgressing.setValue(true);
+    }
+
+    private void hideProgressing() {
+        isProgressing.setValue(false);
+    }
+
+    private void setErrorMessage(String error) {
+        errorMessage.setValue(error);
+    }
+
+    private void checkEmpty(List<Product> products) {
+        setErrorMessage(products.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.empty));
+    }
+
+    private void refreshed() {
+        refreshing.setValue(false);
+    }
+
+    protected void loaded() {
+        hideProgressing();
+        refreshed();
+    }
+
+    private void checkConnection(final String error) {
+        ConnectionHelper.getInstance().checkNetwork(new ConnectionHelper.OnCheckNetworkListener() {
+            @Override
+            public void onCheck(boolean isOnline) {
+                if (!isOnline)
+                    errorMessage.setValue(EappsApplication.getInstance().getString(R.string.network_error));
+                else errorMessage.setValue(error);
+            }
+        });
     }
 }

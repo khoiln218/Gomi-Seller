@@ -17,6 +17,7 @@ import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.ProductHandler;
@@ -25,24 +26,25 @@ import vn.gomicorp.seller.event.ProductHandler;
  * Created by KHOI LE on 3/26/2020.
  */
 public class CollectionViewModel extends BaseViewModel implements ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
-    private final int CODE_OK = 200;
     private final int INIT_PAGE = 1;
-    private int page = INIT_PAGE;
-    private int totalPage = 0;
 
-    private int collectionId;
+    private ProductRepository mProductRepository;
 
-    private List<Product> products = new ArrayList<>();
+    public MutableLiveData<ProductItemAdapter> productItemAdapter;
+    private MultableLiveEvent<CollectionEvent> cmd;
+
+    private List<Product> products;
     private ProductItemAdapter adapter;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
-
-    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
-
-    private MultableLiveEvent<CollectionEvent> cmd = new MultableLiveEvent<>();
+    private int page;
+    private int totalPage;
+    private int collectionId;
 
     public CollectionViewModel() {
-        loaded();
+        mProductRepository = ProductRepository.getInstance();
+        productItemAdapter = new MutableLiveData<>();
+        cmd = new MultableLiveEvent<>();
+        products = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
     }
@@ -68,7 +70,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
             @Override
             public void onLoaded(ResponseData<Product> result) {
                 loaded();
-                if (result.getCode() == CODE_OK)
+                if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
                     updateFail(result.getMessage());
@@ -101,14 +103,10 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
         page = INIT_PAGE;
         products.clear();
         updateProductList();
-        switch (collectionId) {
-            case MarketListAdapter.CollectionType.NEW_PRODUCT:
-            case MarketListAdapter.CollectionType.RECOMEND_PRODUCT:
-                initCollection();
-                break;
-            case MarketListAdapter.CollectionType.SEEN_PRODUCT:
-                initProductSeen();
-                break;
+        if (collectionId == MarketListAdapter.CollectionType.SEEN_PRODUCT) {
+            initProductSeen();
+        } else {
+            initCollection();
         }
     }
 
@@ -126,14 +124,10 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
         page++;
         products.add(null);
         updateProductList();
-        switch (collectionId) {
-            case MarketListAdapter.CollectionType.NEW_PRODUCT:
-            case MarketListAdapter.CollectionType.RECOMEND_PRODUCT:
-                loadMoreCollection();
-                break;
-            case MarketListAdapter.CollectionType.SEEN_PRODUCT:
-                loadMoreProductSeen();
-                break;
+        if (collectionId == MarketListAdapter.CollectionType.SEEN_PRODUCT) {
+            loadMoreProductSeen();
+        } else {
+            loadMoreCollection();
         }
     }
 
@@ -152,7 +146,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     products.remove(null);
@@ -177,7 +171,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     products.remove(null);
@@ -204,7 +198,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
         return cmd;
     }
 
-    public void setCollectionId(int collectionId) {
+    void setCollectionId(int collectionId) {
         this.collectionId = collectionId;
     }
 

@@ -13,6 +13,7 @@ import vn.gomicorp.seller.utils.ToastUtils;
  * Created by KHOI LE on 4/6/2020.
  */
 public class BaseViewModel extends ViewModel {
+
     public MutableLiveData<Boolean> isProgressing = new MutableLiveData<>();
     public MutableLiveData<String> errorMessage = new MutableLiveData<>();
     public MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
@@ -55,10 +56,5 @@ public class BaseViewModel extends ViewModel {
 
     protected void showToast(String msg) {
         ToastUtils.showToast(msg);
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
     }
 }

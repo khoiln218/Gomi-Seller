@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -13,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
@@ -22,31 +22,30 @@ import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class CollectionActivity extends AppCompatActivity {
-    private CollectionViewModel viewModel;
-    private ActivityCollectionBinding binding;
-    private int id;
+public class CollectionActivity extends BaseActivity<CollectionViewModel, ActivityCollectionBinding> {
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() == null)
+            return;
         name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
-        id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
+        int id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
         initBinding();
         setupToolbar();
         setupCmd();
 
-        viewModel.setCollectionId(id);
+        getViewModel().setCollectionId(id);
     }
 
     private void loadData() {
-        viewModel.showLoading();
-        viewModel.onRefresh();
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 
     private void setupCmd() {
-        viewModel.getCmd().observe(this, new Observer<CollectionEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<CollectionEvent>() {
             @Override
             public void onChanged(CollectionEvent event) {
                 switch (event.code) {
@@ -65,12 +64,20 @@ public class CollectionActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_collection);
+        viewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
+        getBinding().setViewModel(getViewModel());
+        binding.setLifecycleOwner(this);
+    }
+
     private void showDialogPickProduct(Product product) {
         final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestPickProduct(product);
+                getViewModel().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });
@@ -79,12 +86,10 @@ public class CollectionActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -99,12 +104,5 @@ public class CollectionActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle(TextUtils.isEmpty(name) ? "" : name);
-    }
-
-    private void initBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_collection);
-        viewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
     }
 }

@@ -15,7 +15,7 @@ import vn.gomicorp.seller.main.market.collection.subcate.pager.ProductCategoryFr
 public class SubCategoryAdapter extends FragmentStateAdapter {
     private List<CategoryItem> categoryItemList;
 
-    public SubCategoryAdapter(@NonNull FragmentActivity fragmentActivity, List<CategoryItem> categoryItems) {
+    SubCategoryAdapter(@NonNull FragmentActivity fragmentActivity, List<CategoryItem> categoryItems) {
         super(fragmentActivity);
         this.categoryItemList = categoryItems;
     }
@@ -26,8 +26,7 @@ public class SubCategoryAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         int type = categoryItemList.get(position).getType();
         int id = categoryItemList.get(position).getId();
-        Fragment fragment = ProductCategoryFragment.newInstance(type, id);
-        return fragment;
+        return ProductCategoryFragment.newInstance(type, id);
     }
 
     @Override

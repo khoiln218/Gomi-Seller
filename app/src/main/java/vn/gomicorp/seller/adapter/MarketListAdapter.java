@@ -16,6 +16,7 @@ import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
+import vn.gomicorp.seller.main.market.MarketViewModel;
 
 public class MarketListAdapter extends RecyclerView.Adapter {
     private List<Collection> collections;
@@ -29,12 +30,12 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public MarketListAdapter(List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, OnProductAdapterInitListener onProductAdapterInitListener) {
+    public MarketListAdapter(List<Collection> collections, MarketViewModel viewModel) {
         this.collections = collections;
-        this.productHandler = productHandler;
-        this.categoryHandler = categoryHandler;
-        this.collectionHandler = collectionHandler;
-        this.onProductAdapterInitListener = onProductAdapterInitListener;
+        this.productHandler = viewModel;
+        this.categoryHandler = viewModel;
+        this.collectionHandler = viewModel;
+        this.onProductAdapterInitListener = viewModel;
     }
 
     @NonNull
@@ -43,7 +44,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case CollectionType.BANNER:
                 return BannerSliderHolder.getInstance(parent);
-            case CollectionType.MEGA_CATAGORY:
+            case CollectionType.MEGA_CATEGORY:
                 return CategoryHolder.getInstance(parent);
             case CollectionType.NEW_PRODUCT:
             case CollectionType.RECOMEND_PRODUCT:
@@ -82,10 +83,8 @@ public class MarketListAdapter extends RecyclerView.Adapter {
     }
 
     public interface CollectionType {
-        int SEEN_PRODUCT = -5;
-        int MEGA_CATAGORY = -4;
-        int CATAGORY = -3;
-        int SUB_CATAGORY = -2;
+        int SEEN_PRODUCT = -3;
+        int MEGA_CATEGORY = -2;
         int BANNER = -1;
         int VIEW_LOADING = 0;
         int NEW_PRODUCT = 1;

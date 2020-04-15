@@ -20,11 +20,11 @@ import vn.gomicorp.seller.utils.ToastUtils;
  * Created by KHOI LE on 3/27/2020.
  */
 public class ProductDetailViewModel extends BaseViewModel implements ProductHandler, AppBarLayout.OnOffsetChangedListener {
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
+    private ProductRepository mProductRepository;
 
-    public MutableLiveData<ProductDetailAdapter> adapter = new MutableLiveData<>();
-    public MutableLiveData<Product> product = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isShow = new MutableLiveData<>();
+    public MutableLiveData<ProductDetailAdapter> adapter;
+    public MutableLiveData<Product> product;
+    public MutableLiveData<Boolean> isShow;
 
     private Product mProduct;
     private ProductDetailAdapter productDetailAdapter;
@@ -34,6 +34,10 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
     private ProductDetialListener listener;
 
     public ProductDetailViewModel() {
+        mProductRepository = ProductRepository.getInstance();
+        adapter = new MutableLiveData<>();
+        product = new MutableLiveData<>();
+        isShow = new MutableLiveData<>();
         scrollRange = -1;
         isShow.setValue(true);
         productDetailAdapter = new ProductDetailAdapter(new Product(), this);

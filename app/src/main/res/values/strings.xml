@@ -70,8 +70,8 @@
     <string name="notify">Thông báo</string>
     <string name="invite">Invite</string>
     <string name="coupon">Coupon</string>
-    <string name="empty">Not Result</string>
-    <string name="network_error">Network Not Available</string>
+    <string name="empty">Không tìm thấy kết quả</string>
+    <string name="network_error">Không có kết nối mạng</string>
     <string name="view_detail">Xem chi tiết</string>
     <string name="product_description">Mô tả sản phẩm</string>
 
@@ -108,4 +108,5 @@
     <string name="msg_need_camera_permission">Gomi Seller cần truy cập máy ảnh. Vui lòng sửa nó trong tab cài đặt.</string>
     <string name="change_password_succsess">Đổi mật khẩu thành công</string>
     <string name="exit_app">Tiếp tục nhấn phím BACK để thoát</string>
+    <string name="not_result">Không tìm thấy kết quả</string>
 </resources>

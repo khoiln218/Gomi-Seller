@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentProductCategoryBinding;
@@ -17,11 +17,9 @@ import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class ProductCategoryFragment extends Fragment {
+public class ProductCategoryFragment extends BaseFragment<ProductCategoryController, FragmentProductCategoryBinding> {
 
-    private FragmentProductCategoryBinding binding;
-    private ProductCategoryViewModel viewModel;
-
+    private ProductCategoryController productCategoryController;
     private int categoryType;
     private int categoryId;
 
@@ -49,25 +47,29 @@ public class ProductCategoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_product_category, container, false);
         if (binding == null)
             binding = FragmentProductCategoryBinding.bind(root);
-        viewModel = new ProductCategoryViewModel();
-        binding.setViewModel(viewModel);
+        productCategoryController = new ProductCategoryController();
+        getBinding().setViewModel(productCategoryController);
         binding.setLifecycleOwner(getActivity());
         initCmd();
 
         return binding.getRoot();
     }
 
+    private ProductCategoryController getController() {
+        return productCategoryController;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.setCategoryId(categoryId);
-        viewModel.setCategoryType(categoryType);
-        viewModel.showLoading();
-        viewModel.onRefresh();
+        getController().setCategoryId(categoryId);
+        getController().setCategoryType(categoryType);
+        getController().showLoading();
+        getController().onRefresh();
     }
 
     private void initCmd() {
-        viewModel.getCmd().observe(this, new Observer<ProductCategoryEvent>() {
+        getController().getCmd().observe(this, new Observer<ProductCategoryEvent>() {
             @Override
             public void onChanged(ProductCategoryEvent event) {
                 switch (event.code) {
@@ -87,11 +89,12 @@ public class ProductCategoryFragment extends Fragment {
     }
 
     private void showDialogPickProduct(Product product) {
+        if (getFragmentManager() == null) return;
         final SelectProductDialogFragment selectProductDialogFragment = SelectProductDialogFragment.getInstance(product);
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestPickProduct(product);
+                getController().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });

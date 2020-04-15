@@ -19,6 +19,7 @@ import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.ProductHandler;
@@ -28,7 +29,6 @@ import vn.gomicorp.seller.utils.ToastUtils;
  * Created by KHOI LE on 4/7/2020.
  */
 public class CategoryViewModel extends BaseViewModel implements CategoryHandler, ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
-    private final int CODE_OK = 200;
     private final int ALL = 0;
     private final int INIT_PAGE = 1;
 
@@ -41,25 +41,30 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
 
     private CategoryListener listener;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
-    private ShopRepository mShopRepository = ShopRepository.getInstance();
+    private ProductRepository mProductRepository;
+    private ShopRepository mShopRepository;
 
-    public MutableLiveData<CategoryAdapter> categoryAdapterLiveData = new MutableLiveData<>();
-    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
+    public MutableLiveData<CategoryAdapter> categoryAdapterLiveData;
+    public MutableLiveData<ProductItemAdapter> productItemAdapter;
 
     private ProductItemAdapter adapter;
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
 
     private CategoryAdapter categoryAdapter;
-    private List<Category> categories = new ArrayList<>();
+    private List<Category> categories;
 
     public CategoryViewModel() {
-        loaded();
+        mProductRepository = ProductRepository.getInstance();
+        mShopRepository = ShopRepository.getInstance();
+        categoryAdapterLiveData = new MutableLiveData<>();
+        productItemAdapter = new MutableLiveData<>();
         page = INIT_PAGE;
         totalPage = 0;
         selectCategoryType = CategoryType.MEGA_CATEGORY;
+        products = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
+        categories = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(categories, this);
         categoryAdapterLiveData.setValue(categoryAdapter);
     }
@@ -117,7 +122,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
             @Override
             public void onLoaded(ResponseData<List<Category>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     categories = result.getResult();
                     updateCategory();
                 }
@@ -139,7 +144,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     products.remove(null);
@@ -209,7 +214,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
             @Override
             public void onLoaded(ResponseData<Product> result) {
                 loaded();
-                if (result.getCode() == CODE_OK)
+                if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
                     updateFail(result.getMessage());
