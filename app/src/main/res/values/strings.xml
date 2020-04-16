@@ -2,36 +2,36 @@
     <string name="app_name">eapps</string>
 
     <!-- TODO: Account -->
-    <string name="name">Full Name</string>
+    <string name="name">Họ tên</string>
     <string name="user_name">Email Or PhoneNumber</string>
     <string name="email">Email</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="phone_number">Số điện thoại</string>
     <string name="password">Password</string>
     <string name="contry_id">Contry ID</string>
     <string name="verify_code">Verify Code</string>
     <string name="new_password">New Password</string>
     <string name="certification_code">Certification Code</string>
 
-    <string name="hint_name">Full Name</string>
+    <string name="hint_name">Họ tên</string>
     <string name="hint_user_name">Email Or PhoneNumber</string>
     <string name="hint_email">Email</string>
     <string name="hint_phone_number">Phone Number</string>
     <string name="hint_password">Password</string>
     <string name="hint_contry_id">Contry ID</string>
     <string name="hint_verify_code">Verify Code</string>
-    <string name="hint_new_password">New Password</string>
+    <string name="hint_new_password">Mật khẩu mới</string>
     <string name="hint_certification_code">Certification Code</string>
 
     <string name="err_input_name">Error Input Full Name</string>
     <string name="err_input_email">Error Input Email</string>
     <string name="err_input_username">Error Input User Name</string>
-    <string name="err_input_password">Error Input Password</string>
-    <string name="err_input_phone_number">Error Input Phone Number</string>
+    <string name="err_input_password">Vui lòng nhập lại mật khẩu</string>
+    <string name="err_input_phone_number">Vui lòng nhập lại số điện thoại</string>
     <string name="err_input_contry_id">Error Input Contry ID</string>
 
     <string name="forget_password">Quên mật khẩu</string>
     <string name="reset_password">Reset Password</string>
-    <string name="send_code">Send Code</string>
+    <string name="send_code">Gửi</string>
     <string name="reset">Reset</string>
     <string name="login">Đăng nhập</string>
     <string name="sign_up">Đăng ký</string>
@@ -109,4 +109,15 @@
     <string name="change_password_succsess">Đổi mật khẩu thành công</string>
     <string name="exit_app">Tiếp tục nhấn phím BACK để thoát</string>
     <string name="not_result">Không tìm thấy kết quả</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="hint_old_password">Mật khẩu hiện tại</string>
+    <string name="change_password">Thay đổi mật khẩu</string>
+    <string name="gender">Giới tính</string>
+    <string name="birthday">Ngày sinh</string>
+    <string name="hint_birthday">Ngày sinh</string>
+    <string name="account_change_info">Thay đổi thông tin cá nhân</string>
+    <string name="err_text_empty">Vui lòng nhập</string>
+    <string name="err_password_confirm">Mật khẩu không trùng khớp</string>
+    <string name="select_birthday_title">Chọn ngày sinh</string>
+    <string name="btn_change">Sửa</string>
 </resources>

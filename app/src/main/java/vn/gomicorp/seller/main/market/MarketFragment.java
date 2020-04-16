@@ -55,9 +55,9 @@ public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarket
         getViewModel().getCmd().observe(this, new Observer<MarketEvent>() {
             @Override
             public void onChanged(MarketEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case MarketEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.message);
+                        ToastUtils.showToast(event.getMessage());
                         break;
                     case MarketEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());

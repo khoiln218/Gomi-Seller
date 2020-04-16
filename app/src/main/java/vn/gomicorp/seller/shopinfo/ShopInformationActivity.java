@@ -45,10 +45,10 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
         getViewModel().getCmd().observe(this, new Observer<ShopInfoEvent>() {
             @Override
             public void onChanged(ShopInfoEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case ShopInfoEvent.CREATE_ERROR:
                     case ShopInfoEvent.VERIFY_ERROR:
-                        ToastUtils.showToast(event.message);
+                        ToastUtils.showToast(event.getMessage());
                         break;
                     case ShopInfoEvent.CREATE_SUCCESS:
                         createSuccess();

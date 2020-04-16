@@ -50,13 +50,13 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
     }
 
     private void pick(Product product) {
-        CollectionEvent event = new CollectionEvent(CollectionEvent.ON_PICK);
+        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_PICK);
         event.setData(product);
         cmd.call(event);
     }
 
     private void showDetail(Product product) {
-        CollectionEvent event = new CollectionEvent(CollectionEvent.ON_SHOW);
+        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_SHOW);
         event.setData(product);
         cmd.call(event);
     }

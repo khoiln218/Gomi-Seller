@@ -48,7 +48,7 @@ public class CollectionActivity extends BaseActivity<CollectionViewModel, Activi
         getViewModel().getCmd().observe(this, new Observer<CollectionEvent>() {
             @Override
             public void onChanged(CollectionEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
                         break;
@@ -57,7 +57,7 @@ public class CollectionActivity extends BaseActivity<CollectionViewModel, Activi
                         Intents.startProductDetailActivity(CollectionActivity.this, product.getId());
                         break;
                     case CollectionEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.message);
+                        ToastUtils.showToast(event.getMessage());
                         break;
                 }
             }

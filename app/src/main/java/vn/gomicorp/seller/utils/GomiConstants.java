@@ -4,6 +4,7 @@ public interface GomiConstants {
     boolean TEST = false;
 
     String SIMPLE_DATE_FORMAT = "yyyy.MM.dd";
+    String INFO_DATE_FORMAT = "dd/MM/yyyy";
     int MAX_CHAR = 500;
 
     // REQUEST

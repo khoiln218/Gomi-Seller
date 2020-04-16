@@ -105,6 +105,7 @@
                         android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
                         android:background="@null"
+                        android:onClick="@{(v)->viewModel.updateInfo()}"
                         android:scaleType="fitXY"
                         android:src="@drawable/ic_settings"
                         android:tint="@color/colorSecondaryText"

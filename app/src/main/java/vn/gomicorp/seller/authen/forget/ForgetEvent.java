@@ -1,15 +1,15 @@
 package vn.gomicorp.seller.authen.forget;
 
-import vn.gomicorp.seller.event.Event;
+import vn.gomicorp.seller.event.BaseEvent;
 
 /**
  * Created by KHOI LE on 3/16/2020.
  */
-public class ForgetEvent<T> extends Event {
-    public static final int FORGER_SUCCESS = 1;
-    public static final int HIDE_KEYBOARD = 2;
+class ForgetEvent<T> extends BaseEvent<T> {
+    static final int FORGER_SUCCESS = 1;
+    static final int HIDE_KEYBOARD = 2;
 
-    public ForgetEvent(int code) {
-        this.code = code;
+    ForgetEvent(int code) {
+        super(code);
     }
 }

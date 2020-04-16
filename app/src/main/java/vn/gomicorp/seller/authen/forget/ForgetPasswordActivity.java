@@ -33,7 +33,7 @@ public class ForgetPasswordActivity extends BaseActivity<ForgetPasswordViewModel
         getViewModel().getCmd().observe(this, new Observer<ForgetEvent>() {
             @Override
             public void onChanged(ForgetEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case ForgetEvent.FORGER_SUCCESS:
                         fogetSuccess((Account) event.getData());
                         break;

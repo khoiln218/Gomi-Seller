@@ -35,7 +35,7 @@ public class ResetPasswordActivity extends BaseActivity<ResetPasswordViewModel, 
         getViewModel().getCmd().observe(this, new Observer<ResetEvent>() {
             @Override
             public void onChanged(ResetEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case ResetEvent.RESET_SUCCESS:
                         setResult(RESULT_OK);
                         finish();

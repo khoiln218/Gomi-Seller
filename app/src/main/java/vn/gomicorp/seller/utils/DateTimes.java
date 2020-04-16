@@ -2,16 +2,18 @@ package vn.gomicorp.seller.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class DateTimes {
 
     public static String toString(Date date) {
+        return toString(date, GomiConstants.SIMPLE_DATE_FORMAT);
+    }
 
-        SimpleDateFormat format = new SimpleDateFormat(GomiConstants.SIMPLE_DATE_FORMAT);
+    public static String toString(Date date, String format) {
         try {
-            return format.format(date);
-
+            return new SimpleDateFormat(format, Locale.getDefault()).format(date);
         } catch (Exception e) {
             return "";
         }

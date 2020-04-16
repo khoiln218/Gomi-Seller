@@ -39,7 +39,7 @@ public class SignInActivity extends BaseActivity<SignInViewModel, ActivitySignIn
         getViewModel().getLoginCommand().observe(this, new Observer<SignInEvent>() {
             @Override
             public void onChanged(SignInEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case SignInEvent.RESET_PASSWORD:
                         Intent intent = new Intent(SignInActivity.this, ResetPasswordActivity.class);
                         intent.putExtra(GomiConstants.EXTRA_ID, (String) event.getData());

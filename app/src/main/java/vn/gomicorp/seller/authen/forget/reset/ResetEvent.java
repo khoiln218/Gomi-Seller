@@ -1,15 +1,15 @@
 package vn.gomicorp.seller.authen.forget.reset;
 
-import vn.gomicorp.seller.event.Event;
+import vn.gomicorp.seller.event.BaseEvent;
 
 /**
  * Created by KHOI LE on 3/16/2020.
  */
-public class ResetEvent<T> extends Event {
-    public static final int RESET_SUCCESS = 0;
-    public static final int HIDE_KEYBOARD = 1;
+class ResetEvent<T> extends BaseEvent<T> {
+    static final int RESET_SUCCESS = 0;
+    static final int HIDE_KEYBOARD = 1;
 
-    public ResetEvent(int code) {
-        this.code = code;
+    ResetEvent(int code) {
+        super(code);
     }
 }

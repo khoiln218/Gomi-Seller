@@ -72,9 +72,9 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
         getController().getCmd().observe(this, new Observer<ProductCategoryEvent>() {
             @Override
             public void onChanged(ProductCategoryEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case ProductCategoryEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.message);
+                        ToastUtils.showToast(event.getMessage());
                         break;
                     case ProductCategoryEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());

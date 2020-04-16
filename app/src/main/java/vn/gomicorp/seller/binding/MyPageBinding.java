@@ -1,6 +1,7 @@
 package vn.gomicorp.seller.binding;
 
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import androidx.databinding.BindingAdapter;
 
@@ -15,6 +16,11 @@ import vn.gomicorp.seller.utils.Utils;
  * Created by KHOI LE on 3/31/2020.
  */
 public class MyPageBinding {
+    @BindingAdapter("setSelect")
+    public static void setSelect(Spinner spinner, int position) {
+        if (position < 0 || position > 2) position = 1;
+        spinner.setSelection(position);
+    }
 
     @BindingAdapter("setMyPageAvatar")
     public static void setMypageAvatar(ImageView imageView, String avatarUrl) {

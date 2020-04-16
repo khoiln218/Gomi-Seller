@@ -105,12 +105,12 @@ public class ShopInformationViewModel extends BaseViewModel {
     private void submitCreateShop() {
         if (!validateSellerUrl())
             return;
-        if (!checkLenghtDes())
+        if (!checkLengthDes())
             return;
         requestCreateShop();
     }
 
-    private boolean checkLenghtDes() {
+    private boolean checkLengthDes() {
         if (description.getValue() != null && description.getValue().length() > GomiConstants.MAX_CHAR) {
             requestFocusDes.setValue(true);
             return false;

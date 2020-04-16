@@ -33,7 +33,7 @@ public class SignUpActivity extends BaseActivity<SignUpViewModel, ActivitySignUp
         getViewModel().getSignInCommand().observe(this, new Observer<SignUpEvent>() {
             @Override
             public void onChanged(SignUpEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case SignUpEvent.GOTO_LOGIN:
                         finish();
                         break;
