@@ -18,6 +18,9 @@ public class MyPageViewModel extends BaseViewModel {
     public MyPageViewModel() {
         cmd = new MultableLiveEvent<>();
         account = new MutableLiveData<>();
+    }
+
+    void initAccountInformation() {
         Account account = new Account();
         account.setFullName(EappsApplication.getPreferences().getFullName());
         account.setUserName(EappsApplication.getPreferences().getUserName());

@@ -29,6 +29,7 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
             binding = FragmentMypageBinding.bind(view);
         viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.MY_PAGE);
         getBinding().setViewModel(getViewModel());
+        getBinding().setLifecycleOwner(this);
         initCmd();
         return binding.getRoot();
     }
@@ -47,5 +48,6 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
     @Override
     public void onResume() {
         super.onResume();
+        getViewModel().initAccountInformation();
     }
 }

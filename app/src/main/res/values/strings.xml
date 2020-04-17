@@ -25,9 +25,8 @@
     <string name="err_input_name">Error Input Full Name</string>
     <string name="err_input_email">Error Input Email</string>
     <string name="err_input_username">Error Input User Name</string>
-    <string name="err_input_password">Vui lòng nhập lại mật khẩu</string>
+    <string name="err_input_password">Mật khẩu sai. Vui lòng nhập từ 6 đến 32 ký tự</string>
     <string name="err_input_phone_number">Vui lòng nhập lại số điện thoại</string>
-    <string name="err_input_contry_id">Error Input Contry ID</string>
 
     <string name="forget_password">Quên mật khẩu</string>
     <string name="reset_password">Reset Password</string>

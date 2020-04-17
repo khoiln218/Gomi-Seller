@@ -1,45 +1,29 @@
 package vn.gomicorp.seller.main.mypage.info;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityAccountInformationBinding;
-import vn.gomicorp.seller.utils.Utils;
 
-public class AccountInformationActivity extends BaseActivity<AccountInformationViewModel, ActivityAccountInformationBinding> {
+public class AccountInformationActivity extends BaseActivity<AccountInformationViewModel, ActivityAccountInformationBinding> implements AccountInfoListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
         initToolbar(getString(R.string.account_change_info));
-        initCmd();
 
-        getViewModel().requestAccountInformation();
-    }
-
-    private void initCmd() {
-        getViewModel().getCmd().observe(this, new Observer<InfoEvent>() {
-            @Override
-            public void onChanged(InfoEvent event) {
-                if (event.getCode() == InfoEvent.HIDE_KEYBOARD) {
-                    Utils.hideSoftKeyboard(AccountInformationActivity.this);
-                } else if (event.getCode() == InfoEvent.SHOW_DATE_PICKER) {
-                    showDatePickerDialog((long) event.getData());
-                }
-            }
-        });
+        getBinding().pager.setAdapter(new AccountInformationAdapter(this));
+        setupTab();
     }
 
     @Override
@@ -48,6 +32,21 @@ public class AccountInformationActivity extends BaseActivity<AccountInformationV
         viewModel = ViewModelProviders.of(this).get(AccountInformationViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
+    }
+
+    private void setupTab() {
+        new TabLayoutMediator(getBinding().tabLayout, getBinding().pager,
+                new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        if (position == AccountInformationAdapter.INFO) {
+                            tab.setText(R.string.account_change_info);
+                        } else {
+                            tab.setText(R.string.change_password);
+                        }
+                    }
+                }
+        ).attach();
     }
 
     @Override
@@ -59,23 +58,18 @@ public class AccountInformationActivity extends BaseActivity<AccountInformationV
         return super.onOptionsItemSelected(item);
     }
 
-    public void showDatePickerDialog(long time) {
-        DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.clear();
-                calendar.setTimeZone(TimeZone.getTimeZone("GMT-0:00"));
-                calendar.set(year, monthOfYear, dayOfMonth);
-                getViewModel().setBirthday(calendar);
-            }
-        };
+    @Override
+    public void showLoading() {
+        getViewModel().showLoading();
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        calendar.setTimeZone(TimeZone.getTimeZone("GMT-0:00"));
-        calendar.setTimeInMillis(time);
-        DatePickerDialog pic = new DatePickerDialog(AccountInformationActivity.this, callback, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        pic.setTitle(getString(R.string.select_birthday_title));
-        pic.show();
+    @Override
+    public void hideLoading() {
+        getViewModel().hideLoading();
+    }
+
+    @Override
+    public void done() {
+        finish();
     }
 }

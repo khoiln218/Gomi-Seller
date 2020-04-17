@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -19,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.main.home.HomeFragment;
 import vn.gomicorp.seller.main.home.HomeViewModel;
@@ -29,7 +29,7 @@ import vn.gomicorp.seller.main.mypage.MyPageViewModel;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
 import vn.gomicorp.seller.utils.ToastUtils;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     public static final int HOME = 1;
     public static final int MARKET = 2;
     public static final int NOTIFICATION = 3;
@@ -61,6 +61,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         };
 
         loadFragment(HomeFragment.getInstance());
+    }
+
+    @Override
+    protected void initBinding() {
+
     }
 
     private void loadFragment(Fragment fragment) {

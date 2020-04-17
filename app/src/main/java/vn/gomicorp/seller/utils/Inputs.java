@@ -7,10 +7,6 @@ import vn.gomicorp.seller.R;
 
 public class Inputs {
 
-    public static boolean validateText(String text) {
-        return !Strings.isNullOrEmpty(text);
-    }
-
     public static boolean validateEmail(String email) {
         return !Strings.isNullOrEmpty(email) && Strings.isEmail(email);
     }
@@ -34,25 +30,12 @@ public class Inputs {
         return true;
     }
 
-    public static boolean validatePhoneNumber(String phoneNumber, MutableLiveData<String> error, MutableLiveData<Boolean> enableError, MutableLiveData<Boolean> focus) {
-        if (Strings.isNullOrEmpty(phoneNumber) /*|| !Strings.isPhoneNumber(phoneNumber)*/) {
-            error.setValue(EappsApplication.getInstance().getString(R.string.err_input_phone_number));
-            focus.setValue(true);
-            return false;
-        }
-
-        enableError.setValue(false);
-        return true;
-    }
-
     public static boolean validatePassword(String password, MutableLiveData<String> error, MutableLiveData<Boolean> enableError, MutableLiveData<Boolean> focus) {
         if (Strings.isNullOrEmpty(password) || password.length() < 6 || password.length() > 32) {
             error.setValue(EappsApplication.getInstance().getString(R.string.err_input_password));
             focus.setValue(true);
             return false;
         }
-
-        enableError.setValue(false);
         return true;
     }
 }
