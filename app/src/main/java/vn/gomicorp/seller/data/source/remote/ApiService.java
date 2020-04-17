@@ -12,6 +12,7 @@ import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
+import vn.gomicorp.seller.data.source.model.api.ChangeAvatarRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
@@ -125,4 +126,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("account/changepassword")
     Call<ResponseData<Account>> changepassword(@Body AccountChangePasswordRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/changeavatar")
+    Call<ResponseData<Account>> changeavatar(@Body ChangeAvatarRequest request);
 }

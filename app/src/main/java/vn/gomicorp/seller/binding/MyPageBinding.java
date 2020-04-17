@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.binding;
 
+import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -44,5 +45,19 @@ public class MyPageBinding {
                             .skipMemoryCache(true))
                     .into(imageView);
         }
+    }
+
+    @BindingAdapter("setAvatar")
+    public static void setMypageAvatar(ImageView imageView, Uri avatarUri) {
+        if (avatarUri == null) return;
+        Glide.with(imageView)
+                .load(avatarUri)
+                .apply(new RequestOptions()
+                        .override(Utils.getScreenWidth() / 3)
+                        .centerCrop()
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true))
+                .into(imageView);
     }
 }

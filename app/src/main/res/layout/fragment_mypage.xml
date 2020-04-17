@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="vn.gomicorp.seller.main.mypage.MyPageViewModel" />
@@ -52,6 +54,7 @@
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
+                            app:setAvatar="@{viewModel.avatarUri}"
                             app:setMyPageAvatar="@{viewModel.account.avatar}" />
 
                         <ImageButton
@@ -62,8 +65,10 @@
                             android:layout_alignParentBottom="true"
                             android:adjustViewBounds="true"
                             android:background="@drawable/circle_with_border_36"
+                            android:onClick="@{(v)->viewModel.changeAvatar()}"
                             android:src="@drawable/ic_camera"
-                            android:tint="@color/colorSecondary" />
+                            android:tint="@color/colorSecondary"
+                            android:visibility="@{viewModel.btnChageHide?View.INVISIBLE:View.VISIBLE}" />
 
                     </RelativeLayout>
 
@@ -104,9 +109,9 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
-                        android:padding="@dimen/padding_small"
                         android:background="@null"
                         android:onClick="@{(v)->viewModel.updateInfo()}"
+                        android:padding="@dimen/padding_small"
                         android:scaleType="fitXY"
                         android:src="@drawable/ic_settings"
                         android:tint="@color/colorSecondaryText"

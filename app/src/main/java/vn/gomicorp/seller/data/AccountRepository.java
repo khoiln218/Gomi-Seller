@@ -3,6 +3,7 @@ package vn.gomicorp.seller.data;
 import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
+import vn.gomicorp.seller.data.source.model.api.ChangeAvatarRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -88,5 +89,10 @@ public class AccountRepository implements AccountDataSource {
     @Override
     public void changepassword(AccountChangePasswordRequest request, ResultListener<ResponseData<Account>> callback) {
         mRemoteDataSource.changepassword(request, callback);
+    }
+
+    @Override
+    public void changeavatar(ChangeAvatarRequest request, ResultListener<ResponseData<Account>> callback) {
+        mRemoteDataSource.changeavatar(request, callback);
     }
 }
