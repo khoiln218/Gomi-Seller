@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
+import vn.gomicorp.seller.adapter.GenderAdapter;
 import vn.gomicorp.seller.utils.Strings;
 import vn.gomicorp.seller.utils.Utils;
 
@@ -16,9 +17,17 @@ import vn.gomicorp.seller.utils.Utils;
  * Created by KHOI LE on 3/31/2020.
  */
 public class MyPageBinding {
+
+    @BindingAdapter("setGenderAdapter")
+    public static void setGenderAdapter(Spinner spinner, GenderAdapter adapter) {
+        if (adapter != null && spinner.getAdapter() == null) {
+            spinner.setAdapter(adapter);
+        }
+    }
+
     @BindingAdapter("setSelect")
     public static void setSelect(Spinner spinner, int position) {
-        if (position < 0 || position > 2) position = 1;
+        if (position < 0 || position > 2) return;
         spinner.setSelection(position);
     }
 

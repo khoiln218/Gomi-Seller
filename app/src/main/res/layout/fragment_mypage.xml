@@ -104,6 +104,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
+                        android:padding="@dimen/padding_small"
                         android:background="@null"
                         android:onClick="@{(v)->viewModel.updateInfo()}"
                         android:scaleType="fitXY"

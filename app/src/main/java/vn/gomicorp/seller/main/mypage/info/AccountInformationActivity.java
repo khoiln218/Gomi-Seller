@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
@@ -62,12 +63,16 @@ public class AccountInformationActivity extends BaseActivity<AccountInformationV
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar calendar = Calendar.getInstance();
+                calendar.clear();
+                calendar.setTimeZone(TimeZone.getTimeZone("GMT-0:00"));
                 calendar.set(year, monthOfYear, dayOfMonth);
                 getViewModel().setBirthday(calendar);
             }
         };
 
         Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT-0:00"));
         calendar.setTimeInMillis(time);
         DatePickerDialog pic = new DatePickerDialog(AccountInformationActivity.this, callback, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         pic.setTitle(getString(R.string.select_birthday_title));

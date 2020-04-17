@@ -11,7 +11,15 @@ import java.util.Calendar;
 import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
+import vn.gomicorp.seller.adapter.GenderAdapter;
+import vn.gomicorp.seller.data.AccountRepository;
+import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
+import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Account;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.DateTimes;
 import vn.gomicorp.seller.utils.GomiConstants;
@@ -22,7 +30,9 @@ import vn.gomicorp.seller.utils.Strings;
  * Created by KHOI LE on 4/16/2020.
  */
 public class AccountInformationViewModel extends BaseViewModel {
-    public MutableLiveData<Account> account;
+
+    private AccountRepository mAccountRepository;
+    private AppPreferences mAppPreferences;
 
     public MutableLiveData<String> fullName;
     public MutableLiveData<String> fullNameError;
@@ -69,15 +79,23 @@ public class AccountInformationViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> changePasswordEnable;
     public MutableLiveData<Boolean> updateEnable;
 
+    public MutableLiveData<Boolean> changeInfoHide;
+    public MutableLiveData<Boolean> changeInfoFocus;
+
+    public MutableLiveData<GenderAdapter> genderAdapter;
+
     private MultableLiveEvent<InfoEvent> cmd;
 
     private boolean isInfoChanged;
     private CountDownTimer countDownTimer;
-
+    private Account account;
     private Calendar selectBirthday;
+    private boolean genderFirstSelect = false;
 
     public AccountInformationViewModel() {
-        account = new MutableLiveData<>();
+        mAccountRepository = AccountRepository.getInstance();
+        mAppPreferences = EappsApplication.getPreferences();
+
         fullName = new MutableLiveData<>();
         fullNameError = new MutableLiveData<>();
         fullNameErrorEnable = new MutableLiveData<>();
@@ -123,16 +141,24 @@ public class AccountInformationViewModel extends BaseViewModel {
         changePasswordEnable = new MutableLiveData<>();
         updateEnable = new MutableLiveData<>();
 
+        changeInfoHide = new MutableLiveData<>();
+        changeInfoFocus = new MutableLiveData<>();
+
+        genderAdapter = new MutableLiveData<>();
+
         cmd = new MultableLiveEvent<>();
+
+        genderAdapter.setValue(new GenderAdapter());
 
         isInfoChanged = false;
     }
 
     public void changeBirthday() {
         hideKeyBoard();
-        if (account.getValue() == null) return;
+        if (account == null) return;
+        long birthday = selectBirthday != null ? selectBirthday.getTimeInMillis() : account.getBirthDayLong();
         InfoEvent<Long> event = new InfoEvent(InfoEvent.SHOW_DATE_PICKER);
-        event.setData(account.getValue().getBirthDayLong());
+        event.setData(birthday);
         cmd.call(event);
     }
 
@@ -144,7 +170,7 @@ public class AccountInformationViewModel extends BaseViewModel {
         requestVerifyPhoneNumber();
     }
 
-    public void updateInfo() {
+    public void update() {
         hideKeyBoard();
         String msg = String.format("%s %s", EappsApplication.getInstance().getString(R.string.err_text_empty), EappsApplication.getInstance().getString(R.string.name));
         if (!Inputs.validateText(fullName.getValue(), fullNameError, fullNameErrorEnable, fullNameFocus, msg))
@@ -183,27 +209,40 @@ public class AccountInformationViewModel extends BaseViewModel {
     }
 
     public void afterFullNameChanged(Editable s) {
-        if (account.getValue() == null) return;
-        isInfoChanged = !s.toString().equals(account.getValue().getFullName());
+        if (account == null) return;
+        isInfoChanged = !s.toString().equals(account.getFullName());
         fullNameErrorEnable.setValue(false);
         updateEnable.setValue(isInfoChanged);
     }
 
-    public void afterBirthdayChanged() {
-        if (account.getValue() == null) return;
-        isInfoChanged = selectBirthday.getTimeInMillis() != account.getValue().getBirthDayLong();
+    private void afterBirthdayChanged() {
+        if (account == null) return;
+        isInfoChanged = selectBirthday.getTimeInMillis() != account.getBirthDayLong();
+        updateEnable.setValue(isInfoChanged);
+    }
+
+    public void onItemSelected(int position) {
+        if (account == null || gender.getValue() == null) return;
+        if (!genderFirstSelect) {
+            genderFirstSelect = true;
+            gender.setValue(account.getGender());
+            return;
+        }
+        isInfoChanged = position != account.getGender();
+        if (position != gender.getValue())
+            gender.setValue(position);
         updateEnable.setValue(isInfoChanged);
     }
 
     public void afterPhoneNumberChanged(Editable s) {
-        if (account.getValue() == null) return;
-        isInfoChanged = !s.toString().equals(account.getValue().getPhoneNumber());
+        if (account == null) return;
+        isInfoChanged = !s.toString().equals(account.getPhoneNumber());
         requestCodeEnable.setValue(isInfoChanged);
         phoneNumberErrorEnable.setValue(false);
         updateEnable.setValue(isInfoChanged);
     }
 
-    public void afterPasswordChanged(Editable s) {
+    public void afterPasswordChanged() {
         oldPasswordErrorEnable.setValue(false);
         newPasswordErrorEnable.setValue(false);
         confirmPasswordErrorEnable.setValue(false);
@@ -256,7 +295,42 @@ public class AccountInformationViewModel extends BaseViewModel {
     }
 
     void requestAccountInformation() {
+        showProgressing();
+        final AccountRequest request = new AccountRequest();
+        mAccountRepository.findbyid(request, new ResultListener<ResponseData<Account>>() {
+            @Override
+            public void onLoaded(ResponseData<Account> result) {
+                hideProgressing();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    account = result.getResult();
+                    mAppPreferences.setAccount(result.getResult());
+                    updateInfo();
+                } else {
+                    showToast(result.getMessage());
+                }
+            }
 
+            @Override
+            public void onDataNotAvailable(String error) {
+                hideProgressing();
+                showToast(error);
+            }
+        });
+    }
+
+    private void updateInfo() {
+        fullName.setValue(account.getFullName());
+        birthday.setValue(account.getBirthDay());
+        gender.setValue(account.getGender());
+        email.setValue(account.getEmail());
+        phoneNumber.setValue(account.getPhoneNumber());
+
+        oldPassword.setValue(null);
+        newPassword.setValue(null);
+        confirmPassword.setValue(null);
+
+        isInfoChanged = false;
+        updateEnable.setValue(isInfoChanged);
     }
 
     private void requestVerifyPhoneNumber() {
@@ -264,10 +338,40 @@ public class AccountInformationViewModel extends BaseViewModel {
     }
 
     private void requestUpdateInfo() {
+        showProgressing();
+        changeInfoHide.setValue(true);
+        AccountUpdateRequest request = new AccountUpdateRequest();
         if (selectBirthday != null) {
-            long birthday = selectBirthday.getTimeInMillis();
+            request.setBirthDayLong(selectBirthday.getTimeInMillis());
+        } else {
+            request.setBirthDayLong(account.getBirthDayLong());
         }
+        request.setFullName(fullName.getValue());
+        request.setGender(gender.getValue());
+        mAccountRepository.updateinfo(request, new ResultListener<ResponseData<Account>>() {
+            @Override
+            public void onLoaded(ResponseData<Account> result) {
+                hideProgressing();
+                changeInfoHide.setValue(false);
+                changeInfoFocus.setValue(true);
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    account = result.getResult();
+                    mAppPreferences.setAccount(result.getResult());
+                    updateInfo();
+                    showToast(EappsApplication.getInstance().getString(R.string.account_update_success));
+                } else {
+                    showToast(result.getMessage());
+                }
+            }
 
+            @Override
+            public void onDataNotAvailable(String error) {
+                hideProgressing();
+                showToast(error);
+                changeInfoHide.setValue(false);
+                changeInfoFocus.setValue(true);
+            }
+        });
     }
 
     private void requestChangePassword() {

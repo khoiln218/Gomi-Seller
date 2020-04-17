@@ -1,5 +1,7 @@
 package vn.gomicorp.seller.data;
 
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -70,5 +72,15 @@ public class AccountRepository implements AccountDataSource {
     public void verifyPhoneNumber(VerifyPhoneNumberRequest request, ResultListener<ResponseData<Account>> callback) {
         checkNotNull(callback);
         mRemoteDataSource.verifyPhoneNumber(request, callback);
+    }
+
+    @Override
+    public void findbyid(AccountRequest request, ResultListener<ResponseData<Account>> callback) {
+        mRemoteDataSource.findbyid(request, callback);
+    }
+
+    @Override
+    public void updateinfo(AccountUpdateRequest request, ResultListener<ResponseData<Account>> callback) {
+        mRemoteDataSource.updateinfo(request, callback);
     }
 }

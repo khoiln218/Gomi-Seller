@@ -8,6 +8,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
@@ -110,4 +112,12 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("product/findbyshop/page={page}")
     Call<ResponseData<List<Product>>> findbyshop(@Body ShopRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/findbyid")
+    Call<ResponseData<Account>> findbyid(@Body AccountRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/updateinfo")
+    Call<ResponseData<Account>> updateinfo(@Body AccountUpdateRequest request);
 }

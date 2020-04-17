@@ -5,6 +5,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.gomicorp.seller.data.AccountDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -114,6 +116,54 @@ public class AccountRemoteDataSource implements AccountDataSource {
     public void verifyPhoneNumber(VerifyPhoneNumberRequest request, final ResultListener<ResponseData<Account>> callback) {
         ApiService client = ApiConfig.getClient();
         Call<ResponseData<Account>> call = client.verifyPhoneNumber(request);
+        call.enqueue(new Callback<ResponseData<Account>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else
+                        callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Account>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyid(AccountRequest request, final ResultListener<ResponseData<Account>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Account>> call = client.findbyid(request);
+        call.enqueue(new Callback<ResponseData<Account>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else
+                        callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Account>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void updateinfo(AccountUpdateRequest request, final ResultListener<ResponseData<Account>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Account>> call = client.updateinfo(request);
         call.enqueue(new Callback<ResponseData<Account>>() {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {

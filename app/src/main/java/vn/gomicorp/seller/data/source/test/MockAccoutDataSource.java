@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 
 import vn.gomicorp.seller.data.AccountDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -202,6 +204,16 @@ public class MockAccoutDataSource implements AccountDataSource {
     @Override
     public void verifyPhoneNumber(VerifyPhoneNumberRequest request, ResultListener<ResponseData<Account>> callback) {
         excute(verifyJson, callback);
+    }
+
+    @Override
+    public void findbyid(AccountRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void updateinfo(AccountUpdateRequest request, ResultListener<ResponseData<Account>> callback) {
+
     }
 
     private void excute(final String jsonData, final ResultListener<ResponseData<Account>> callback) {

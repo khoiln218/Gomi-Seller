@@ -28,11 +28,11 @@ public class InputBinding {
     }
 
     @BindingAdapter("requestFocus")
-    public static void requestFocus(View txt, boolean requestFocus) {
+    public static void requestFocus(View view, boolean requestFocus) {
         if (requestFocus) {
-            txt.clearFocus();
-            txt.setFocusableInTouchMode(true);
-            txt.requestFocus();
+            view.clearFocus();
+            view.setFocusableInTouchMode(true);
+            view.requestFocus();
         }
     }
 
