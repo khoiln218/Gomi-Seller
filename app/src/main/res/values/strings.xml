@@ -121,4 +121,5 @@
     <string name="select_birthday_title">Chọn ngày sinh</string>
     <string name="btn_change">Sửa</string>
     <string name="account_update_success">Cập nhật thông tin thành công</string>
+    <string name="change_password_success">Đổi mật khẩu thành công</string>
 </resources>

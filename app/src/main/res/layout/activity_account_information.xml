@@ -339,7 +339,7 @@
                                 android:hint="@string/hint_old_password"
                                 android:inputType="textPassword"
                                 android:singleLine="true"
-                                android:text="@{viewModel.oldPassword}"
+                                android:text="@={viewModel.oldPassword}"
                                 android:textAppearance="?android:textAppearance" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -362,7 +362,7 @@
                                 android:hint="@string/hint_new_password"
                                 android:inputType="textPassword"
                                 android:singleLine="true"
-                                android:text="@{viewModel.newPassword}"
+                                android:text="@={viewModel.newPassword}"
                                 android:textAppearance="?android:textAppearance" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -385,7 +385,7 @@
                                 android:hint="@string/hint_confirm_password"
                                 android:inputType="textPassword"
                                 android:singleLine="true"
-                                android:text="@{viewModel.confirmPassword}"
+                                android:text="@={viewModel.confirmPassword}"
                                 android:textAppearance="?android:textAppearance" />
 
                         </com.google.android.material.textfield.TextInputLayout>

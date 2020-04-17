@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import vn.gomicorp.seller.data.AccountDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
@@ -213,6 +214,11 @@ public class MockAccoutDataSource implements AccountDataSource {
 
     @Override
     public void updateinfo(AccountUpdateRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void changepassword(AccountChangePasswordRequest request, ResultListener<ResponseData<Account>> callback) {
 
     }
 

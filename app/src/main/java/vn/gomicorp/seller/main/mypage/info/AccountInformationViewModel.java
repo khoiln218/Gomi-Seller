@@ -15,6 +15,7 @@ import vn.gomicorp.seller.adapter.GenderAdapter;
 import vn.gomicorp.seller.data.AccountRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.local.prefs.AppPreferences;
+import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
@@ -325,12 +326,16 @@ public class AccountInformationViewModel extends BaseViewModel {
         email.setValue(account.getEmail());
         phoneNumber.setValue(account.getPhoneNumber());
 
-        oldPassword.setValue(null);
-        newPassword.setValue(null);
-        confirmPassword.setValue(null);
+        resetFormChangePasswword();
 
         isInfoChanged = false;
         updateEnable.setValue(isInfoChanged);
+    }
+
+    private void resetFormChangePasswword() {
+        oldPassword.setValue(null);
+        newPassword.setValue(null);
+        confirmPassword.setValue(null);
     }
 
     private void requestVerifyPhoneNumber() {
@@ -375,7 +380,28 @@ public class AccountInformationViewModel extends BaseViewModel {
     }
 
     private void requestChangePassword() {
+        showProgressing();
+        AccountChangePasswordRequest request = new AccountChangePasswordRequest();
+        request.setPassword(oldPassword.getValue());
+        request.setNewPassword(newPassword.getValue());
+        mAccountRepository.changepassword(request, new ResultListener<ResponseData<Account>>() {
+            @Override
+            public void onLoaded(ResponseData<Account> result) {
+                hideProgressing();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    showToast(EappsApplication.getInstance().getString(R.string.change_password_success));
+                    resetFormChangePasswword();
+                } else {
+                    showToast(result.getMessage());
+                }
+            }
 
+            @Override
+            public void onDataNotAvailable(String error) {
+                hideProgressing();
+                showToast(error);
+            }
+        });
     }
 
     MutableLiveData<InfoEvent> getCmd() {

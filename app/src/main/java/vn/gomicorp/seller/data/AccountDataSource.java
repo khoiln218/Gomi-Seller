@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.data;
 
+import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountRequest;
 import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
@@ -27,4 +28,6 @@ public interface AccountDataSource {
     void findbyid(AccountRequest request, ResultListener<ResponseData<Account>> callback);
 
     void updateinfo(AccountUpdateRequest request, ResultListener<ResponseData<Account>> callback);
+
+    void changepassword(AccountChangePasswordRequest request, ResultListener<ResponseData<Account>> callback);
 }
