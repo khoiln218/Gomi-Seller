@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
@@ -14,23 +15,11 @@ import vn.gomicorp.seller.data.source.model.data.Collection;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentMarketBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
-import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarketBinding> {
-
-    private static MarketFragment INSTANCE;
-
-    public static MarketFragment getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new MarketFragment();
-        return INSTANCE;
-    }
-
-    private MarketFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +32,7 @@ public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarket
         View root = inflater.inflate(R.layout.fragment_market, container, false);
         if (binding == null)
             binding = FragmentMarketBinding.bind(root);
-        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.MARKET);
+        viewModel = ViewModelProviders.of(this).get(MarketViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(getActivity());
         initCmd();

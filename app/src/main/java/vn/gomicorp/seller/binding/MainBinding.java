@@ -252,7 +252,8 @@ public class MainBinding {
                 .load(icon)
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                 .into(imageView);
     }
 
@@ -264,7 +265,8 @@ public class MainBinding {
                         .placeholder(R.drawable.ic_place_holder)
                         .override(Utils.getScreenWidth() / 3)
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                 .into(imageView);
     }
 
@@ -277,7 +279,8 @@ public class MainBinding {
                         .placeholder(R.drawable.ic_place_holder)
                         .override(width)
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
                 .into(imageView);
     }
 

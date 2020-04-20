@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textfield.TextInputLayout;
 
 import vn.gomicorp.seller.utils.Utils;
@@ -40,6 +41,8 @@ public class InputBinding {
     public static void loadImage(ImageView imageView, String imageUrl) {
         Glide.with(imageView)
                 .load(imageUrl)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
     }
 }

@@ -113,11 +113,10 @@ public class AccountInfoViewModel extends BaseViewModel {
         if (!genderFirstSelect) {
             genderFirstSelect = true;
             gender.setValue(account.getGender());
-            return;
+        } else if (position != gender.getValue()) {
+            gender.setValue(position);
         }
         isInfoChanged = position != account.getGender();
-        if (position != gender.getValue())
-            gender.setValue(position);
         updateEnable.setValue(isInfoChanged);
     }
 

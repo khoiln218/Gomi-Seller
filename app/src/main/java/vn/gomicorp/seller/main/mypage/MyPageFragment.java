@@ -1,5 +1,6 @@
 package vn.gomicorp.seller.main.mypage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,13 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentMypageBinding;
-import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.MainListener;
 import vn.gomicorp.seller.main.mypage.info.AccountInformationActivity;
 import vn.gomicorp.seller.main.mypage.setting.AccountSettingActivity;
@@ -22,19 +24,7 @@ import vn.gomicorp.seller.utils.Intents;
 
 public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypageBinding> {
 
-    private static MyPageFragment INSTANCE;
-
     private MainListener listener;
-
-    public static MyPageFragment getInstance(MainListener listener) {
-        if (INSTANCE == null)
-            INSTANCE = new MyPageFragment(listener);
-        return INSTANCE;
-    }
-
-    private MyPageFragment(MainListener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +37,7 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
         if (binding == null)
             binding = FragmentMypageBinding.bind(view);
-        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.MY_PAGE);
+        viewModel = ViewModelProviders.of(this).get(MyPageViewModel.class);
         getBinding().setViewModel(getViewModel());
         getBinding().setLifecycleOwner(this);
         initCmd();
@@ -85,6 +75,18 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
     public void onResume() {
         super.onResume();
         getViewModel().initAccountInformation();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.listener = (MainListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.listener = null;
     }
 
     @Override

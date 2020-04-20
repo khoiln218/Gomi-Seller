@@ -11,10 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -28,11 +25,8 @@ import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.event.OnClickListener;
 import vn.gomicorp.seller.main.home.HomeFragment;
-import vn.gomicorp.seller.main.home.HomeViewModel;
 import vn.gomicorp.seller.main.market.MarketFragment;
-import vn.gomicorp.seller.main.market.MarketViewModel;
 import vn.gomicorp.seller.main.mypage.MyPageFragment;
-import vn.gomicorp.seller.main.mypage.MyPageViewModel;
 import vn.gomicorp.seller.main.notification.NotificationFragment;
 import vn.gomicorp.seller.utils.AlertDialogs;
 import vn.gomicorp.seller.utils.MediaHelper;
@@ -41,10 +35,6 @@ import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainListener {
-    public static final int HOME = 1;
-    public static final int MARKET = 2;
-    public static final int NOTIFICATION = 3;
-    public static final int MY_PAGE = 4;
 
     private PermissionHelper permissionHelper;
     private boolean dialogShowing = false;
@@ -52,6 +42,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private boolean isExit = false;
     private Handler handler;
     private Runnable exitApp;
+
+    private HomeFragment homeFragment;
+    private MarketFragment marketFragment;
+    private NotificationFragment notificationFragment;
+    private MyPageFragment myPageFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +60,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_main);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
-        
+
         permissionHelper = new PermissionHelper(this, PermissionHelper.photo_permissions);
 
         handler = new Handler();
@@ -76,7 +71,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             }
         };
 
-        loadFragment(HomeFragment.getInstance());
+        homeFragment = new HomeFragment();
+        marketFragment = new MarketFragment();
+        notificationFragment = new NotificationFragment();
+        myPageFragment = new MyPageFragment();
+
+        loadFragment(homeFragment);
     }
 
     @Override
@@ -91,17 +91,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         transaction.commit();
     }
 
-    public static ViewModel obtainViewModel(FragmentActivity activity, int screen) {
-        switch (screen) {
-            case MARKET:
-                return ViewModelProviders.of(activity).get(MarketViewModel.class);
-            case MY_PAGE:
-                return ViewModelProviders.of(activity).get(MyPageViewModel.class);
-            default:
-                return ViewModelProviders.of(activity).get(HomeViewModel.class);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -114,19 +103,19 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
-                loadFragment(HomeFragment.getInstance());
+                loadFragment(homeFragment);
                 return true;
 
             case R.id.nav_market:
-                loadFragment(MarketFragment.getInstance());
+                loadFragment(marketFragment);
                 return true;
 
             case R.id.nav_notify:
-                loadFragment(new NotificationFragment());
+                loadFragment(notificationFragment);
                 return true;
 
             case R.id.nav_account:
-                loadFragment(MyPageFragment.getInstance(this));
+                loadFragment(myPageFragment);
                 return true;
 
             default:

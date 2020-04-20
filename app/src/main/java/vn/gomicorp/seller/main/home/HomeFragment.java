@@ -6,27 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.ViewModelProviders;
+
 import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.FragmentHomeBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
-import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBinding> implements HomeListener {
-    private static HomeFragment INSTANCE;
-
-    public static HomeFragment getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new HomeFragment();
-        return INSTANCE;
-    }
-
-    private HomeFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +25,7 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         if (binding == null)
             binding = FragmentHomeBinding.bind(view);
-        viewModel = MainActivity.obtainViewModel(getActivity(), MainActivity.HOME);
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         getViewModel().setListener(this);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
@@ -48,8 +39,8 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         getViewModel().setListener(null);
     }
 
