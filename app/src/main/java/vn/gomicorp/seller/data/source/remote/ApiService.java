@@ -23,6 +23,7 @@ import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
+import vn.gomicorp.seller.data.source.model.api.SignOutRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
@@ -130,4 +131,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("account/changeavatar")
     Call<ResponseData<Account>> changeavatar(@Body ChangeAvatarRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/logout")
+    Call<ResponseData<Account>> logout(@Body SignOutRequest request);
 }

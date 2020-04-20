@@ -8,6 +8,7 @@ import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
+import vn.gomicorp.seller.data.source.model.api.SignOutRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
@@ -94,5 +95,10 @@ public class AccountRepository implements AccountDataSource {
     @Override
     public void changeavatar(ChangeAvatarRequest request, ResultListener<ResponseData<Account>> callback) {
         mRemoteDataSource.changeavatar(request, callback);
+    }
+
+    @Override
+    public void logout(SignOutRequest request, ResultListener<ResponseData<Account>> callback) {
+        mRemoteDataSource.logout(request, callback);
     }
 }

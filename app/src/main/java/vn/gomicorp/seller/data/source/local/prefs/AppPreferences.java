@@ -93,4 +93,11 @@ public class AppPreferences {
     public String getShopId() {
         return prefs.getString(SHOP_ID, null);
     }
+
+    public void clear() {
+        String token = getDeviceToken();
+        editor.clear();
+        editor.putString(DEVICE_TOKEN, token);
+        editor.commit();
+    }
 }

@@ -128,4 +128,7 @@
     <string name="sign_out">Đăng xuất</string>
     <string name="version">Version</string>
     <string name="setting_title">Cài đặt ứng dụng</string>
+    <string name="logout">Bạn đã đăng xuất khỏi hệ thống</string>
+    <string name="logout_msg">Bạn có chắc chắn muốn đăng xuất?</string>
+    <string name="btn_confirm">Xác nhận</string>
 </resources>

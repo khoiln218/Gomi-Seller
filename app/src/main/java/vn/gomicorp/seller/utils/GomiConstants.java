@@ -16,6 +16,7 @@ public interface GomiConstants {
     int REQUEST_SIGN_UP = 105;
     int REQUEST_FORGET_PASSWORD = 106;
     int REQUEST_RESET_PASSWORD = 107;
+    int REQUEST_ACCOUNT_SIGN_OUT = 108;
 
     //REQUEST CODE
     int RC_SELLER_BANK = 201;

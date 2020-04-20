@@ -1,13 +1,19 @@
 package vn.gomicorp.seller.main.mypage.setting;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityAcountSettingBinding;
+import vn.gomicorp.seller.utils.AlertDialogs;
 
 public class AccountSettingActivity extends BaseActivity<AccountSettingViewModel, ActivityAcountSettingBinding> {
 
@@ -16,6 +22,18 @@ public class AccountSettingActivity extends BaseActivity<AccountSettingViewModel
         super.onCreate(savedInstanceState);
         initBinding();
         initToolbar(getString(R.string.setting_title));
+        initCmd();
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<AccountSettingEvent>() {
+            @Override
+            public void onChanged(AccountSettingEvent event) {
+                if (event.getCode() == AccountSettingEvent.SIGN_OUT) {
+                    confirmSignOut();
+                }
+            }
+        });
     }
 
     @Override
@@ -24,5 +42,31 @@ public class AccountSettingActivity extends BaseActivity<AccountSettingViewModel
         viewModel = ViewModelProviders.of(this).get(AccountSettingViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmSignOut() {
+
+        AlertDialogs.show(this, "", getString(R.string.logout_msg), getString(R.string.btn_cancel), getString(R.string.btn_confirm), new AlertDialogs.OnClickListener() {
+            @Override
+            public void onNegativeButtonClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onPositiveButtonClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                getViewModel().requestSignOut();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
     }
 }

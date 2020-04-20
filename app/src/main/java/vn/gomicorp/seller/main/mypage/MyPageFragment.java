@@ -17,6 +17,8 @@ import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.MainListener;
 import vn.gomicorp.seller.main.mypage.info.AccountInformationActivity;
 import vn.gomicorp.seller.main.mypage.setting.AccountSettingActivity;
+import vn.gomicorp.seller.utils.GomiConstants;
+import vn.gomicorp.seller.utils.Intents;
 
 public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypageBinding> {
 
@@ -68,9 +70,11 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
                         if (listener != null)
                             listener.requestPermission();
                         break;
-
                     case MyPageEvent.SETTING:
-                        startActivity(new Intent(getActivity(), AccountSettingActivity.class));
+                        startActivityForResult(new Intent(getActivity(), AccountSettingActivity.class), GomiConstants.REQUEST_ACCOUNT_SIGN_OUT);
+                        break;
+                    case MyPageEvent.SIGN_OUT:
+                        Intents.startLoginActivity(getActivity());
                         break;
                 }
             }

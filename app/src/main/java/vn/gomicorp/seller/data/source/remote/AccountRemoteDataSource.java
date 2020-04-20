@@ -13,6 +13,7 @@ import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
+import vn.gomicorp.seller.data.source.model.api.SignOutRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
@@ -214,6 +215,30 @@ public class AccountRemoteDataSource implements AccountDataSource {
     public void changeavatar(ChangeAvatarRequest request, final ResultListener<ResponseData<Account>> callback) {
         ApiService client = ApiConfig.getClient();
         Call<ResponseData<Account>> call = client.changeavatar(request);
+        call.enqueue(new Callback<ResponseData<Account>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else
+                        callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Account>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void logout(SignOutRequest request, final ResultListener<ResponseData<Account>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Account>> call = client.logout(request);
         call.enqueue(new Callback<ResponseData<Account>>() {
             @Override
             public void onResponse(Call<ResponseData<Account>> call, Response<ResponseData<Account>> response) {

@@ -92,6 +92,9 @@ public class MyPageViewModel extends BaseViewModel {
                         setAvatar(null);
                     }
                     break;
+                case GomiConstants.REQUEST_ACCOUNT_SIGN_OUT:
+                    cmd.call(new MyPageEvent(MyPageEvent.SIGN_OUT));
+                    break;
             }
         } else {
             switch (requestCode) {
