@@ -122,4 +122,10 @@
     <string name="account_update_success">Cập nhật thông tin thành công</string>
     <string name="change_password_success">Đổi mật khẩu thành công</string>
     <string name="change_avatar_success">Cập nhật ảnh đại diện thành công</string>
+    <string name="view_term">Xem điều khoản</string>
+    <string name="open_source">Giấy phép mã nguồn mở</string>
+    <string name="notice">Thông báo</string>
+    <string name="sign_out">Đăng xuất</string>
+    <string name="version">Version</string>
+    <string name="setting_title">Cài đặt ứng dụng</string>
 </resources>

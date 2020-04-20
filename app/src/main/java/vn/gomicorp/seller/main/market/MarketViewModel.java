@@ -116,7 +116,7 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
                     //TODO: code demo
                     if (result.getResult().getBannerList().size() == 0) {
                         for (int i = 0; i < 5; i++) {
-                            banners.add(new Banner(i, i % 2 == 0 ? "http://192.168.1.30:2526/banner/elravie.jpg" : "http://192.168.1.30:2526/banner/booki.jpg"));
+                            banners.add(new Banner(i, i % 2 == 0 ? "http://192.168.1.33:2526/banner/elravie.jpg" : "http://192.168.1.33:2526/banner/booki.jpg"));
                         }
                     } else {
                         banners.addAll(result.getResult().getBannerList());

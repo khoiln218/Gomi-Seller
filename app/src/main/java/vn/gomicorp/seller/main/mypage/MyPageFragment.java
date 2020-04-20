@@ -16,6 +16,7 @@ import vn.gomicorp.seller.databinding.FragmentMypageBinding;
 import vn.gomicorp.seller.main.MainActivity;
 import vn.gomicorp.seller.main.MainListener;
 import vn.gomicorp.seller.main.mypage.info.AccountInformationActivity;
+import vn.gomicorp.seller.main.mypage.setting.AccountSettingActivity;
 
 public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypageBinding> {
 
@@ -66,6 +67,10 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
                     case MyPageEvent.REQUEST_PERMISSION:
                         if (listener != null)
                             listener.requestPermission();
+                        break;
+
+                    case MyPageEvent.SETTING:
+                        startActivity(new Intent(getActivity(), AccountSettingActivity.class));
                         break;
                 }
             }

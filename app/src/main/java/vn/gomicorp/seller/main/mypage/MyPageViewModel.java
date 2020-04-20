@@ -64,6 +64,10 @@ public class MyPageViewModel extends BaseViewModel {
         cmd.call(new MyPageEvent(MyPageEvent.REQUEST_PERMISSION));
     }
 
+    public void setting() {
+        cmd.call(new MyPageEvent(MyPageEvent.SETTING));
+    }
+
     void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {

@@ -11,6 +11,7 @@ class MyPageEvent extends BaseEvent<Uri> {
     static final int UPDATE_INFO = 0;
     static final int START_CROPPER = 1;
     static final int REQUEST_PERMISSION = 2;
+    static final int SETTING = 3;
 
     MyPageEvent(int code) {
         super(code);
