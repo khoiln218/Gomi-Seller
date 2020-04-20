@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -149,7 +150,27 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    binding.progressBar.setVisibility(View.GONE);
+                    final WebView contentView = view;
+
+                    contentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            int measuredHeight = contentView.getMeasuredHeight();
+                            int height = (int) (Utils.getScreenWidth() * 1.5f);
+
+                            if (measuredHeight < height) {
+                                height = measuredHeight;
+                                binding.btnViewDetail.setVisibility(View.GONE);
+                            }
+
+                            ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
+                            params.height = height;
+                            binding.webContainer.setLayoutParams(params);
+                            binding.progressBar.setVisibility(View.GONE);
+                            contentView.getViewTreeObserver().removeOnPreDrawListener(this);
+                            return false;
+                        }
+                    });
                 }
             });
         }
@@ -161,7 +182,10 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
             binding.btnViewDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: open WebViewActivity
+                    ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    binding.webContainer.setLayoutParams(params);
+                    binding.btnViewDetail.setVisibility(View.GONE);
                 }
             });
         }
