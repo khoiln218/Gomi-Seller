@@ -9,20 +9,12 @@
             type="vn.gomicorp.seller.data.source.model.data.Collection" />
 
         <variable
-            name="productHandler"
-            type="vn.gomicorp.seller.event.ProductHandler" />
-
-        <variable
             name="collectionHandler"
             type="vn.gomicorp.seller.event.CollectionHandler" />
 
         <variable
-            name="onLoadMoreListener"
-            type="vn.gomicorp.seller.event.OnLoadMoreListener" />
-
-        <variable
-            name="onProductAdapterInitListener"
-            type="vn.gomicorp.seller.event.OnProductAdapterInitListener" />
+            name="adapter"
+            type="vn.gomicorp.seller.adapter.ProductItemAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -76,10 +68,7 @@
                 android:id="@+id/recycler_market_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:onLoadMoreListener="@{onLoadMoreListener}"
-                app:onProductAdapterInitListener="@{onProductAdapterInitListener}"
-                app:productHandler="@{productHandler}"
-                app:setProducts="@{collection}" />
+                app:setAdapterProductCollection="@{adapter}" />
 
         </LinearLayout>
 

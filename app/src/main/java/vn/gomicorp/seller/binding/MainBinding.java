@@ -20,7 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,13 +31,7 @@ import vn.gomicorp.seller.adapter.ProductDetailAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.source.model.data.Attribute;
 import vn.gomicorp.seller.data.source.model.data.Banner;
-import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
-import vn.gomicorp.seller.data.source.model.data.Product;
-import vn.gomicorp.seller.event.CategoryHandler;
-import vn.gomicorp.seller.event.OnLoadMoreListener;
-import vn.gomicorp.seller.event.OnProductAdapterInitListener;
-import vn.gomicorp.seller.event.ProductHandler;
 import vn.gomicorp.seller.main.market.collection.cate.CategoryAdapter;
 import vn.gomicorp.seller.utils.Numbers;
 import vn.gomicorp.seller.utils.Utils;
@@ -173,22 +166,14 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter({"setCategories", "categoryHandler"})
-    public static void setCategory(RecyclerView recyclerView, Collection collection, CategoryHandler categoryHandler) {
-        List<Category> categoryList = new ArrayList<>();
-        for (Parcelable parcelable : collection.getData()) {
-            if (parcelable instanceof Category)
-                categoryList.add((Category) parcelable);
-        }
-        if (recyclerView.getAdapter() == null) {
+    @BindingAdapter("setMegaCategory")
+    public static void setMegaCategory(RecyclerView recyclerView, CategoryItemAdapter adapter) {
+        if (recyclerView.getAdapter() == null && adapter != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setHasFixedSize(true);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            CategoryItemAdapter adapter = new CategoryItemAdapter(categoryList, categoryHandler);
             recyclerView.setAdapter(adapter);
             recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
-        } else {
-            ((CategoryItemAdapter) recyclerView.getAdapter()).setCategoryList(categoryList);
         }
     }
 
@@ -214,14 +199,9 @@ public class MainBinding {
         }
     }
 
-    @BindingAdapter({"setProducts", "productHandler", "onLoadMoreListener", "onProductAdapterInitListener"})
-    public static void setProducts(RecyclerView recyclerView, Collection collection, ProductHandler productHandler, final OnLoadMoreListener onLoadMoreListener, OnProductAdapterInitListener onProductAdapterInitListener) {
-        List<Product> products = new ArrayList<>();
-        for (Parcelable parcelable : collection.getData()) {
-            if (parcelable instanceof Product)
-                products.add((Product) parcelable);
-        }
-        if (recyclerView.getAdapter() == null) {
+    @BindingAdapter("setAdapterProductCollection")
+    public static void setAdapterProductCollection(RecyclerView recyclerView, ProductItemAdapter adapter) {
+        if (recyclerView.getAdapter() == null && adapter != null) {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(INTRODUCE_ROW, StaggeredGridLayoutManager.VERTICAL) {
                 @Override
                 public boolean canScrollVertically() {
@@ -236,13 +216,7 @@ public class MainBinding {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
-            ProductItemAdapter adapter = new ProductItemAdapter(products, productHandler, onLoadMoreListener);
-            if (onProductAdapterInitListener != null) {
-                onProductAdapterInitListener.init(adapter);
-            }
             recyclerView.setAdapter(adapter);
-        } else {
-            ((ProductItemAdapter) recyclerView.getAdapter()).setProductList(products);
         }
     }
 

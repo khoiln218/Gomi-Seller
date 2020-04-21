@@ -12,7 +12,6 @@ import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.adapter.MarketListAdapter;
-import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
@@ -27,27 +26,24 @@ import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.CategoryHandler;
 import vn.gomicorp.seller.event.CollectionHandler;
 import vn.gomicorp.seller.event.MultableLiveEvent;
-import vn.gomicorp.seller.event.OnProductAdapterInitListener;
 import vn.gomicorp.seller.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends BaseViewModel implements ProductHandler, CategoryHandler, CollectionHandler, OnProductAdapterInitListener {
+public class MarketViewModel extends BaseViewModel implements ProductHandler, CategoryHandler, CollectionHandler {
 
     private ProductRepository mProductRepository;
     public MutableLiveData<MarketListAdapter> marketListAdapter;
 
     private MultableLiveEvent<MarketEvent> cmd;
 
-    private List<ProductItemAdapter> adapters;
     private List<Collection> collections;
     private MarketListAdapter adapter;
 
     public MarketViewModel() {
         mProductRepository = ProductRepository.getInstance();
         marketListAdapter = new MutableLiveData<>();
-        adapters = new ArrayList<>();
         cmd = new MultableLiveEvent<>();
         collections = new ArrayList<>();
         adapter = new MarketListAdapter(collections, this);
@@ -64,7 +60,7 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
             public void onLoaded(ResponseData<Product> result) {
                 hideProgressing();
                 if (result.getCode() == ResultCode.CODE_OK)
-                    updateProduct(result.getResult());
+                    productChange(result.getResult());
                 else
                     updateFail(result.getMessage());
             }
@@ -81,21 +77,21 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
         cmd.call(new MarketEvent(MarketEvent.SELECT_ERROR, message));
     }
 
-    private void updateProduct(Product product) {
+    private void productChange(Product product) {
         for (Collection collection : collections) {
-            for (Parcelable parcelable : collection.getData()) {
-                if (parcelable instanceof Product) {
-                    Product item = (Product) parcelable;
-                    if (TextUtils.equals(product.getId(), item.getId())) {
-                        item.setIsSelling(product.getIsSelling());
-                        updateCollection();
-                        for (ProductItemAdapter adapter : adapters)
-                            adapter.notifyItemChanged(product);
-                        break;
-                    }
-                } else {
-                    break;
-                }
+            if (collection.getType() == MarketListAdapter.CollectionType.NEW_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.RECOMEND_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.SEEN_PRODUCT)
+                updateCollection(collection, product);
+        }
+        adapter.notifyItemChanged(product);
+    }
+
+    private void updateCollection(Collection collection, Product product) {
+        for (Parcelable parcelable : collection.getData()) {
+            Product item = (Product) parcelable;
+            if (TextUtils.equals(item.getId(), product.getId())) {
+                item.setIsSelling(product.getIsSelling());
             }
         }
     }
@@ -124,20 +120,17 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.BANNER, banners));
 
                     //category
-                    List<Parcelable> categorys = new ArrayList<>();
-                    categorys.addAll(result.getResult().getMegaCateList());
+                    List<Parcelable> categorys = new ArrayList<Parcelable>(result.getResult().getMegaCateList());
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.MEGA_CATEGORY, categorys));
 
                     //collectionlist
                     for (Introduce.CollectionListBean collectionListBean : result.getResult().getCollectionList()) {
-                        List<Parcelable> productParcelableList = new ArrayList<>();
-                        productParcelableList.addAll(collectionListBean.getProductList());
+                        List<Parcelable> productParcelableList = new ArrayList<Parcelable>(collectionListBean.getProductList());
                         collectionList.add(new Collection(collectionListBean.getId(), collectionListBean.getName(), productParcelableList));
                     }
 
                     //product seen
-                    List<Parcelable> productList = new ArrayList<>();
-                    productList.addAll(result.getResult().getProductSeen().getProductList());
+                    List<Parcelable> productList = new ArrayList<Parcelable>(result.getResult().getProductSeen().getProductList());
                     collectionList.add(new Collection(MarketListAdapter.CollectionType.SEEN_PRODUCT, EappsApplication.getInstance().getString(R.string.product_seen), productList));
 
                     //update collection
@@ -168,7 +161,6 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
     private void refresh() {
         collections.clear();
         updateCollection();
-        adapters.clear();
     }
 
     @Override
@@ -198,10 +190,5 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
         collection.getData().clear();
         event.setData(collection);
         cmd.call(event);
-    }
-
-    @Override
-    public void init(ProductItemAdapter adapter) {
-        adapters.add(adapter);
     }
 }

@@ -80,8 +80,9 @@ public class ProductItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void notifyItemChanged(Product product) {
         int pos = getPosition(product);
-        if (pos != NOT_FOUND)
+        if (pos != NOT_FOUND) {
             notifyItemChanged(pos);
+        }
     }
 
     public void notifyItemRemoved(Product product) {
@@ -100,12 +101,10 @@ public class ProductItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ProductItemType.VIEW_ITEM:
-                return ProductItemHolder.getInstance(parent);
-            default:
-                return LoadingHolder.getInstance(parent);
+        if (viewType == ProductItemType.VIEW_ITEM) {
+            return ProductItemHolder.getInstance(parent);
         }
+        return LoadingHolder.getInstance(parent);
     }
 
     public void setLoading() {
