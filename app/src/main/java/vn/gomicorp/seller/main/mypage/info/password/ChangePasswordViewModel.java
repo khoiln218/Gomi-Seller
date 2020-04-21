@@ -78,7 +78,7 @@ public class ChangePasswordViewModel extends BaseViewModel {
     }
 
     private void hideKeyBoard() {
-
+        cmd.call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_KEY_BOARD));
     }
 
     private boolean confirmPassword() {

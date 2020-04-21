@@ -37,19 +37,23 @@ public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> email = new MutableLiveData<>();
     public MutableLiveData<String> phoneNumber = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
+    public MutableLiveData<String> confirmPassword = new MutableLiveData<>();
     public MutableLiveData<String> certificationCode = new MutableLiveData<>();
 
     public MutableLiveData<String> errorEmailMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorPhoneNumberMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorPwdMsg = new MutableLiveData<>();
+    public MutableLiveData<String> errorConfirmPwdMsg = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> errorEnableEmail = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnablePhoneNumber = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnablePwd = new MutableLiveData<>();
+    public MutableLiveData<Boolean> errorEnableConfirmPwd = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> requestFocusEmail = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusPhoneNumber = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusPwd = new MutableLiveData<>();
+    public MutableLiveData<Boolean> requestFocusConfirmPwd = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> countDownIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
@@ -183,7 +187,21 @@ public class SignUpViewModel extends BaseViewModel {
             passwordSuccess();
         }
 
+        if (!confirmPassword())
+            return;
+
         requestSignUp();
+    }
+
+    private boolean confirmPassword() {
+        if (!TextUtils.equals(confirmPassword.getValue(), password.getValue())) {
+            errorConfirmPwdMsg.setValue(EappsApplication.getInstance().getString(R.string.err_password_confirm));
+            requestFocusConfirmPwd.setValue(true);
+            return false;
+        }
+
+        errorEnableConfirmPwd.setValue(false);
+        return true;
     }
 
     private void passwordSuccess() {
@@ -269,11 +287,15 @@ public class SignUpViewModel extends BaseViewModel {
     }
 
     public void afterTextChanged() {
-        if (checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLengthVerifyCode()) {
+        if (checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLenghtConfirmPwd() && checkLengthVerifyCode()) {
             enableBtnSigup.setValue(true);
         } else {
             enableBtnSigup.setValue(false);
         }
+    }
+
+    private boolean checkLenghtConfirmPwd() {
+        return !TextUtils.isEmpty(confirmPassword.getValue()) && confirmPassword.getValue().length() > 3;
     }
 
     public void afterPhoneNumberChanged() {

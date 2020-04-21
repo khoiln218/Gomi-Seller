@@ -47,8 +47,8 @@ public class AccountInfoViewModel extends BaseViewModel {
 
     private boolean isInfoChanged;
     private Account account;
+    private int selectGender;
     private Calendar selectBirthday;
-    private boolean genderFirstSelect = false;
 
     public AccountInfoViewModel() {
         mAccountRepository = AccountRepository.getInstance();
@@ -109,13 +109,8 @@ public class AccountInfoViewModel extends BaseViewModel {
     }
 
     public void onItemSelected(int position) {
-        if (account == null || gender.getValue() == null) return;
-        if (!genderFirstSelect) {
-            genderFirstSelect = true;
-            gender.setValue(account.getGender());
-        } else if (position != gender.getValue()) {
-            gender.setValue(position);
-        }
+        if (account == null) return;
+        selectGender = position;
         isInfoChanged = position != account.getGender();
         updateEnable.setValue(isInfoChanged);
     }
@@ -175,7 +170,7 @@ public class AccountInfoViewModel extends BaseViewModel {
             request.setBirthDayLong(account.getBirthDayLong());
         }
         request.setFullName(fullName.getValue());
-        request.setGender(gender.getValue() == null ? 0 : gender.getValue());
+        request.setGender(selectGender);
         mAccountRepository.updateinfo(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {

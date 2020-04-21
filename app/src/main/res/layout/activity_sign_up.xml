@@ -298,6 +298,49 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!--Confirm password-->
+                <TextView
+                    android:id="@+id/tv_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/confirm_password"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_confirm_password"
+                    app:passwordToggleEnabled="true"
+                    app:setError="@{signUpViewModel.errorConfirmPwdMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnableConfirmPwd}">
+
+                    <EditText
+                        android:id="@+id/txt_confirm_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_confirm_password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.confirmPassword}"
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusConfirmPwd}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <!--ContryId-->
                 <TextView
                     android:id="@+id/tvcontry_id"
@@ -311,7 +354,7 @@
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="@dimen/text_size_small"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_confirm_password" />
 
                 <RelativeLayout
                     android:id="@+id/select_country_id"

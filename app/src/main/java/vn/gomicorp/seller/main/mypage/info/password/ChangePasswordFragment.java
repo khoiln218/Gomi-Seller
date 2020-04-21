@@ -14,6 +14,7 @@ import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ChangePasswordFragmentBinding;
 import vn.gomicorp.seller.main.mypage.info.AccountInfoListener;
+import vn.gomicorp.seller.utils.Utils;
 
 public class ChangePasswordFragment extends BaseFragment<ChangePasswordViewModel, ChangePasswordFragmentBinding> {
 
@@ -61,6 +62,9 @@ public class ChangePasswordFragment extends BaseFragment<ChangePasswordViewModel
                     case ChangePasswordEvent.CHANGE_PASSWORD_DONE:
                         if (listener != null)
                             listener.done();
+                        break;
+                    case ChangePasswordEvent.HIDE_KEY_BOARD:
+                        Utils.hideSoftKeyboard(getActivity());
                         break;
                 }
             }

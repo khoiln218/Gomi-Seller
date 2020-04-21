@@ -28,7 +28,7 @@ public class MyPageBinding {
 
     @BindingAdapter("setSelect")
     public static void setSelect(Spinner spinner, int position) {
-        if (position < 0 || position > 2) return;
+        if (position < 0 || position > 2) position = 0;
         spinner.setSelection(position);
     }
 

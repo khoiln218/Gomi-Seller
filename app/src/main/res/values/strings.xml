@@ -123,4 +123,5 @@
     <string name="logout_msg">Bạn có chắc chắn muốn đăng xuất?</string>
     <string name="btn_confirm">Xác nhận</string>
     <string name="url">Địa chỉ website</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
 </resources>
