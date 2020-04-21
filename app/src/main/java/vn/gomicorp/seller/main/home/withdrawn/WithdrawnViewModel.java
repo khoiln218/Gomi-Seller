@@ -1,15 +1,17 @@
 package vn.gomicorp.seller.main.home.withdrawn;
 
 import vn.gomicorp.seller.BaseViewModel;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 
 /**
  * Created by KHOI LE on 4/9/2020.
  */
 public class WithdrawnViewModel extends BaseViewModel {
-    private WithdrawnListener listener;
 
-    public void setListener(WithdrawnListener listener) {
-        this.listener = listener;
+    private MultableLiveEvent<WithdrawEvent> cmd;
+
+    public WithdrawnViewModel() {
+        cmd = new MultableLiveEvent<>();
     }
 
     public void onBankClick() {
@@ -17,12 +19,14 @@ public class WithdrawnViewModel extends BaseViewModel {
     }
 
     public void onCouponClick() {
-        if (listener != null)
-            listener.coupon();
+        cmd.call(new WithdrawEvent(WithdrawEvent.WITHDRAW_COUPON));
     }
 
-    void requestBankAccount() {
-        if (listener != null)
-            listener.bank();
+    private void requestBankAccount() {
+        cmd.call(new WithdrawEvent(WithdrawEvent.WITHDRAW_BANK));
+    }
+
+    MultableLiveEvent<WithdrawEvent> getCmd() {
+        return cmd;
     }
 }

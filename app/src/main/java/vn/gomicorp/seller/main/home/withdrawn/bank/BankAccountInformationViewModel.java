@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.data.source.model.data.BankAccount;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.utils.GomiConstants;
 
 /**
@@ -15,12 +16,12 @@ import vn.gomicorp.seller.utils.GomiConstants;
 public class BankAccountInformationViewModel extends BaseViewModel {
     public MutableLiveData<BankAccount> bankAccount = new MutableLiveData<>();
 
+    private MultableLiveEvent<BankAccountEvent> cmd;
+
     private BankAccount mBankAccount;
 
-    private BankAccountInformationListener listener;
-
-    public void setListener(BankAccountInformationListener listener) {
-        this.listener = listener;
+    public BankAccountInformationViewModel() {
+        cmd = new MultableLiveEvent<>();
     }
 
     public void submit() {
@@ -31,8 +32,7 @@ public class BankAccountInformationViewModel extends BaseViewModel {
     }
 
     public void selectBank() {
-        if (listener != null)
-            listener.selectBank();
+        cmd.call(new BankAccountEvent(BankAccountEvent.SELECT_BANK));
     }
 
     void requestAddBankAccount() {
@@ -52,5 +52,9 @@ public class BankAccountInformationViewModel extends BaseViewModel {
 
     private void updateBank() {
         bankAccount.setValue(mBankAccount);
+    }
+
+    MultableLiveEvent<BankAccountEvent> getCmd() {
+        return cmd;
     }
 }

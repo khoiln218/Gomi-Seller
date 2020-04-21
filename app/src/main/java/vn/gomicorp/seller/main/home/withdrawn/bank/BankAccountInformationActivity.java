@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseActivity;
@@ -14,7 +15,7 @@ import vn.gomicorp.seller.databinding.ActivityBankAccoutInfomationBinding;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Utils;
 
-public class BankAccountInformationActivity extends BaseActivity<BankAccountInformationViewModel, ActivityBankAccoutInfomationBinding> implements BankAccountInformationListener {
+public class BankAccountInformationActivity extends BaseActivity<BankAccountInformationViewModel, ActivityBankAccoutInfomationBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,38 +30,36 @@ public class BankAccountInformationActivity extends BaseActivity<BankAccountInfo
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bank_accout_infomation);
         viewModel = ViewModelProviders.of(this).get(BankAccountInformationViewModel.class);
         getBinding().setViewModel(getViewModel());
-        getViewModel().setListener(this);
+        initCmd();
         binding.setLifecycleOwner(this);
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<BankAccountEvent>() {
+            @Override
+            public void onChanged(BankAccountEvent event) {
+                if (event.getCode() == BankAccountEvent.SELECT_BANK) {
+                    Utils.hideSoftKeyboard(BankAccountInformationActivity.this);
+                    Intent intent = new Intent(BankAccountInformationActivity.this, BankListActivity.class);
+//        intent.putExtra(GomiConstants.EXTRA_ID, bankAccount.getBankId());
+                    startActivityForResult(intent, GomiConstants.RC_SELLER_BANK);
+                }
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-    }
-
-    @Override
-    public void selectBank() {
-        Utils.hideSoftKeyboard(this);
-        Intent intent = new Intent(this, BankListActivity.class);
-//        intent.putExtra(GomiConstants.EXTRA_ID, bankAccount.getBankId());
-        startActivityForResult(intent, GomiConstants.RC_SELLER_BANK);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         getViewModel().onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getViewModel().setListener(null);
     }
 }

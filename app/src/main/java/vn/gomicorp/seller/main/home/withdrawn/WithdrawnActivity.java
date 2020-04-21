@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseActivity;
@@ -17,7 +18,7 @@ import vn.gomicorp.seller.main.home.withdrawn.coupon.CouponActivity;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.widgets.dialog.WithdrawnBankDialogFragment;
 
-public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, ActivityWithdrawnBinding> implements WithdrawnListener {
+public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, ActivityWithdrawnBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,25 @@ public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, Activity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_withdrawn);
         viewModel = ViewModelProviders.of(this).get(WithdrawnViewModel.class);
         getBinding().setViewModel(getViewModel());
-        getViewModel().setListener(this);
+        initCmd();
         binding.setLifecycleOwner(this);
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<WithdrawEvent>() {
+            @Override
+            public void onChanged(WithdrawEvent event) {
+                switch (event.getCode()) {
+                    case WithdrawEvent.WITHDRAW_BANK:
+                        Intent intent = new Intent(WithdrawnActivity.this, BankAccountInformationActivity.class);
+                        startActivityForResult(intent, GomiConstants.RC_SELLER_BANK);
+                        break;
+                    case WithdrawEvent.WITHDRAW_COUPON:
+                        startActivity(new Intent(WithdrawnActivity.this, CouponActivity.class));
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -45,15 +63,9 @@ public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, Activity
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getViewModel().setListener(null);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GomiConstants.RC_SELLER_BANK && resultCode == RESULT_OK) {
+        if (requestCode == GomiConstants.RC_SELLER_BANK && resultCode == RESULT_OK && data != null) {
             BankAccount bankAccount = data.getParcelableExtra(GomiConstants.EXTRA_PARCELABLE);
             showEnterAmountDialog(bankAccount);
         }
@@ -62,16 +74,5 @@ public class WithdrawnActivity extends BaseActivity<WithdrawnViewModel, Activity
     private void showEnterAmountDialog(BankAccount bankAccount) {
         WithdrawnBankDialogFragment fragment = WithdrawnBankDialogFragment.newInstance(bankAccount);
         fragment.show(getSupportFragmentManager(), fragment.getTag());
-    }
-
-    @Override
-    public void bank() {
-        Intent intent = new Intent(WithdrawnActivity.this, BankAccountInformationActivity.class);
-        startActivityForResult(intent, GomiConstants.RC_SELLER_BANK);
-    }
-
-    @Override
-    public void coupon() {
-        startActivity(new Intent(this, CouponActivity.class));
     }
 }

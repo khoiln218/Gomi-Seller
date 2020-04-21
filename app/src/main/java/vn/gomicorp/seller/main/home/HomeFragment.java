@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomicorp.seller.BaseFragment;
@@ -17,7 +18,7 @@ import vn.gomicorp.seller.main.home.withdrawn.WithdrawnActivity;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBinding> implements HomeListener {
+public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBinding> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,43 +27,42 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
         if (binding == null)
             binding = FragmentHomeBinding.bind(view);
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        getViewModel().setListener(this);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
+        initCmd();
         return binding.getRoot();
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<HomeEvent>() {
+            @Override
+            public void onChanged(HomeEvent event) {
+                switch (event.getCode()) {
+                    case HomeEvent.SHOW_DETAIL:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(getActivity(), product.getId());
+                        break;
+                    case HomeEvent.REMOVE_PRODUCT:
+                        showDialogPickProduct((Product) event.getData());
+                        break;
+                    case HomeEvent.WITHDRAW:
+                        startActivity(new Intent(getActivity(), WithdrawnActivity.class));
+                        break;
+                    case HomeEvent.SHARE_SNS:
+                        if (getActivity() != null) {
+                            String content = (String) event.getData();
+                            Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getViewModel().onRefreshProduct();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getViewModel().setListener(null);
-    }
-
-    @Override
-    public void show(Product product) {
-        Intents.startProductDetailActivity(getActivity(), product.getId());
-    }
-
-    @Override
-    public void remove(Product product) {
-        showDialogPickProduct(product);
-    }
-
-    @Override
-    public void withdrawn() {
-        startActivity(new Intent(getActivity(), WithdrawnActivity.class));
-    }
-
-    @Override
-    public void shareSNS(String content) {
-        if (getActivity() != null)
-            Intents.startActionSend(getActivity(), getString(R.string.share), getString(R.string.share_sub), content);
     }
 
     private void showDialogPickProduct(Product product) {

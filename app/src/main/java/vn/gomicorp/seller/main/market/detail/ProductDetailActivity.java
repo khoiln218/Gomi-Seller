@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, ActivityProductDetailBinding> implements ProductDetialListener {
+public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, ActivityProductDetailBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,20 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
             finish();
         initBinding();
         initToolbar();
+        initCmd();
         getViewModel().setProductId(getIntent().getStringExtra(GomiConstants.EXTRA_ID));
-        getViewModel().setListener(this);
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<ProductDetailEvent>() {
+            @Override
+            public void onChanged(ProductDetailEvent event) {
+                if (event.getCode() == ProductDetailEvent.SHOW_DETAIL) {
+                    Product product = event.getData();
+                    showDialogPickProduct(product);
+                }
+            }
+        });
     }
 
     @Override
@@ -53,23 +66,12 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getViewModel().setListener(null);
-    }
-
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
-
-    @Override
-    public void pick(Product product) {
-        showDialogPickProduct(product);
     }
 
     private void showDialogPickProduct(Product product) {

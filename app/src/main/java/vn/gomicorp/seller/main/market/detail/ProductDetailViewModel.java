@@ -13,6 +13,7 @@ import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.data.source.remote.ResultCode;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.ProductHandler;
 import vn.gomicorp.seller.utils.ToastUtils;
 
@@ -26,18 +27,19 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
     public MutableLiveData<Product> product;
     public MutableLiveData<Boolean> isShow;
 
+    private MultableLiveEvent<ProductDetailEvent> cmd;
+
     private Product mProduct;
     private ProductDetailAdapter productDetailAdapter;
     private String productId;
     private int scrollRange;
-
-    private ProductDetialListener listener;
 
     public ProductDetailViewModel() {
         mProductRepository = ProductRepository.getInstance();
         adapter = new MutableLiveData<>();
         product = new MutableLiveData<>();
         isShow = new MutableLiveData<>();
+        cmd = new MultableLiveEvent<>();
         scrollRange = -1;
         isShow.setValue(true);
         productDetailAdapter = new ProductDetailAdapter(new Product(), this);
@@ -114,10 +116,6 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
         this.productId = productId;
     }
 
-    void setListener(ProductDetialListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void onShow(Product product) {
 
@@ -129,7 +127,12 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
     }
 
     private void pick(Product product) {
-        if (listener != null)
-            listener.pick(product);
+        ProductDetailEvent event = new ProductDetailEvent(ProductDetailEvent.SHOW_DETAIL);
+        event.setData(product);
+        cmd.call(event);
+    }
+
+    MultableLiveEvent<ProductDetailEvent> getCmd() {
+        return cmd;
     }
 }
