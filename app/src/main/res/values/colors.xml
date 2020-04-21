@@ -8,7 +8,6 @@
     <color name="colorBackground">#FCFCFC</color>
     <color name="colorHighlight">#B8B8B8</color>
     <color name="colorDivider">#E4E4E4</color>
-    <color name="colorAccentBackground">#33E71823</color>
 
     <color name="colorPrimaryText">#4E4F4F</color>
     <color name="colorSecondaryText">#707070</color>
@@ -17,6 +16,5 @@
     <color name="colorShimmer">#DDDDDD</color>
 
     <color name="colorGreen">#34B44A</color>
-    <color name="colorYellow">#FCC011</color>
     <color name="colorRed">#EC2226</color>
 </resources>
