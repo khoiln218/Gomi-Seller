@@ -5,25 +5,23 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.Objects;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCategoryBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
+import vn.gomicorp.seller.main.market.collection.subcate.CategoryItem;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCategoryBinding> implements CategoryListener {
+public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCategoryBinding> {
 
     private int id;
-    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +30,29 @@ public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCa
             finish();
 
         id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
-        name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
+        String name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         initBinding();
-        initToolbar();
+        initToolbar(TextUtils.isEmpty(name) ? "" : name);
+        initCmd();
         loadData();
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<CategoryEvent>() {
+            @Override
+            public void onChanged(CategoryEvent event) {
+                if (event.getCode() == CategoryEvent.OPEN_SUB_CATEGORY) {
+                    CategoryItem categoryItem = (CategoryItem) event.getData();
+                    Intents.startSubCategoryActivity(CategoryActivity.this, categoryItem.getType(), categoryItem.getId(), categoryItem.getName());
+                } else if (event.getCode() == CategoryEvent.PICK_PRODUCT) {
+                    Product product = (Product) event.getData();
+                    showDialogPickProduct(product);
+                } else if (event.getCode() == CategoryEvent.SHOW_DETAIL) {
+                    Product product = (Product) event.getData();
+                    Intents.startProductDetailActivity(CategoryActivity.this, product.getId());
+                }
+            }
+        });
     }
 
     @Override
@@ -54,32 +71,8 @@ public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCa
 
     protected void loadData() {
         getViewModel().setCategoryId(id);
-        getViewModel().setListener(this);
         getViewModel().showLoading();
         getViewModel().requestCategory();
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(TextUtils.isEmpty(name) ? "" : name);
-    }
-
-    @Override
-    public void openCategory(int type, int id, String name) {
-        Intents.startSubCategoryActivity(this, type, id, name);
-    }
-
-    @Override
-    public void pick(Product product) {
-        showDialogPickProduct(product);
-    }
-
-    @Override
-    public void show(Product product) {
-        Intents.startProductDetailActivity(this, product.getId());
     }
 
     private void showDialogPickProduct(Product product) {
