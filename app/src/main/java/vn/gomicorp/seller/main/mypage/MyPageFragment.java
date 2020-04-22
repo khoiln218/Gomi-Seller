@@ -1,6 +1,5 @@
 package vn.gomicorp.seller.main.mypage;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,15 +14,12 @@ import androidx.lifecycle.ViewModelProviders;
 import vn.gomicorp.seller.BaseFragment;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.FragmentMypageBinding;
-import vn.gomicorp.seller.main.MainListener;
 import vn.gomicorp.seller.main.mypage.info.AccountInformationActivity;
 import vn.gomicorp.seller.main.mypage.setting.AccountSettingActivity;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Intents;
 
 public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypageBinding> {
-
-    private MainListener listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,14 +47,6 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
                     case MyPageEvent.UPDATE_INFO:
                         startActivity(new Intent(getActivity(), AccountInformationActivity.class));
                         break;
-                    case MyPageEvent.START_CROPPER:
-                        if (listener != null)
-                            listener.cropImage(event.getData());
-                        break;
-                    case MyPageEvent.REQUEST_PERMISSION:
-                        if (listener != null)
-                            listener.requestPermission();
-                        break;
                     case MyPageEvent.SETTING:
                         startActivityForResult(new Intent(getActivity(), AccountSettingActivity.class), GomiConstants.REQUEST_ACCOUNT_SIGN_OUT);
                         break;
@@ -75,18 +62,6 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
     public void onResume() {
         super.onResume();
         getViewModel().initAccountInformation();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.listener = (MainListener) context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.listener = null;
     }
 
     @Override

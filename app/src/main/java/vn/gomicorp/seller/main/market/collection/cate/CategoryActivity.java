@@ -41,15 +41,22 @@ public class CategoryActivity extends BaseActivity<CategoryViewModel, ActivityCa
         getViewModel().getCmd().observe(this, new Observer<CategoryEvent>() {
             @Override
             public void onChanged(CategoryEvent event) {
-                if (event.getCode() == CategoryEvent.OPEN_SUB_CATEGORY) {
-                    CategoryItem categoryItem = (CategoryItem) event.getData();
-                    Intents.startSubCategoryActivity(CategoryActivity.this, categoryItem.getType(), categoryItem.getId(), categoryItem.getName());
-                } else if (event.getCode() == CategoryEvent.PICK_PRODUCT) {
-                    Product product = (Product) event.getData();
-                    showDialogPickProduct(product);
-                } else if (event.getCode() == CategoryEvent.SHOW_DETAIL) {
-                    Product product = (Product) event.getData();
-                    Intents.startProductDetailActivity(CategoryActivity.this, product.getId());
+                switch (event.getCode()) {
+                    case CategoryEvent.OPEN_SUB_CATEGORY: {
+                        CategoryItem categoryItem = (CategoryItem) event.getData();
+                        Intents.startSubCategoryActivity(CategoryActivity.this, categoryItem.getType(), categoryItem.getId(), categoryItem.getName());
+                        break;
+                    }
+                    case CategoryEvent.PICK_PRODUCT: {
+                        Product product = (Product) event.getData();
+                        showDialogPickProduct(product);
+                        break;
+                    }
+                    case CategoryEvent.SHOW_DETAIL: {
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(CategoryActivity.this, product.getId());
+                        break;
+                    }
                 }
             }
         });

@@ -17,6 +17,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -34,7 +38,7 @@ import vn.gomicorp.seller.utils.PermissionHelper;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainListener {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private PermissionHelper permissionHelper;
     private boolean dialogShowing = false;
@@ -77,6 +81,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         myPageFragment = new MyPageFragment();
 
         loadFragment(homeFragment);
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -123,6 +129,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MainEvent event) {
+        if (event.getCode() == MainEvent.REQUEST_PERMISSION) {
+            requestPermission();
+        } else if (event.getCode() == MainEvent.CROP_IMAGE) {
+            cropImage((Uri) event.getData());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void onBackPressed() {
         if (isExit) {
@@ -143,7 +164,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
     public void cropImage(Uri uri) {
         CropImage.activity(uri)
                 .setAspectRatio(1, 1)
@@ -197,7 +217,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     /**
      * Check Photo Permissions
      */
-    @Override
     public void requestPermission() {
         permissionHelper.request(new PermissionHelper.PermissionCallback() {
             @Override

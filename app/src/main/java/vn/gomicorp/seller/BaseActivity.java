@@ -68,6 +68,11 @@ public abstract class BaseActivity<T, V> extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         ConnectionHelper.getInstance().registerNetworkCallback(networkCallback);
@@ -77,5 +82,10 @@ public abstract class BaseActivity<T, V> extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         ConnectionHelper.getInstance().unregisterNetworkCallback(networkCallback);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

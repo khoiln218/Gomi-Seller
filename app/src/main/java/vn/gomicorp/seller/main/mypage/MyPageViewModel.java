@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.greenrobot.eventbus.EventBus;
+
 import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.EappsApplication;
 import vn.gomicorp.seller.R;
@@ -20,6 +22,7 @@ import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Account;
 import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
+import vn.gomicorp.seller.main.MainEvent;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.MediaHelper;
 
@@ -61,7 +64,7 @@ public class MyPageViewModel extends BaseViewModel {
     }
 
     public void changeAvatar() {
-        cmd.call(new MyPageEvent(MyPageEvent.REQUEST_PERMISSION));
+        EventBus.getDefault().post(new MainEvent(MainEvent.REQUEST_PERMISSION));
     }
 
     public void setting() {
@@ -148,9 +151,9 @@ public class MyPageViewModel extends BaseViewModel {
     }
 
     private void cropImage(Uri uri) {
-        MyPageEvent event = new MyPageEvent(MyPageEvent.START_CROPPER);
-        event.setData(uri);
-        cmd.call(event);
+        MainEvent<Uri> mainEvent = new MainEvent(MainEvent.CROP_IMAGE);
+        mainEvent.setData(uri);
+        EventBus.getDefault().post(mainEvent);
     }
 
     MultableLiveEvent<MyPageEvent> getCmd() {

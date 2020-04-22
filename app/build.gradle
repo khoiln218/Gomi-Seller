@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     annotationProcessor 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
     // Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
