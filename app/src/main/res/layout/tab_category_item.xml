@@ -14,17 +14,16 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingStart="@dimen/padding_medium"
-        android:paddingEnd="@dimen/padding_medium">
+        android:paddingStart="@dimen/padding_small"
+        android:paddingEnd="@dimen/padding_small">
 
         <ImageView
             android:id="@+id/image_avatar"
-            android:layout_width="@dimen/icon_size_large"
-            android:layout_height="@dimen/icon_size_large"
+            android:layout_width="@dimen/icon_mega_cate"
+            android:layout_height="@dimen/icon_mega_cate"
             android:layout_marginBottom="@dimen/padding_xsmall"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:tint="@color/colorSecondaryText"
             app:setTabIcon="@{category.icon}" />
 
         <TextView

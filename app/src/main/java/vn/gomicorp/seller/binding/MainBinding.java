@@ -226,8 +226,7 @@ public class MainBinding {
                 .load(icon)
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE))
                 .into(imageView);
     }
 

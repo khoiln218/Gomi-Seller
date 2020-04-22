@@ -73,8 +73,7 @@ public class HomeBinding {
                 .load(iconUrl)
                 .apply(new RequestOptions()
                         .fitCenter()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE))
                 .into(imageView);
     }
 

@@ -43,6 +43,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     private ProductRepository mProductRepository;
     private ShopRepository mShopRepository;
 
+    public MutableLiveData<Boolean> categoryEmpty;
     public MutableLiveData<CategoryAdapter> categoryAdapterLiveData;
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
 
@@ -57,6 +58,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     public CategoryViewModel() {
         mProductRepository = ProductRepository.getInstance();
         mShopRepository = ShopRepository.getInstance();
+        categoryEmpty = new MutableLiveData<>();
         categoryAdapterLiveData = new MutableLiveData<>();
         productItemAdapter = new MutableLiveData<>();
         cmd = new MultableLiveEvent<>();
@@ -67,6 +69,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
         categories = new ArrayList<>();
+        categoryEmpty.setValue(true);
         categoryAdapter = new CategoryAdapter(categories, this);
         categoryAdapterLiveData.setValue(categoryAdapter);
     }
@@ -170,6 +173,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
 
     private void updateCategory() {
         categoryAdapter.setCategoryList(categories);
+        categoryEmpty.setValue(categories.size() == 0);
         if (categories.size() > 0)
             categoryAdapter.selectItem(categories.get(0).getId());
     }

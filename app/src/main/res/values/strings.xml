@@ -60,7 +60,7 @@
     <string name="notify">Thông báo</string>
     <string name="invite">Invite</string>
     <string name="coupon">Coupon</string>
-    <string name="empty">Không tìm thấy sản phẩm</string>
+    <string name="empty">Chưa có sản phẩm</string>
     <string name="network_error">Không có kết nối mạng. Vui lòng <strong> thử lại </strong></string>
     <string name="view_detail">Xem chi tiết</string>
     <string name="product_description">Mô tả sản phẩm</string>

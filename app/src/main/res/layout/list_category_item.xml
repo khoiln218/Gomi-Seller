@@ -26,12 +26,11 @@
 
         <ImageView
             android:id="@+id/image_icon"
-            android:layout_width="@dimen/icon_size_large"
-            android:layout_height="@dimen/icon_size_large"
+            android:layout_width="@dimen/icon_mega_cate"
+            android:layout_height="@dimen/icon_mega_cate"
             android:layout_marginBottom="@dimen/padding_xsmall"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:tint="@color/colorSecondaryText"
             app:setImageCategory="@{category.icon}" />
 
         <TextView

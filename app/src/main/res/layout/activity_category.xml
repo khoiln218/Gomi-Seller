@@ -36,6 +36,7 @@
                 android:layout_height="?android:attr/actionBarSize"
                 android:layout_gravity="bottom"
                 android:orientation="horizontal"
+                android:visibility="@{viewModel.categoryEmpty?View.GONE:View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:setCategoryAdapter="@{viewModel.categoryAdapterLiveData}"
                 tools:listitem="@layout/list_category_item_round" />

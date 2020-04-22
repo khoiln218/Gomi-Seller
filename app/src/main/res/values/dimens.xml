@@ -14,6 +14,9 @@
     <dimen name="icon_size_large">32dp</dimen>
     <dimen name="icon_size_xlarge">48dp</dimen>
 
+    <dimen name="icon_mega_cate">40dp</dimen>
+
+
     <dimen name="avatar_size">96dp</dimen>
     <dimen name="avatar_radius">48dp</dimen>
 

@@ -20,15 +20,16 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/avatar_size"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="125dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_place_holder" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_small"
-                android:text="@{msg, default=Empty}" />
+                android:text="@{msg}" />
         </LinearLayout>
 
     </RelativeLayout>
