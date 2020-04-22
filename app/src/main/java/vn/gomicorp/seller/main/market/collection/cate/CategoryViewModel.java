@@ -21,9 +21,10 @@ import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.CategoryHandler;
+import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
 import vn.gomicorp.seller.event.ProductHandler;
-import vn.gomicorp.seller.utils.ToastUtils;
+import vn.gomicorp.seller.main.market.collection.subcate.CategoryItem;
 
 /**
  * Created by KHOI LE on 4/7/2020.
@@ -39,13 +40,13 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     private int selectCategoryId;
     private String selectCategoryName;
 
-    private CategoryListener listener;
-
     private ProductRepository mProductRepository;
     private ShopRepository mShopRepository;
 
     public MutableLiveData<CategoryAdapter> categoryAdapterLiveData;
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
+
+    private MultableLiveEvent<CategoryEvent> cmd;
 
     private ProductItemAdapter adapter;
     private List<Product> products;
@@ -58,6 +59,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         mShopRepository = ShopRepository.getInstance();
         categoryAdapterLiveData = new MutableLiveData<>();
         productItemAdapter = new MutableLiveData<>();
+        cmd = new MultableLiveEvent<>();
         page = INIT_PAGE;
         totalPage = 0;
         selectCategoryType = CategoryType.MEGA_CATEGORY;
@@ -86,7 +88,10 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     }
 
     private void openSubCategory() {
-        listener.openCategory(selectCategoryType, selectCategoryId, selectCategoryName);
+        CategoryItem categoryItem = new CategoryItem(selectCategoryType, selectCategoryId, selectCategoryName);
+        CategoryEvent<CategoryItem> event = new CategoryEvent<>(CategoryEvent.OPEN_SUB_CATEGORY);
+        event.setData(categoryItem);
+        cmd.call(event);
     }
 
     @Override
@@ -178,10 +183,6 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         this.selectCategoryId = categoryId;
     }
 
-    public void setListener(CategoryListener listener) {
-        this.listener = listener;
-    }
-
     void showLoading() {
         showProgressing();
     }
@@ -192,7 +193,9 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     }
 
     private void showDetail(Product product) {
-        listener.show(product);
+        CategoryEvent<Product> event = new CategoryEvent<>(CategoryEvent.SHOW_DETAIL);
+        event.setData(product);
+        cmd.call(event);
     }
 
     @Override
@@ -202,7 +205,9 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
 
 
     private void pick(Product product) {
-        listener.pick(product);
+        CategoryEvent<Product> event = new CategoryEvent<>(CategoryEvent.PICK_PRODUCT);
+        event.setData(product);
+        cmd.call(event);
     }
 
     void requestPickProduct(Product product) {
@@ -217,19 +222,15 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
                 if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
-                    updateFail(result.getMessage());
+                    showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                updateFail(error);
+                showToast(error);
             }
         });
-    }
-
-    private void updateFail(String message) {
-        ToastUtils.showToast(message);
     }
 
     private void updateProduct(Product product) {
@@ -240,5 +241,9 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
                 break;
             }
         }
+    }
+
+    MultableLiveEvent<CategoryEvent> getCmd() {
+        return cmd;
     }
 }

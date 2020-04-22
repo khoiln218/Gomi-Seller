@@ -50,13 +50,13 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
     }
 
     private void pick(Product product) {
-        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_PICK);
+        CollectionEvent<Product> event = new CollectionEvent<>(CollectionEvent.ON_PICK);
         event.setData(product);
         cmd.call(event);
     }
 
     private void showDetail(Product product) {
-        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_SHOW);
+        CollectionEvent<Product> event = new CollectionEvent<>(CollectionEvent.ON_SHOW);
         event.setData(product);
         cmd.call(event);
     }
@@ -73,19 +73,15 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
                 if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
-                    updateFail(result.getMessage());
+                    showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                updateFail(error);
+                showToast(error);
             }
         });
-    }
-
-    private void updateFail(String message) {
-        cmd.call(new CollectionEvent(CollectionEvent.SELECT_ERROR, message));
     }
 
     private void updateProduct(Product product) {

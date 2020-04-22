@@ -5,12 +5,9 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.Objects;
 
 import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
@@ -19,29 +16,22 @@ import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.Intents;
-import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
 public class CollectionActivity extends BaseActivity<CollectionViewModel, ActivityCollectionBinding> {
-    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() == null)
             return;
-        name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
+        String name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         int id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
         initBinding();
-        setupToolbar();
+        initToolbar(TextUtils.isEmpty(name) ? "" : name);
         setupCmd();
 
         getViewModel().setCollectionId(id);
-    }
-
-    private void loadData() {
-        getViewModel().showLoading();
-        getViewModel().onRefresh();
     }
 
     private void setupCmd() {
@@ -55,9 +45,6 @@ public class CollectionActivity extends BaseActivity<CollectionViewModel, Activi
                     case CollectionEvent.ON_SHOW:
                         Product product = (Product) event.getData();
                         Intents.startProductDetailActivity(CollectionActivity.this, product.getId());
-                        break;
-                    case CollectionEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.getMessage());
                         break;
                 }
             }
@@ -95,14 +82,7 @@ public class CollectionActivity extends BaseActivity<CollectionViewModel, Activi
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(TextUtils.isEmpty(name) ? "" : name);
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 }
