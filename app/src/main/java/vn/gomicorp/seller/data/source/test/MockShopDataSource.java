@@ -13,7 +13,9 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopDataSource;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
+import vn.gomicorp.seller.data.source.model.api.MegaCategoryRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
@@ -161,6 +163,16 @@ public class MockShopDataSource implements ShopDataSource {
                 }.getType()));
             }
         }, 400);
+    }
+
+    @Override
+    public void megacategory(MegaCategoryRequest request, ResultListener<ResponseData<List<Category>>> callback) {
+
+    }
+
+    @Override
+    public void findbyid(ShopRequest request, ResultListener<ResponseData<Shop>> callback) {
+
     }
 
     private void excute(final String jsonData, final ResultListener<ResponseData<Shop>> callback) {

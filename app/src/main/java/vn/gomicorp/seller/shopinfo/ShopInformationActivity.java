@@ -1,11 +1,12 @@
 package vn.gomicorp.seller.shopinfo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,47 +17,50 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.IOException;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.databinding.ActivityShopInfomationBinding;
 import vn.gomicorp.seller.event.OnClickListener;
+import vn.gomicorp.seller.utils.AlertDialogs;
 import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.MediaHelper;
+import vn.gomicorp.seller.utils.PermissionHelper;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.ImageChooserDialogFragment;
 
-public class ShopInformationActivity extends AppCompatActivity {
-    private ShopInformationViewModel viewModel;
+public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel, ActivityShopInfomationBinding> {
+    private PermissionHelper permissionHelper;
+    private boolean dialogShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDataBinding();
+        initBinding();
         initCmd();
+        permissionHelper = new PermissionHelper(this, PermissionHelper.photo_permissions);
+        getViewModel().requestLocationCountryId();
     }
 
     private void initCmd() {
-        viewModel.getCmd().observe(this, new Observer<ShopInfoEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<ShopInfoEvent>() {
             @Override
             public void onChanged(ShopInfoEvent event) {
-                switch (event.code) {
+                switch (event.getCode()) {
                     case ShopInfoEvent.CREATE_ERROR:
-                        ToastUtils.showToast(event.message);
+                    case ShopInfoEvent.VERIFY_ERROR:
+                        ToastUtils.showToast(event.getMessage());
                         break;
                     case ShopInfoEvent.CREATE_SUCCESS:
                         createSuccess();
-                        break;
-                    case ShopInfoEvent.VERIFY_ERROR:
-                        ToastUtils.showToast(event.message);
                         break;
                     case ShopInfoEvent.VERIFY_SUCCESS:
                         break;
                     case ShopInfoEvent.START_CROPPER:
                         cropImage((Uri) event.getData());
                         break;
-                    case ShopInfoEvent.SHOW_IMAGE_OPTION:
-                        showImageOptions();
+                    case ShopInfoEvent.REQUEST_PERMISSION:
+                        requestPermission();
                         break;
-
                 }
             }
         });
@@ -66,29 +70,25 @@ public class ShopInformationActivity extends AppCompatActivity {
         Intents.directToMainActivity(this);
     }
 
-    private void initDataBinding() {
-        ActivityShopInfomationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_infomation);
+    @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_infomation);
         viewModel = ViewModelProviders.of(this).get(ShopInformationViewModel.class);
-        binding.setViewModel(viewModel);
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        viewModel.requestLocationCountryId();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        viewModel.releaseAdapter();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionHelper != null)
+            permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        viewModel.onActivityResult(requestCode, resultCode, data);
+        getViewModel().onActivityResult(requestCode, resultCode, data);
     }
 
     private void cropImage(Uri uri) {
@@ -117,7 +117,7 @@ public class ShopInformationActivity extends AppCompatActivity {
                 try {
                     File file = MediaHelper.createImageFile();
                     Uri imageUri = MediaHelper.uriFromFile(file);
-                    viewModel.setCover(imageUri);
+                    getViewModel().setCover(imageUri);
                     MediaHelper.dispatchTakePictureIntent(ShopInformationActivity.this, file);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -137,5 +137,53 @@ public class ShopInformationActivity extends AppCompatActivity {
             public void onRemovePhoto() {
             }
         });
+    }
+
+    /**
+     * Check Photo Permissions
+     */
+    private void requestPermission() {
+        permissionHelper.request(new PermissionHelper.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                showImageOptions();
+            }
+
+            @Override
+            public void onIndividualPermissionGranted(String[] grantedPermission) {
+                showPermissionDialog();
+            }
+
+            @Override
+            public void onPermissionDenied() {
+                showPermissionDialog();
+            }
+
+            @Override
+            public void onPermissionDeniedBySystem() {
+                showPermissionDialog();
+            }
+        });
+    }
+
+    private void showPermissionDialog() {
+        if (!dialogShowing) {
+            dialogShowing = true;
+
+            AlertDialogs.show(this, String.format(getString(R.string.title_need_camera_permission), getString(R.string.app_name)), getString(R.string.msg_need_camera_permission), getString(R.string.btn_cancel), getString(R.string.btn_setting), new AlertDialogs.OnClickListener() {
+                @Override
+                public void onNegativeButtonClick(DialogInterface dialog, int which) {
+                    dialogShowing = false;
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onPositiveButtonClick(DialogInterface dialog, int which) {
+                    dialogShowing = false;
+                    permissionHelper.launchAppDetailsSettings();
+                    dialog.dismiss();
+                }
+            });
+        }
     }
 }

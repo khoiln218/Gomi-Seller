@@ -1,20 +1,20 @@
 package vn.gomicorp.seller.main.market.collection.subcate.pager;
 
-import vn.gomicorp.seller.event.Event;
+import vn.gomicorp.seller.event.BaseEvent;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class ProductCategoryEvent extends Event {
-    public static final int SELECT_ERROR = 1;
-    public static final int ON_PICK = 2;
+class ProductCategoryEvent<T> extends BaseEvent<T> {
+    static final int SELECT_ERROR = 1;
+    static final int ON_PICK = 2;
+    static final int ON_SHOW = 3;
 
-    public ProductCategoryEvent(int code) {
-        this.code = code;
+    ProductCategoryEvent(int code) {
+        super(code);
     }
 
-    public ProductCategoryEvent(int code, String message) {
-        this.code = code;
-        this.message = message;
+    ProductCategoryEvent(int code, String message) {
+        super(code, message);
     }
 }

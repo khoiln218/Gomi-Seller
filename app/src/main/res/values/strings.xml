@@ -2,66 +2,126 @@
     <string name="app_name">eapps</string>
 
     <!-- TODO: Account -->
-    <string name="name">Full Name</string>
-    <string name="user_name">Email Or PhoneNumber</string>
+    <string name="name">Họ tên</string>
+    <string name="user_name">Tên đăng nhập</string>
     <string name="email">Email</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="password">Password</string>
-    <string name="contry_id">Contry ID</string>
-    <string name="verify_code">Verify Code</string>
-    <string name="new_password">New Password</string>
-    <string name="certification_code">Certification Code</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="password">Mật Khẩu</string>
+    <string name="contry_id">Chọn quốc gia</string>
+    <string name="verify_code">Mã OTP</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="certification_code">Mã OTP</string>
 
-    <string name="hint_name">Full Name</string>
-    <string name="hint_user_name">Email Or PhoneNumber</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_phone_number">Phone Number</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_contry_id">Contry ID</string>
-    <string name="hint_verify_code">Verify Code</string>
-    <string name="hint_new_password">New Password</string>
-    <string name="hint_certification_code">Certification Code</string>
+    <string name="hint_name">Nhập họ tên</string>
+    <string name="hint_user_name">SĐT hoặc địa chỉ email</string>
+    <string name="hint_email">Địa chỉ email</string>
+    <string name="hint_phone_number">Số điện thoại</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_verify_code">Mã OTP</string>
+    <string name="hint_new_password">Mật khẩu mới</string>
+    <string name="hint_certification_code">Mã OTP</string>
 
-    <string name="err_input_name">Error Input Full Name</string>
-    <string name="err_input_email">Error Input Email</string>
-    <string name="err_input_username">Error Input User Name</string>
-    <string name="err_input_password">Error Input Password</string>
-    <string name="err_input_phone_number">Error Input Phone Number</string>
-    <string name="err_input_contry_id">Error Input Contry ID</string>
+    <string name="err_input_email">Vui lòng nhập lại email</string>
+    <string name="err_input_username">Tên đăng nhập không đúng</string>
+    <string name="err_input_password">Mật khẩu sai. Vui lòng nhập từ 6 đến 32 ký tự</string>
+    <string name="err_input_phone_number">Vui lòng nhập lại số điện thoại</string>
 
-    <string name="forget_password">Forget Password</string>
-    <string name="reset_password">Reset Password</string>
-    <string name="send_code">Send Code</string>
-    <string name="reset">Reset</string>
-    <string name="login">Log In</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="verify_phone_number">Verify</string>
-    <string name="no_have_account">Add new account</string>
+    <string name="forget_password">Quên mật khẩu</string>
+    <string name="reset_password">Tạo lại mật khẩu</string>
+    <string name="send_code">Gửi</string>
+    <string name="login">Đăng nhập</string>
+    <string name="sign_up">Đăng ký</string>
+    <string name="verify_phone_number">Gửi OTP</string>
+    <string name="no_have_account">Bạn đã <strong> đăng ký </strong> chưa?</string>
 
-    <string name="popup_submit">Are you sure, You wanted to make decision</string>
-    <string name="submit">Submit</string>
-    <string name="cancel">Cancel</string>
-    <string name="msg_resend">Resend after %ds</string>
+    <string name="msg_resend">Gửi lại sau %ds</string>
 
     <!--Shop-->
-    <string name="hint_description">Description</string>
-    <string name="err_shop_name">Shop Name Error</string>
-    <string name="err_input_url">Web Address Error</string>
-    <string name="shop_name">Shop Name</string>
-    <string name="hint_shop_name">Shop Name</string>
-    <string name="verify_url">Verify</string>
-    <string name="take_photo">Take Photo</string>
-    <string name="choose_image_gallery">Choose Image Gallery</string>
-    <string name="view_photo">View Photo</string>
-    <string name="remove_photo">Remove Photo</string>
-    <string name="cover">Change Cover</string>
+    <string name="err_input_url">Chỉ các chữ cái (a&#8211;z), số (0&#8211;9) và (-) được cho phép.</string>
+    <string name="shop_name">Tên cửa hàng</string>
+    <string name="hint_shop_name">Tên cửa hàng</string>
+    <string name="verify_url">Xác minh</string>
+    <string name="take_photo">Chụp ảnh</string>
+    <string name="choose_image_gallery">Chọn ảnh từ bộ sưu tập</string>
+    <string name="view_photo">Xem ảnh</string>
+    <string name="remove_photo">Xóa ảnh</string>
+    <string name="cover">Ảnh bìa(ảnh thu nhỏ)</string>
 
     <!--Main-->
     <string name="view">Xem thêm</string>
-    <string name="banner">banner</string>
+    <string name="banner">Banner</string>
     <string name="add_product">Thêm sản phẩm</string>
     <string name="sub_product">Xóa sản phẩm</string>
     <string name="product_seen">Sản phẩm đã xem</string>
-    <string name="empty">Not Result</string>
-    <string name="network_error">Network Not Available</string>
+    <string name="no_result">Không có kết quả tìm kiếm</string>
+    <string name="product_attribute">Thông tin chi tiết</string>
+    <string name="withdrawn">Rút tiền</string>
+    <string name="setting">Cài đặt</string>
+    <string name="notify">Thông báo</string>
+    <string name="invite">Invite</string>
+    <string name="coupon">Coupon</string>
+    <string name="empty">Không tìm thấy sản phẩm</string>
+    <string name="network_error">Không có kết nối mạng. Vui lòng <strong> thử lại </strong></string>
+    <string name="view_detail">Xem chi tiết</string>
+    <string name="product_description">Mô tả sản phẩm</string>
+
+    <string name="html" translatable="false"><![CDATA[<!DOCTYPE html><html><head>
+                                <meta http-equiv="content-type" content="text/html; charset=utf-8">
+                                <meta name="viewport" content="width={width}, initial-scale=0.65" />
+                                <style>img{display: inline; height: auto; max-width: 100%;}</style>
+                                </head><body>{body_content}</body></html>]]></string>
+    <string name="withdrawn_bank">Rút tiền về tài khoản của bạn</string>
+    <string name="withdrawn_coupon">Chọn phiếu giảm giá</string>
+    <string name="btn_continue">Tiếp tục</string>
+    <string name="receiving_account">Đã xác thực</string>
+    <string name="amount">Số tiền</string>
+    <string name="transaction_fee">Phí giao dịch</string>
+    <string name="receive">Số tiền nhận được</string>
+    <string name="receive_note">Chuyển tiền sẽ được hoàn thành trong 2 ngày làm việc.</string>
+    <string name="btn_back">Trở lại</string>
+    <string name="select_bank">Chọn ngân hàng</string>
+    <string name="account_holder">Chủ tài khoản</string>
+    <string name="account_number">Số tài khoản</string>
+    <string name="btn_complete">Xong</string>
+    <string name="bank_management">Quản lý tài khoản</string>
+    <string name="network_connected">Đã có kết nối mạng</string>
+    <string name="network_lost">Không có kết nối mạng</string>
+    <string name="share">Share</string>
+    <string name="share_sub">[AD]Gomi Corporation</string>
+    <string name="shop_des">Mô tả cửa hàng</string>
+    <string name="hint_shop_des">Mô tả cửa hàng có thể dài tới %s ký tự</string>
+    <string name="title_oops">Oops</string>
+    <string name="btn_ok">Đồng ý</string>
+    <string name="btn_cancel">Hủy</string>
+    <string name="btn_setting">Cài đặt</string>
+    <string name="title_need_camera_permission">Bạn có cho phép %s truy cập vào camera không?</string>
+    <string name="msg_need_camera_permission">Gomi Seller cần truy cập máy ảnh. Vui lòng sửa nó trong tab cài đặt.</string>
+    <string name="change_password_succsess">Đổi mật khẩu thành công</string>
+    <string name="exit_app">Tiếp tục nhấn phím BACK để thoát</string>
+    <string name="not_result">Không tìm thấy kết quả</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="hint_old_password">Mật khẩu hiện tại</string>
+    <string name="change_password">Thay đổi mật khẩu</string>
+    <string name="gender">Giới tính</string>
+    <string name="birthday">Ngày sinh</string>
+    <string name="hint_birthday">Ngày sinh</string>
+    <string name="account_change_info">Thay đổi thông tin cá nhân</string>
+    <string name="err_text_empty">Vui lòng nhập</string>
+    <string name="err_password_confirm">Mật khẩu không trùng khớp</string>
+    <string name="select_birthday_title">Chọn ngày sinh</string>
+    <string name="btn_change">Sửa</string>
+    <string name="account_update_success">Cập nhật thông tin thành công</string>
+    <string name="change_password_success">Đổi mật khẩu thành công</string>
+    <string name="change_avatar_success">Cập nhật ảnh đại diện thành công</string>
+    <string name="view_term">Xem điều khoản</string>
+    <string name="open_source">Giấy phép mã nguồn mở</string>
+    <string name="notice">Thông báo</string>
+    <string name="sign_out">Đăng xuất</string>
+    <string name="version">Phiên bản</string>
+    <string name="setting_title">Cài đặt ứng dụng</string>
+    <string name="logout">Bạn đã đăng xuất khỏi hệ thống</string>
+    <string name="logout_msg">Bạn có chắc chắn muốn đăng xuất?</string>
+    <string name="btn_confirm">Xác nhận</string>
+    <string name="url">Địa chỉ website</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
 </resources>

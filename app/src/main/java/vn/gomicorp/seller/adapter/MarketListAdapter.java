@@ -5,36 +5,41 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomicorp.seller.adapter.holder.BannerSliderHolder;
 import vn.gomicorp.seller.adapter.holder.CategoryHolder;
 import vn.gomicorp.seller.adapter.holder.LoadingHolder;
 import vn.gomicorp.seller.adapter.holder.ProductHolder;
+import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Collection;
-import vn.gomicorp.seller.event.CategoryHandler;
+import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.event.CollectionHandler;
-import vn.gomicorp.seller.event.OnProductAdapterInitListener;
-import vn.gomicorp.seller.event.ProductHandler;
+import vn.gomicorp.seller.main.market.MarketViewModel;
 
 public class MarketListAdapter extends RecyclerView.Adapter {
     private List<Collection> collections;
-    private ProductHandler productHandler;
-    private CategoryHandler categoryHandler;
     private CollectionHandler collectionHandler;
-    private OnProductAdapterInitListener onProductAdapterInitListener;
+
+    private CategoryItemAdapter categoryItemAdapter;
+    private ProductItemAdapter newProductAdapter;
+    private ProductItemAdapter recommendProductAdapter;
+    private ProductItemAdapter seenProductAdapter;
 
     public void setCollections(List<Collection> collections) {
         this.collections = collections;
         notifyDataSetChanged();
     }
 
-    public MarketListAdapter(List<Collection> collections, ProductHandler productHandler, CategoryHandler categoryHandler, CollectionHandler collectionHandler, OnProductAdapterInitListener onProductAdapterInitListener) {
+    public MarketListAdapter(List<Collection> collections, MarketViewModel viewModel) {
         this.collections = collections;
-        this.productHandler = productHandler;
-        this.categoryHandler = categoryHandler;
-        this.collectionHandler = collectionHandler;
-        this.onProductAdapterInitListener = onProductAdapterInitListener;
+        this.collectionHandler = viewModel;
+
+        categoryItemAdapter = new CategoryItemAdapter(new ArrayList<Category>(), viewModel);
+        newProductAdapter = new ProductItemAdapter(new ArrayList<Product>(), viewModel, null);
+        recommendProductAdapter = new ProductItemAdapter(new ArrayList<Product>(), viewModel, null);
+        seenProductAdapter = new ProductItemAdapter(new ArrayList<Product>(), viewModel, null);
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case CollectionType.BANNER:
                 return BannerSliderHolder.getInstance(parent);
-            case CollectionType.MEGA_CATAGORY:
+            case CollectionType.MEGA_CATEGORY:
                 return CategoryHolder.getInstance(parent);
             case CollectionType.NEW_PRODUCT:
             case CollectionType.RECOMEND_PRODUCT:
@@ -56,14 +61,23 @@ public class MarketListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BannerSliderHolder)
-            ((BannerSliderHolder) holder).setBannerSlider(collections.get(position));
-
-        else if (holder instanceof CategoryHolder)
-            ((CategoryHolder) holder).setCategoryList(collections.get(position), categoryHandler);
-
-        else if (holder instanceof ProductHolder) {
-            ((ProductHolder) holder).bind(collections.get(position), productHandler, collectionHandler, onProductAdapterInitListener);
+        Collection collection = collections.get(position);
+        switch (collection.getType()) {
+            case CollectionType.BANNER:
+                ((BannerSliderHolder) holder).setBannerSlider(collection);
+                break;
+            case CollectionType.MEGA_CATEGORY:
+                ((CategoryHolder) holder).setCategoryList(collection, categoryItemAdapter);
+                break;
+            case CollectionType.NEW_PRODUCT:
+                ((ProductHolder) holder).bind(collection, newProductAdapter, collectionHandler);
+                break;
+            case CollectionType.RECOMEND_PRODUCT:
+                ((ProductHolder) holder).bind(collection, recommendProductAdapter, collectionHandler);
+                break;
+            case CollectionType.SEEN_PRODUCT:
+                ((ProductHolder) holder).bind(collection, seenProductAdapter, collectionHandler);
+                break;
         }
     }
 
@@ -81,11 +95,15 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         return collections == null ? 0 : collections.size();
     }
 
+    public void notifyItemChanged(Product product) {
+        newProductAdapter.notifyItemChanged(product);
+        recommendProductAdapter.notifyItemChanged(product);
+        seenProductAdapter.notifyItemChanged(product);
+    }
+
     public interface CollectionType {
-        int SEEN_PRODUCT = -5;
-        int MEGA_CATAGORY = -4;
-        int CATAGORY = -3;
-        int SUB_CATAGORY = -2;
+        int SEEN_PRODUCT = -3;
+        int MEGA_CATEGORY = -2;
         int BANNER = -1;
         int VIEW_LOADING = 0;
         int NEW_PRODUCT = 1;

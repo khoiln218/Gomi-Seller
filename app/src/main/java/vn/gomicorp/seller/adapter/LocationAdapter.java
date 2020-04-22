@@ -1,6 +1,5 @@
 package vn.gomicorp.seller.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,35 +16,20 @@ import vn.gomicorp.seller.databinding.CountryItemBinding;
  * Created by KHOI LE on 3/18/2020.
  */
 public class LocationAdapter extends BaseAdapter {
-    public static final int COUNTRY = 0;
-    public static final int PROVINCE = 1;
-    public static final int DISTRICT = 2;
-
-    private int type;
-
     private List<Location> locations;
-    private Context context;
 
-    public LocationAdapter(Context applicationContext, List<Location> locations) {
-        context = applicationContext;
+    public LocationAdapter(List<Location> locations) {
         setData(locations);
     }
 
-    public void setData(List<Location> countries) {
-        this.locations = countries;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setData(List<Location> locations) {
+        this.locations = locations;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return locations.size();
+        return locations == null ? 0 : locations.size();
     }
 
     @Override
@@ -55,18 +39,18 @@ public class LocationAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return locations.get(i).getId();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         CountryItemBinding binding;
         if (view == null) {
-            binding = CountryItemBinding.inflate(LayoutInflater.from(context), viewGroup, false);
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            binding = CountryItemBinding.inflate(inflater, viewGroup, false);
         } else {
             binding = DataBindingUtil.bind(view);
         }
-        assert binding != null;
         binding.setLocation(getItem(i));
         binding.executePendingBindings();
         return binding.getRoot();

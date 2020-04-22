@@ -9,366 +9,394 @@
 
         <variable
             name="signUpViewModel"
-            type="vn.gomicorp.seller.signup.SignUpViewModel" />
+            type="vn.gomicorp.seller.authen.signup.SignUpViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".signup.views.SignUpActivity">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <!--TODO: Banner Image-->
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/banner"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_login_banner"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvLogin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/sign_up"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/tvname"
-                app:layout_constraintRight_toLeftOf="@+id/btn_login"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-            <TextView
-                android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:drawableEnd="@drawable/ic_arrow_right"
-                android:onClick="@{()->signUpViewModel.signIn()}"
-                android:text="@string/login"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                app:drawableTint="@color/colorSecondaryText"
-                app:layout_constraintBottom_toBottomOf="@+id/tvLogin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@id/tvLogin"
-                app:layout_constraintTop_toTopOf="@+id/tvLogin" />
-
-            <!--Full name-->
-            <TextView
-                android:id="@+id/tvname"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/name"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
+                tools:context=".authen.signup.views.SignUpActivity">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                app:hintEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvname">
+                <!--TODO: Banner Image-->
 
-                <EditText
-                    android:id="@+id/txt_name"
+                <ImageView
+                    android:id="@+id/imageView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
-                    android:hint="@string/hint_name"
-                    android:importantForAutofill="no"
-                    android:inputType="textCapWords"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.fullName}"
-                    android:textAppearance="?android:textAppearance" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/banner"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_login_banner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!--User name-->
-            <TextView
-                android:id="@+id/tvemail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/email"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_name" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                app:hintEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvemail"
-                app:setError="@{signUpViewModel.errorEmailMsg}"
-                app:setErrorEnabled="@{signUpViewModel.errorEnableEmail}">
-
-                <EditText
-                    android:id="@+id/txt_email"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvLogin"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
-                    android:hint="@string/hint_email"
-                    android:importantForAutofill="no"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.email}"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/sign_up"
                     android:textAppearance="?android:textAppearance"
-                    app:requestFocus="@{signUpViewModel.requestFocusEmail}" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Phone Number-->
-            <TextView
-                android:id="@+id/tvphone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/phone_number"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_email" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_phone_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                app:hintEnabled="false"
-                app:layout_constraintEnd_toStartOf="@+id/bt_resend"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/bt_resend"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvphone_number"
-                app:setError="@{signUpViewModel.errorPhoneNumberMsg}"
-                app:setErrorEnabled="@{signUpViewModel.errorEnablePhoneNumber}">
-
-                <EditText
-                    android:id="@+id/txt_phone_number"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/btn_login"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterPhoneNumberChanged()}"
-                    android:hint="@string/hint_phone_number"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.phoneNumber}"
+                    android:layout_marginEnd="32dp"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:onClick="@{()->signUpViewModel.signIn()}"
+                    android:text="@string/login"
                     android:textAppearance="?android:textAppearance"
-                    app:requestFocus="@{signUpViewModel.requestFocusPhoneNumber}" />
+                    android:textColor="@color/colorSecondaryText"
+                    app:drawableTint="@color/colorSecondaryText"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvLogin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvLogin" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/bt_resend"
-                style="@style/AppTheme.ButtonOutline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:onClick="@{()->signUpViewModel.verify()}"
-                android:text="@string/verify_phone_number"
-                android:visibility="@{signUpViewModel.verifyIsShow? View.VISIBLE: View.INVISIBLE, default=visible}"
-                app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/input_layout_phone_number"
-                app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
-
-            <TextView
-                android:id="@+id/tv_resend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:adjustViewBounds="true"
-                android:text="@={signUpViewModel.countDown}"
-                android:visibility="@{signUpViewModel.countDownIsShow? View.VISIBLE: View.INVISIBLE, default=invisible}"
-                app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/input_layout_phone_number"
-                app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
-
-            <!--Verify Code-->
-            <TextView
-                android:id="@+id/tv_verify_phone_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/certification_code"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_phone_number" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_verify_phone_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                app:hintEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_verify_phone_number">
-
-                <EditText
-                    android:id="@+id/txt_certification_code"
+                <!--Full name-->
+                <TextView
+                    android:id="@+id/tvname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
-                    android:hint="@string/hint_certification_code"
-                    android:importantForAutofill="no"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.certificationCode}"
-                    android:textAppearance="?android:textAppearance" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Password-->
-            <TextView
-                android:id="@+id/tvpassword"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/password"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_verify_phone_number" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_password"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                app:hintEnabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvpassword"
-                app:passwordToggleEnabled="true"
-                app:setError="@{signUpViewModel.errorPwdMsg}"
-                app:setErrorEnabled="@{signUpViewModel.errorEnablePwd}">
-
-                <EditText
-                    android:id="@+id/txt_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
-                    android:hint="@string/hint_password"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:text="@={signUpViewModel.password}"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/name"
                     android:textAppearance="?android:textAppearance"
-                    app:requestFocus="@{signUpViewModel.requestFocusPwd}" />
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvname">
 
-            <!--ContryId-->
-            <TextView
-                android:id="@+id/tvcontry_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/contry_id"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
+                    <EditText
+                        android:id="@+id/txt_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_name"
+                        android:importantForAutofill="no"
+                        android:inputType="textCapWords"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.fullName}"
+                        android:textAppearance="?android:textAppearance" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <Spinner
-                android:id="@+id/select_country_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:backgroundTint="@color/colorAccent"
-                android:onItemSelected="@{(p, v, pos, id) -> signUpViewModel.itemSelectedListener.onItemSelected(pos)}"
-                android:onTouch="@{(v, event)->signUpViewModel.touchListener.onTouch(event)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvcontry_id"
-                app:locations="@{signUpViewModel.countries}" />
+                <!--User name-->
+                <TextView
+                    android:id="@+id/tvemail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/email"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_name" />
 
-            <Button
-                android:id="@+id/button"
-                style="@style/AppTheme.ButtonPrimary"
-                android:layout_width="@dimen/button_width_180"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
-                android:enabled="@{signUpViewModel.enableBtnSigup, default=false}"
-                android:onClick="@{()->signUpViewModel.signUp()}"
-                android:text="@string/sign_up"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/select_country_id" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvemail"
+                    app:setError="@{signUpViewModel.errorEmailMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnableEmail}">
 
-            <include
-                android:id="@+id/include"
-                layout="@layout/layout_progress"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="@{signUpViewModel.loading?View.VISIBLE:View.GONE, default=gone}"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <EditText
+                        android:id="@+id/txt_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_email"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.email}"
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusEmail}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Phone Number-->
+                <TextView
+                    android:id="@+id/tvphone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/phone_number"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_email" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_phone_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_resend"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvphone_number"
+                    app:setError="@{signUpViewModel.errorPhoneNumberMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnablePhoneNumber}">
+
+                    <EditText
+                        android:id="@+id/txt_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterPhoneNumberChanged()}"
+                        android:hint="@string/hint_phone_number"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.phoneNumber}"
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusPhoneNumber}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/bt_resend"
+                    style="@style/AppTheme.ButtonOutline"
+                    android:layout_width="@dimen/button_width_108"
+                    android:layout_height="@dimen/button_height_small"
+                    android:layout_marginEnd="32dp"
+                    android:onClick="@{()->signUpViewModel.verify()}"
+                    android:text="@string/verify_phone_number"
+                    android:visibility="@{signUpViewModel.verifyIsShow? View.VISIBLE: View.INVISIBLE, default=visible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
+
+                <TextView
+                    android:id="@+id/tv_resend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:adjustViewBounds="true"
+                    android:text="@={signUpViewModel.countDown}"
+                    android:visibility="@{signUpViewModel.countDownIsShow? View.VISIBLE: View.INVISIBLE, default=invisible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/input_layout_phone_number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/input_layout_phone_number" />
+
+                <!--Verify Code-->
+                <TextView
+                    android:id="@+id/tv_verify_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/certification_code"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_phone_number" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_verify_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_verify_phone_number">
+
+                    <EditText
+                        android:id="@+id/txt_certification_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_certification_code"
+                        android:importantForAutofill="no"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.certificationCode}"
+                        android:textAppearance="?android:textAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Password-->
+                <TextView
+                    android:id="@+id/tvpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/password"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_verify_phone_number" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvpassword"
+                    app:passwordToggleEnabled="true"
+                    app:setError="@{signUpViewModel.errorPwdMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnablePwd}">
+
+                    <EditText
+                        android:id="@+id/txt_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.password}"
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusPwd}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Confirm password-->
+                <TextView
+                    android:id="@+id/tv_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/confirm_password"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_confirm_password"
+                    app:passwordToggleEnabled="true"
+                    app:setError="@{signUpViewModel.errorConfirmPwdMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnableConfirmPwd}">
+
+                    <EditText
+                        android:id="@+id/txt_confirm_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(s) -> signUpViewModel.afterTextChanged()}"
+                        android:hint="@string/hint_confirm_password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:text="@={signUpViewModel.confirmPassword}"
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusConfirmPwd}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--ContryId-->
+                <TextView
+                    android:id="@+id/tvcontry_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/contry_id"
+                    android:textAppearance="?android:textAppearance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input_layout_confirm_password" />
+
+                <RelativeLayout
+                    android:id="@+id/select_country_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/bg_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvcontry_id">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/colorAccent"
+                        android:onItemSelected="@{(p, v, pos, id) -> signUpViewModel.onItemSelected(pos)}"
+                        android:onTouch="@{(v, event)->signUpViewModel.onTouch(event)}"
+                        app:setLocationAdapter="@{signUpViewModel.locationAdapter}"
+                        tools:listitem="@layout/country_item" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/button"
+                    style="@style/AppTheme.ButtonPrimary"
+                    android:layout_width="@dimen/button_width_180"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:enabled="@{signUpViewModel.enableBtnSigup, default=false}"
+                    android:onClick="@{()->signUpViewModel.signUp()}"
+                    android:text="@string/sign_up"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/select_country_id" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_progress"
+            android:visibility="@{signUpViewModel.isProgressing?View.VISIBLE:View.GONE, default=gone}" />
+    </RelativeLayout>
 </layout>

@@ -9,10 +9,15 @@ import com.google.gson.reflect.TypeToken;
 
 import vn.gomicorp.seller.data.AccountDataSource;
 import vn.gomicorp.seller.data.ResultListener;
+import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
+import vn.gomicorp.seller.data.source.model.api.ChangeAvatarRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
+import vn.gomicorp.seller.data.source.model.api.SignOutRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomicorp.seller.data.source.model.data.Account;
@@ -202,6 +207,31 @@ public class MockAccoutDataSource implements AccountDataSource {
     @Override
     public void verifyPhoneNumber(VerifyPhoneNumberRequest request, ResultListener<ResponseData<Account>> callback) {
         excute(verifyJson, callback);
+    }
+
+    @Override
+    public void findbyid(AccountRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void updateinfo(AccountUpdateRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void changepassword(AccountChangePasswordRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void changeavatar(ChangeAvatarRequest request, ResultListener<ResponseData<Account>> callback) {
+
+    }
+
+    @Override
+    public void logout(SignOutRequest request, ResultListener<ResponseData<Account>> callback) {
+
     }
 
     private void excute(final String jsonData, final ResultListener<ResponseData<Account>> callback) {

@@ -1,13 +1,342 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.mypage.MyPageFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="vn.gomicorp.seller.main.mypage.MyPageViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Profile Fragment" />
+        tools:context=".main.mypage.MyPageFragment">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDivider"
+            android:orientation="vertical">
+
+            <!--Account Profile-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_small"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="2dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:paddingStart="@dimen/padding_xlarge"
+                    android:paddingTop="@dimen/padding_xlarge"
+                    android:paddingEnd="@dimen/padding_xlarge"
+                    android:paddingBottom="@dimen/padding_large">
+
+                    <RelativeLayout
+                        android:id="@+id/avatar_container"
+                        android:layout_width="@dimen/avatar_size"
+                        android:layout_height="@dimen/avatar_size"
+                        android:background="@drawable/avatar_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/image_avatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            app:setAvatar="@{viewModel.avatarUri}"
+                            app:setMyPageAvatar="@{viewModel.account.avatar}" />
+
+                        <ImageButton
+                            android:id="@+id/btn_change_avatar"
+                            android:layout_width="@dimen/button_height_small"
+                            android:layout_height="@dimen/button_height_small"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/circle_with_border_36"
+                            android:onClick="@{(v)->viewModel.changeAvatar()}"
+                            android:src="@drawable/ic_camera"
+                            android:tint="@color/colorSecondary"
+                            android:visibility="@{viewModel.btnChageHide?View.INVISIBLE:View.VISIBLE}" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/padding_medium"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/avatar_container"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/text_full_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@{viewModel.account.fullName}"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/text_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@{viewModel.account.userName}"
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:textColor="@color/colorSecondaryText" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btn_account_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:onClick="@{(v)->viewModel.updateInfo()}"
+                        android:padding="@dimen/padding_small"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_settings"
+                        android:tint="@color/colorSecondaryText"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!---->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_small"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!--Bank Management-->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/white">
+
+                        <LinearLayout
+                            android:id="@+id/bank_management"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/padding_large"
+                            android:layout_marginBottom="@dimen/padding_large"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/icon_size_xlarge"
+                                android:layout_height="@dimen/icon_size_xlarge"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_bank"
+                                android:tint="@color/colorSecondaryText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/bank_management"
+                                android:textAppearance="?android:textAppearance"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDivider" />
+
+
+                    <!--Coupon-->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/white">
+
+                        <LinearLayout
+                            android:id="@+id/my_coupon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/padding_large"
+                            android:layout_marginBottom="@dimen/padding_large"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/icon_size_xlarge"
+                                android:layout_height="@dimen/icon_size_xlarge"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_coupon"
+                                android:tint="@color/colorSecondaryText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/coupon"
+                                android:textAppearance="?android:textAppearance"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDivider" />
+
+
+                    <!--Coupon-->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/white">
+
+                        <LinearLayout
+                            android:id="@+id/invite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/padding_large"
+                            android:layout_marginBottom="@dimen/padding_large"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/icon_size_xlarge"
+                                android:layout_height="@dimen/icon_size_xlarge"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_invite"
+                                android:tint="@color/colorSecondaryText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/invite"
+                                android:textAppearance="?android:textAppearance"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!---->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_small"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="2dp">
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_guide_banner" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!---->
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/padding_large"
+                    android:paddingTop="@dimen/padding_xsmall"
+                    android:paddingEnd="@dimen/padding_large"
+                    android:paddingBottom="@dimen/padding_xsmall">
+
+                    <Button
+                        android:id="@+id/btn_notify"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:text="@string/notify"
+                        android:textAlignment="textStart"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorSecondaryText" />
+
+                    <TextView
+                        android:id="@+id/text_notify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="99"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/padding_large"
+                    android:paddingTop="@dimen/padding_xsmall"
+                    android:paddingEnd="@dimen/padding_large"
+                    android:paddingBottom="@dimen/padding_xsmall">
+
+                    <Button
+                        android:id="@+id/btn_settings"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:onClick="@{(v)->viewModel.setting()}"
+                        android:text="@string/setting"
+                        android:textAlignment="textStart"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorSecondaryText" />
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

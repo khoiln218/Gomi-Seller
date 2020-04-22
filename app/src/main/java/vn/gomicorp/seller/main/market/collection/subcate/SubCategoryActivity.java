@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.data.Category;
@@ -25,31 +25,27 @@ import vn.gomicorp.seller.databinding.ActivitySubCategoryBinding;
 import vn.gomicorp.seller.utils.GomiConstants;
 import vn.gomicorp.seller.utils.ToastUtils;
 
-public class SubCategoryActivity extends AppCompatActivity {
-    private List<CategoryItem> categoryItemList = new ArrayList<>();
-    SubCategoryAdapter adapter;
-
-    private ActivitySubCategoryBinding binding;
-    private SubCategoryViewModel viewModel;
+public class SubCategoryActivity extends BaseActivity<SubCategoryViewModel, ActivitySubCategoryBinding> {
+    private List<CategoryItem> categoryItemList;
+    private SubCategoryAdapter adapter;
     private int id;
-    private int type;
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
-            id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 1);
-            type = CategoryType.CATEGORY;
+            id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
             name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
         }
 
         initBinding();
         setupToolbar();
+        categoryItemList = new ArrayList<>();
     }
 
     private void setupTab() {
-        new TabLayoutMediator(binding.tabLayout, binding.pager,
+        new TabLayoutMediator(getBinding().tabLayout, getBinding().pager,
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -57,13 +53,6 @@ public class SubCategoryActivity extends AppCompatActivity {
                     }
                 }
         ).attach();
-    }
-
-    private void initBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sub_category);
-        viewModel = ViewModelProviders.of(this).get(SubCategoryViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
     }
 
     private void setupToolbar() {
@@ -75,23 +64,31 @@ public class SubCategoryActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_sub_category);
+        viewModel = ViewModelProviders.of(this).get(SubCategoryViewModel.class);
+        getBinding().setViewModel(getViewModel());
+        binding.setLifecycleOwner(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         categoryItemList.clear();
-        viewModel.requestCategory(type, id, new ResultListener<List<Category>>() {
+        getViewModel().requestCategory(id, new ResultListener<List<Category>>() {
             @Override
             public void onLoaded(List<Category> result) {
                 for (Category category : result) {
-                    int cateType = type + 1;
+                    int cateType = CategoryType.SUB_CATEGORY;
                     int cateId = category.getId();
                     if (category.getId() == 0) {
-                        cateType = type;
+                        cateType = CategoryType.CATEGORY;
                         cateId = id;
                     }
                     categoryItemList.add(new CategoryItem(cateType, cateId, category.getName()));
                 }
                 adapter = new SubCategoryAdapter(SubCategoryActivity.this, categoryItemList);
-                binding.pager.setAdapter(adapter);
+                getBinding().pager.setAdapter(adapter);
                 setupTab();
             }
 
@@ -104,11 +101,9 @@ public class SubCategoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 }

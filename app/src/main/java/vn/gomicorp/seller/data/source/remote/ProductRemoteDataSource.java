@@ -10,7 +10,9 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -108,6 +110,48 @@ public class ProductRemoteDataSource implements ProductDataSource {
     public void findbyseen(CollectionByIdRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
         ApiService client = ApiConfig.getClient();
         Call<ResponseData<List<Product>>> call = client.findbyseen(request, page);
+        call.enqueue(new Callback<ResponseData<List<Product>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Product>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyid(ProductDetailRequest request, final ResultListener<ResponseData<Product>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Product>> call = client.findbyid(request);
+        call.enqueue(new Callback<ResponseData<Product>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Product>> call, Response<ResponseData<Product>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Product>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyshop(ShopRequest request, int page, final ResultListener<ResponseData<List<Product>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Product>>> call = client.findbyshop(request, page);
         call.enqueue(new Callback<ResponseData<List<Product>>>() {
             @Override
             public void onResponse(Call<ResponseData<List<Product>>> call, Response<ResponseData<List<Product>>> response) {

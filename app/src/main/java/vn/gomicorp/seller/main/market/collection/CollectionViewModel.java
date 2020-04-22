@@ -13,110 +13,64 @@ import vn.gomicorp.seller.adapter.MarketListAdapter;
 import vn.gomicorp.seller.adapter.ProductItemAdapter;
 import vn.gomicorp.seller.data.ProductRepository;
 import vn.gomicorp.seller.data.ResultListener;
-import vn.gomicorp.seller.data.ShopRepository;
-import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
-import vn.gomicorp.seller.data.source.model.data.Category;
-import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 import vn.gomicorp.seller.event.MultableLiveEvent;
 import vn.gomicorp.seller.event.OnLoadMoreListener;
-import vn.gomicorp.seller.event.OnLoadTabListener;
 import vn.gomicorp.seller.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/26/2020.
  */
-public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
-    private final int CODE_OK = 200;
-    private final int ALL = 0;
+public class CollectionViewModel extends BaseViewModel implements ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
     private final int INIT_PAGE = 1;
-    private int collectionType;
-    private int page = INIT_PAGE;
-    private int totalPage = 0;
-    private int categoryType;
-    private int categoryId;
 
-    private int selectCategoryType;
-    private int selectCategoryId;
+    private ProductRepository mProductRepository;
 
-    private List<Product> products = new ArrayList<>();
+    public MutableLiveData<ProductItemAdapter> productItemAdapter;
+    private MultableLiveEvent<CollectionEvent> cmd;
+
+    private List<Product> products;
     private ProductItemAdapter adapter;
 
-    private ProductRepository mProductRepository = ProductRepository.getInstance();
-    private ShopRepository mShopRepository = ShopRepository.getInstance();
-
-    public MutableLiveData<List<Category>> categories = new MutableLiveData<>();
-    public MutableLiveData<ProductItemAdapter> productItemAdapter = new MutableLiveData<>();
-
-    private MultableLiveEvent<CollectionEvent> cmd = new MultableLiveEvent<>();
+    private int page;
+    private int totalPage;
+    private int collectionId;
 
     public CollectionViewModel() {
-        loaded();
-        adapter = new ProductItemAdapter(products, productHandler, this);
+        mProductRepository = ProductRepository.getInstance();
+        productItemAdapter = new MutableLiveData<>();
+        cmd = new MultableLiveEvent<>();
+        products = new ArrayList<>();
+        adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
     }
 
-    public ProductHandler productHandler = new ProductHandler() {
-        @Override
-        public void onShow(Product product) {
-
-        }
-
-        @Override
-        public void onPick(Product product) {
-            pick(product);
-        }
-    };
-
-    public OnLoadTabListener onLoadTabListener = new OnLoadTabListener() {
-        @Override
-        public void onLoaded(Category selectedCate) {
-            if (selectedCate.getId() == ALL) {
-                showProgressing();
-                selectCategoryType = categoryType;
-                selectCategoryId = categoryId;
-                onRefresh();
-            } else if (categoryType == CategoryType.MEGA_CATEGORY) {
-                openSubCategory(selectedCate);
-            }/* else if (categoryType == CategoryType.CATEGORY) {
-                showProgressing();
-                selectCategoryType = categoryType + 1;
-                selectCategoryId = selectedCate.getId();
-                onRefresh();
-            }*/
-        }
-
-        @Override
-        public void onLoadFails() {
-            products.clear();
-            updateProductList();
-            checkEmpty(products);
-        }
-    };
-
-    private void openSubCategory(Category selectedCate) {
-        CollectionEvent event = new CollectionEvent(CollectionEvent.OPEN_SUB_CATEGORY);
-        event.setData(selectedCate);
-        cmd.call(event);
-    }
-
     private void pick(Product product) {
-        CollectionEvent event = new CollectionEvent(CollectionEvent.ON_PICK);
+        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_PICK);
         event.setData(product);
         cmd.call(event);
     }
 
-    public void requestPickProduct(Product product) {
+    private void showDetail(Product product) {
+        CollectionEvent<Product> event = new CollectionEvent(CollectionEvent.ON_SHOW);
+        event.setData(product);
+        cmd.call(event);
+    }
+
+    void requestPickProduct(Product product) {
+        showLoading();
         ToggleProductRequest request = new ToggleProductRequest();
         request.setIsSelling(product.getIsSelling());
         request.setProductId(product.getId());
         mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
             @Override
             public void onLoaded(ResponseData<Product> result) {
-                if (result.getCode() == CODE_OK)
+                loaded();
+                if (result.getCode() == ResultCode.CODE_OK)
                     updateProduct(result.getResult());
                 else
                     updateFail(result.getMessage());
@@ -124,6 +78,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
 
             @Override
             public void onDataNotAvailable(String error) {
+                loaded();
                 updateFail(error);
             }
         });
@@ -148,19 +103,10 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         page = INIT_PAGE;
         products.clear();
         updateProductList();
-        switch (collectionType) {
-            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
-            case MarketListAdapter.CollectionType.CATAGORY:
-            case MarketListAdapter.CollectionType.SUB_CATAGORY:
-                initCategory();
-                break;
-            case MarketListAdapter.CollectionType.NEW_PRODUCT:
-            case MarketListAdapter.CollectionType.RECOMEND_PRODUCT:
-                initCollection();
-                break;
-            case MarketListAdapter.CollectionType.SEEN_PRODUCT:
-                initProductSeen();
-                break;
+        if (collectionId == MarketListAdapter.CollectionType.SEEN_PRODUCT) {
+            initProductSeen();
+        } else {
+            initCollection();
         }
     }
 
@@ -169,30 +115,19 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     }
 
     private void initCollection() {
-        requestProductListByCollectionId(collectionType);
-    }
-
-    private void initCategory() {
-        requestProductListByCategoryId(selectCategoryId);
+        requestProductListByCollectionId();
     }
 
     @Override
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
-        switch (collectionType) {
-            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
-            case MarketListAdapter.CollectionType.CATAGORY:
-            case MarketListAdapter.CollectionType.SUB_CATAGORY:
-                loadMoreCategory();
-                break;
-            case MarketListAdapter.CollectionType.NEW_PRODUCT:
-            case MarketListAdapter.CollectionType.RECOMEND_PRODUCT:
-                loadMoreCollection();
-                break;
-            case MarketListAdapter.CollectionType.SEEN_PRODUCT:
-                loadMoreProductSeen();
-                break;
+        products.add(null);
+        updateProductList();
+        if (collectionId == MarketListAdapter.CollectionType.SEEN_PRODUCT) {
+            loadMoreProductSeen();
+        } else {
+            loadMoreCollection();
         }
     }
 
@@ -201,11 +136,7 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
     }
 
     private void loadMoreCollection() {
-        requestProductListByCollectionId(collectionType);
-    }
-
-    private void loadMoreCategory() {
-        requestProductListByCategoryId(selectCategoryId);
+        requestProductListByCollectionId();
     }
 
     private void requestProductSeen() {
@@ -215,9 +146,10 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 }
@@ -231,17 +163,18 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         });
     }
 
-    private void requestProductListByCollectionId(int id) {
+    private void requestProductListByCollectionId() {
         adapter.setLoading();
         CollectionByIdRequest request = new CollectionByIdRequest();
-        request.setFindById(id);
+        request.setFindById(collectionId);
         mProductRepository.findbycollection(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override
             public void onLoaded(ResponseData<List<Product>> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
                     checkEmpty(products);
                 } else {
@@ -255,59 +188,6 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
                 checkConnection(error);
             }
         });
-    }
-
-    void requestCategory() {
-        CategoryByIdRequest request = new CategoryByIdRequest();
-        request.setCategoryType(categoryType);
-        request.setFindById(selectCategoryId);
-        mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Category>> result) {
-                loaded();
-                if (result.getCode() == CODE_OK) {
-                    categories.setValue(result.getResult());
-                    updateCategory();
-                    if (result.getResult().size() < 2)
-                        requestProductListByCategoryId(selectCategoryId);
-                }
-            }
-
-            @Override
-            public void onDataNotAvailable(String error) {
-                loaded();
-            }
-        });
-    }
-
-    private void requestProductListByCategoryId(int id) {
-        adapter.setLoading();
-        CategoryByIdRequest request = new CategoryByIdRequest();
-        request.setCategoryType(selectCategoryType);
-        request.setFindById(id);
-        mProductRepository.findbycategory(request, page, new ResultListener<ResponseData<List<Product>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Product>> result) {
-                loaded();
-                if (result.getCode() == CODE_OK) {
-                    products.addAll(result.getResult());
-                    totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
-                    updateProductList();
-                    checkEmpty(products);
-                } else {
-                    setErrorMessage(result.getMessage());
-                }
-            }
-
-            @Override
-            public void onDataNotAvailable(final String error) {
-                loaded();
-                checkConnection(error);
-            }
-        });
-    }
-
-    private void updateCategory() {
     }
 
     private void updateProductList() {
@@ -318,25 +198,21 @@ public class CollectionViewModel extends BaseViewModel implements SwipeRefreshLa
         return cmd;
     }
 
-    private void loaded() {
-        hideProgressing();
-        refreshed();
-    }
-
-    public void setCollectionType(int collectionType) {
-        this.collectionType = collectionType;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-        this.selectCategoryId = categoryId;
-    }
-
-    public void setCategoryType(int categoryType) {
-        this.categoryType = categoryType;
+    void setCollectionId(int collectionId) {
+        this.collectionId = collectionId;
     }
 
     void showLoading() {
         showProgressing();
+    }
+
+    @Override
+    public void onShow(Product product) {
+        showDetail(product);
+    }
+
+    @Override
+    public void onPick(Product product) {
+        pick(product);
     }
 }

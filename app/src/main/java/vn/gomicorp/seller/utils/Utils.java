@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Vibrator;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import vn.gomicorp.seller.EappsApplication;
@@ -85,5 +88,44 @@ public final class Utils {
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
         return displayMetrics.widthPixels;
+    }
+
+    /**
+     * Get Resources Color
+     *
+     * @param colorId
+     * @return
+     */
+    public static int getColorResources(int colorId) {
+        Context context = EappsApplication.getInstance().getAppContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return context.getResources().getColor(colorId, context.getTheme());
+        else
+            return context.getResources().getColor(colorId);
+    }
+
+    /**
+     * Set Html Tag to Text View
+     *
+     * @param source
+     * @return
+     */
+    public static Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        else
+            return Html.fromHtml(source);
+    }
+
+    /**
+     * Hide Soft Keyboard
+     *
+     * @param activity
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        if (activity.getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

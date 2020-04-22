@@ -5,7 +5,9 @@ import java.util.List;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -23,4 +25,8 @@ public interface ProductDataSource {
     void findbycategory(CategoryByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
 
     void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
+
+    void findbyid(ProductDetailRequest request, ResultListener<ResponseData<Product>> callback);
+
+    void findbyshop(ShopRequest request, int page, ResultListener<ResponseData<List<Product>>> callback);
 }

@@ -30,21 +30,6 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:layout_gravity="bottom"
-                android:visibility="@{(viewModel.categories == null || viewModel.categories.size() &lt; 2) ? View.GONE : View.VISIBLE, default=gone}"
-                app:onLoadTabListener="@{viewModel.onLoadTabListener}"
-                app:setCollectionCategories="@{viewModel.categories}"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/colorAccent"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/colorAccent"
-                app:tabTextAppearance="?android:textAppearance" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -71,11 +56,17 @@
 
                 <include
                     layout="@layout/layout_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?attr/actionBarSize"
                     android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
                     app:msg="@{viewModel.errorMessage}" />
 
                 <include
                     layout="@layout/layout_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?attr/actionBarSize"
                     android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
             </RelativeLayout>
 

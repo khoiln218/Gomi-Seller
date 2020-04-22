@@ -8,14 +8,22 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import vn.gomicorp.seller.data.source.model.api.AccountChangePasswordRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountRequest;
+import vn.gomicorp.seller.data.source.model.api.AccountUpdateRequest;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
+import vn.gomicorp.seller.data.source.model.api.ChangeAvatarRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ForgetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.MegaCategoryRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResetPwdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.SignInRequest;
+import vn.gomicorp.seller.data.source.model.api.SignOutRequest;
 import vn.gomicorp.seller.data.source.model.api.SignUpRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyPhoneNumberRequest;
@@ -91,4 +99,40 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("product/findbyseen/page={page}")
     Call<ResponseData<List<Product>>> findbyseen(@Body CollectionByIdRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbyid")
+    Call<ResponseData<Product>> findbyid(@Body ProductDetailRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("shop/findbyid")
+    Call<ResponseData<Shop>> findbyid(@Body ShopRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("utilities/megacategory")
+    Call<ResponseData<List<Category>>> megacategory(@Body MegaCategoryRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("product/findbyshop/page={page}")
+    Call<ResponseData<List<Product>>> findbyshop(@Body ShopRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/findbyid")
+    Call<ResponseData<Account>> findbyid(@Body AccountRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/updateinfo")
+    Call<ResponseData<Account>> updateinfo(@Body AccountUpdateRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/changepassword")
+    Call<ResponseData<Account>> changepassword(@Body AccountChangePasswordRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/changeavatar")
+    Call<ResponseData<Account>> changeavatar(@Body ChangeAvatarRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("account/logout")
+    Call<ResponseData<Account>> logout(@Body SignOutRequest request);
 }

@@ -42,7 +42,7 @@ public class Shop {
     private String CountryName;
     private String ProvinceName;
     private String DistrictName;
-    private int PointBalance;
+    private double PointBalance;
     private int Visits;
     private int Follows;
     private boolean Followed;
@@ -167,11 +167,11 @@ public class Shop {
         this.DistrictName = DistrictName;
     }
 
-    public int getPointBalance() {
+    public double getPointBalance() {
         return PointBalance;
     }
 
-    public void setPointBalance(int PointBalance) {
+    public void setPointBalance(double PointBalance) {
         this.PointBalance = PointBalance;
     }
 

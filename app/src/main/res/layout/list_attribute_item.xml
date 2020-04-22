@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.widget.LinearLayout" />
+
+        <variable
+            name="attribute"
+            type="vn.gomicorp.seller.data.source.model.data.Attribute" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/layout_attribute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <TextView
+            android:id="@+id/text_attribute_name"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@{attribute.name}"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorPrimaryText" />
+
+        <TextView
+            android:id="@+id/text_attribute_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:textAppearance"
+            android:textColor="@color/colorSecondaryText"
+            app:setAttributeContent="@{attribute.content}" />
+
+    </LinearLayout>
+</layout>

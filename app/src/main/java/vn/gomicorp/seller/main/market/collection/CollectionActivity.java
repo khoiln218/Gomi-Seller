@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -13,10 +12,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Objects;
 
+import vn.gomicorp.seller.BaseActivity;
 import vn.gomicorp.seller.R;
-import vn.gomicorp.seller.adapter.MarketListAdapter;
-import vn.gomicorp.seller.data.source.model.data.Category;
-import vn.gomicorp.seller.data.source.model.data.CategoryType;
 import vn.gomicorp.seller.data.source.model.data.Product;
 import vn.gomicorp.seller.databinding.ActivityCollectionBinding;
 import vn.gomicorp.seller.event.OnSelectedListener;
@@ -25,67 +22,54 @@ import vn.gomicorp.seller.utils.Intents;
 import vn.gomicorp.seller.utils.ToastUtils;
 import vn.gomicorp.seller.widgets.dialog.SelectProductDialogFragment;
 
-public class CollectionActivity extends AppCompatActivity {
-    private CollectionViewModel viewModel;
-    private ActivityCollectionBinding binding;
-    private int type;
-    private int id;
+public class CollectionActivity extends BaseActivity<CollectionViewModel, ActivityCollectionBinding> {
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getIntent().getIntExtra(GomiConstants.EXTRA_TYPE, MarketListAdapter.CollectionType.VIEW_LOADING);
+        if (getIntent() == null)
+            return;
         name = getIntent().getStringExtra(GomiConstants.EXTRA_TITLE);
-        id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
+        int id = getIntent().getIntExtra(GomiConstants.EXTRA_ID, 0);
         initBinding();
         setupToolbar();
         setupCmd();
-        viewModel.setCategoryId(id);
-        viewModel.setCollectionType(type);
 
-        loadData();
+        getViewModel().setCollectionId(id);
     }
 
     private void loadData() {
-        viewModel.showLoading();
-        switch (type) {
-            case MarketListAdapter.CollectionType.MEGA_CATAGORY:
-                viewModel.setCategoryType(CategoryType.MEGA_CATEGORY);
-                viewModel.requestCategory();
-                break;
-            case MarketListAdapter.CollectionType.CATAGORY:
-                viewModel.setCategoryType(CategoryType.CATEGORY);
-                viewModel.requestCategory();
-                break;
-            case MarketListAdapter.CollectionType.SUB_CATAGORY:
-                viewModel.setCategoryType(CategoryType.SUB_CATEGORY);
-                viewModel.requestCategory();
-                break;
-            default:
-                viewModel.onRefresh();
-                break;
-        }
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 
     private void setupCmd() {
-        viewModel.getCmd().observe(this, new Observer<CollectionEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<CollectionEvent>() {
             @Override
             public void onChanged(CollectionEvent event) {
-                switch (event.code) {
-                    case CollectionEvent.OPEN_SUB_CATEGORY:
-                        Category category = (Category) event.getData();
-                        Intents.startCategoryActivity(CollectionActivity.this, MarketListAdapter.CollectionType.CATAGORY, category.getId(), category.getName());
-                        break;
+                switch (event.getCode()) {
                     case CollectionEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
                         break;
+                    case CollectionEvent.ON_SHOW:
+                        Product product = (Product) event.getData();
+                        Intents.startProductDetailActivity(CollectionActivity.this, product.getId());
+                        break;
                     case CollectionEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.message);
+                        ToastUtils.showToast(event.getMessage());
                         break;
                 }
             }
         });
+    }
+
+    @Override
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_collection);
+        viewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
+        getBinding().setViewModel(getViewModel());
+        binding.setLifecycleOwner(this);
     }
 
     private void showDialogPickProduct(Product product) {
@@ -93,7 +77,7 @@ public class CollectionActivity extends AppCompatActivity {
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                viewModel.requestPickProduct(product);
+                getViewModel().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });
@@ -102,17 +86,16 @@ public class CollectionActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadData();
     }
 
     private void setupToolbar() {
@@ -121,12 +104,5 @@ public class CollectionActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle(TextUtils.isEmpty(name) ? "" : name);
-    }
-
-    private void initBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_collection);
-        viewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
     }
 }

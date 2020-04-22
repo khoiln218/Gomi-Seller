@@ -1,31 +1,35 @@
 package vn.gomicorp.seller.main.market.collection.subcate;
 
-import androidx.lifecycle.ViewModel;
-
 import java.util.List;
 
+import vn.gomicorp.seller.BaseViewModel;
 import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopRepository;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
 import vn.gomicorp.seller.data.source.model.data.Category;
+import vn.gomicorp.seller.data.source.model.data.CategoryType;
+import vn.gomicorp.seller.data.source.remote.ResultCode;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class SubCategoryViewModel extends ViewModel {
-    private static final int CODE_OK = 200;
+public class SubCategoryViewModel extends BaseViewModel {
 
-    private ShopRepository mShopRepository = ShopRepository.getInstance();
+    private ShopRepository mShopRepository;
 
-    void requestCategory(int type, int id, final ResultListener<List<Category>> listener) {
+    public SubCategoryViewModel() {
+        mShopRepository = ShopRepository.getInstance();
+    }
+
+    void requestCategory(int id, final ResultListener<List<Category>> listener) {
         CategoryByIdRequest request = new CategoryByIdRequest();
-        request.setCategoryType(type);
+        request.setCategoryType(CategoryType.CATEGORY);
         request.setFindById(id);
         mShopRepository.findcatebytype(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override
             public void onLoaded(ResponseData<List<Category>> result) {
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     listener.onLoaded(result.getResult());
                 } else {
                     listener.onDataNotAvailable(result.getMessage());

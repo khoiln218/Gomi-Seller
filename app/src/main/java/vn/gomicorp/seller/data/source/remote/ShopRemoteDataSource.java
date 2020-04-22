@@ -9,7 +9,9 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.ShopDataSource;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CreateShopRequest;
+import vn.gomicorp.seller.data.source.model.api.MegaCategoryRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.VerifyUrlRequest;
 import vn.gomicorp.seller.data.source.model.data.Category;
 import vn.gomicorp.seller.data.source.model.data.Shop;
@@ -79,6 +81,52 @@ public class ShopRemoteDataSource implements ShopDataSource {
 
             @Override
             public void onFailure(Call<ResponseData<List<Category>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void megacategory(MegaCategoryRequest request, final ResultListener<ResponseData<List<Category>>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<List<Category>>> call = client.megacategory(request);
+        call.enqueue(new Callback<ResponseData<List<Category>>>() {
+            @Override
+            public void onResponse(Call<ResponseData<List<Category>>> call, Response<ResponseData<List<Category>>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<List<Category>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyid(ShopRequest request, final ResultListener<ResponseData<Shop>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Shop>> call = client.findbyid(request);
+        call.enqueue(new Callback<ResponseData<Shop>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Shop>> call, Response<ResponseData<Shop>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Shop>> call, Throwable t) {
                 callback.onDataNotAvailable(t.getMessage());
             }
         });

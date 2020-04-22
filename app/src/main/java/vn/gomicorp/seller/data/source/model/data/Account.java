@@ -23,6 +23,7 @@ public class Account implements Serializable {
      * PhoneNumber : 1234566
      * Gender : 1
      * BirthDay : 27/11/1988
+     * BirthDayLong: 1586883600
      * CountryId : 0
      * Avatar :
      * CountryCode : null
@@ -51,6 +52,7 @@ public class Account implements Serializable {
     private String Avatar;
     private int CountryCode;
     private int AccountType;
+    private long BirthDayLong;
 
     public String getVerificationCode() {
         return VerificationCode;
@@ -226,5 +228,13 @@ public class Account implements Serializable {
 
     public void setAccountType(int AccountType) {
         this.AccountType = AccountType;
+    }
+
+    public long getBirthDayLong() {
+        return BirthDayLong;
+    }
+
+    public void setBirthDayLong(long BirthDayLong) {
+        this.BirthDayLong = BirthDayLong;
     }
 }

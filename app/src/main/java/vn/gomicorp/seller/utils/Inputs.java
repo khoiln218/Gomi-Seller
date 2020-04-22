@@ -1,31 +1,39 @@
 package vn.gomicorp.seller.utils;
 
+import androidx.lifecycle.MutableLiveData;
+
+import vn.gomicorp.seller.EappsApplication;
+import vn.gomicorp.seller.R;
+
 public class Inputs {
 
-    public static boolean validateText(String text) {
-        if (Strings.isNullOrEmpty(text)) {
-            return false;
-        }
-        return true;
-    }
-
     public static boolean validateEmail(String email) {
-        if (Strings.isNullOrEmpty(email) || !Strings.isEmail(email)) {
-            return false;
-        }
-        return true;
+        return !Strings.isNullOrEmpty(email) && Strings.isEmail(email);
     }
 
     public static boolean validatePassword(String pwd) {
-        if (Strings.isNullOrEmpty(pwd) || pwd.length() < 6 || pwd.length() > 32) {
-            return false;
-        }
-        return true;
+        return !Strings.isNullOrEmpty(pwd) && pwd.length() >= 6 && pwd.length() <= 32;
     }
 
     public static boolean validatePhoneNumber(String phoneNumber) {
-//        if (Strings.isNullOrEmpty(phoneNumber) || !Strings.isPhoneNumber(phoneNumber)) {
-        if (Strings.isNullOrEmpty(phoneNumber)) {
+        return !Strings.isNullOrEmpty(phoneNumber);
+    }
+
+    public static boolean validateText(String text, MutableLiveData<String> error, MutableLiveData<Boolean> enableError, MutableLiveData<Boolean> focus, String msg) {
+        if (Strings.isNullOrEmpty(text)) {
+            error.setValue(msg);
+            focus.setValue(true);
+            return false;
+        }
+
+        enableError.setValue(false);
+        return true;
+    }
+
+    public static boolean validatePassword(String password, MutableLiveData<String> error, MutableLiveData<Boolean> enableError, MutableLiveData<Boolean> focus) {
+        if (Strings.isNullOrEmpty(password) || password.length() < 6 || password.length() > 32) {
+            error.setValue(EappsApplication.getInstance().getString(R.string.err_input_password));
+            focus.setValue(true);
             return false;
         }
         return true;

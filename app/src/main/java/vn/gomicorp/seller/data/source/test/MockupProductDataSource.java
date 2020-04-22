@@ -13,7 +13,9 @@ import vn.gomicorp.seller.data.ResultListener;
 import vn.gomicorp.seller.data.source.model.api.CategoryByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.CollectionByIdRequest;
 import vn.gomicorp.seller.data.source.model.api.IntroduceRequest;
+import vn.gomicorp.seller.data.source.model.api.ProductDetailRequest;
 import vn.gomicorp.seller.data.source.model.api.ResponseData;
+import vn.gomicorp.seller.data.source.model.api.ShopRequest;
 import vn.gomicorp.seller.data.source.model.api.ToggleProductRequest;
 import vn.gomicorp.seller.data.source.model.data.Introduce;
 import vn.gomicorp.seller.data.source.model.data.Product;
@@ -604,6 +606,16 @@ public class MockupProductDataSource implements ProductDataSource {
     @Override
     public void findbyseen(CollectionByIdRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
         exeProductList(jsonListProduct, callback);
+    }
+
+    @Override
+    public void findbyid(ProductDetailRequest request, ResultListener<ResponseData<Product>> callback) {
+
+    }
+
+    @Override
+    public void findbyshop(ShopRequest request, int page, ResultListener<ResponseData<List<Product>>> callback) {
+
     }
 
     private void exeIntroduce(final String jsonData, final ResultListener<ResponseData<Introduce>> callback) {
