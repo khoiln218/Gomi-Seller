@@ -44,6 +44,13 @@ import vn.gomicorp.seller.widgets.slider.SliderView;
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
 
+    @BindingAdapter("initLayout")
+    public static void initLayout(View view, Void _v) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = (int) (Utils.getScreenWidth() * 1.5f);
+        view.setLayoutParams(params);
+    }
+
     @BindingAdapter("setAttributeContent")
     public static void setAttributeContent(final TextView textView, String content) {
         textView.setText(Utils.fromHtml(content));

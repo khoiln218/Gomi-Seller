@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -133,6 +132,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
         }
 
         private void initWebView() {
+            binding.webView.getSettings().setLoadWithOverviewMode(true);
             binding.webView.setVerticalScrollBarEnabled(false);
             binding.webView.setHorizontalScrollBarEnabled(false);
             binding.webView.setWebViewClient(new WebViewClient() {
@@ -144,33 +144,33 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
-                    binding.progressBar.setVisibility(View.VISIBLE);
+//                    binding.progressBar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    final WebView contentView = view;
-
-                    contentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            int measuredHeight = contentView.getMeasuredHeight();
-                            int height = (int) (Utils.getScreenWidth() * 1.5f);
-
-                            if (measuredHeight < height) {
-                                height = measuredHeight;
-                                binding.btnViewDetail.setVisibility(View.GONE);
-                            }
-
-                            ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
-                            params.height = height;
-                            binding.webContainer.setLayoutParams(params);
-                            binding.progressBar.setVisibility(View.GONE);
-                            contentView.getViewTreeObserver().removeOnPreDrawListener(this);
-                            return false;
-                        }
-                    });
+//                    final WebView contentView = view;
+//
+//                    contentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                        @Override
+//                        public boolean onPreDraw() {
+//                            int measuredHeight = contentView.getMeasuredHeight();
+//                            int height = (int) (Utils.getScreenWidth() * 1.5f);
+//
+//                            if (measuredHeight < height) {
+//                                height = measuredHeight;
+//                                binding.btnViewDetail.setVisibility(View.GONE);
+//                            }
+//
+//                            ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
+//                            params.height = height;
+//                            binding.webContainer.setLayoutParams(params);
+//                            binding.progressBar.setVisibility(View.GONE);
+//                            contentView.getViewTreeObserver().removeOnPreDrawListener(this);
+//                            return false;
+//                        }
+//                    });
                 }
             });
         }
