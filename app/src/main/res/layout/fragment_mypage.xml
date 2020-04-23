@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.mypage.MyPageViewModel" />
+            type="vn.gomisellers.apps.main.mypage.MyPageViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

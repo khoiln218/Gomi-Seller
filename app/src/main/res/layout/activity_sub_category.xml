@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.market.collection.subcate.SubCategoryViewModel" />
+            type="vn.gomisellers.apps.main.market.collection.subcate.SubCategoryViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

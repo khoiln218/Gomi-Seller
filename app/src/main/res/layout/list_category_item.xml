@@ -6,11 +6,11 @@
 
         <variable
             name="category"
-            type="vn.gomicorp.seller.data.source.model.data.Category" />
+            type="vn.gomisellers.apps.data.source.model.data.Category" />
 
         <variable
             name="listener"
-            type="vn.gomicorp.seller.event.CategoryHandler" />
+            type="vn.gomisellers.apps.event.CategoryHandler" />
     </data>
 
     <LinearLayout

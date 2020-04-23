@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.market.collection.CollectionViewModel" />
+            type="vn.gomisellers.apps.main.market.collection.CollectionViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

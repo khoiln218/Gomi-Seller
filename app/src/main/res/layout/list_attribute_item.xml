@@ -8,7 +8,7 @@
 
         <variable
             name="attribute"
-            type="vn.gomicorp.seller.data.source.model.data.Attribute" />
+            type="vn.gomisellers.apps.data.source.model.data.Attribute" />
     </data>
 
     <LinearLayout

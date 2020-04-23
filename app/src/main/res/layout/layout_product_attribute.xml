@@ -7,7 +7,7 @@
 
         <variable
             name="attributes"
-            type="java.util.List&lt;vn.gomicorp.seller.data.source.model.data.Attribute>" />
+            type="java.util.List&lt;vn.gomisellers.apps.data.source.model.data.Attribute>" />
     </data>
 
     <androidx.cardview.widget.CardView

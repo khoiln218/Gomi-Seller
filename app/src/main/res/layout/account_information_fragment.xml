@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.mypage.info.basic.AccountInfoViewModel" />
+            type="vn.gomisellers.apps.main.mypage.info.basic.AccountInfoViewModel" />
     </data>
 
 
@@ -178,7 +178,7 @@
                     android:layout_weight="1"
                     app:hintEnabled="false">
 
-                    <vn.gomicorp.seller.widgets.PrefixEditText
+                    <vn.gomisellers.apps.widgets.PrefixEditText
                         android:id="@+id/input_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

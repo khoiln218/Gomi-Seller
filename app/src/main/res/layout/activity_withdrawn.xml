@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.home.withdrawn.WithdrawnViewModel" />
+            type="vn.gomisellers.apps.main.home.withdrawn.WithdrawnViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

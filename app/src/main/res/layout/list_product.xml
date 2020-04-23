@@ -6,15 +6,15 @@
 
         <variable
             name="collection"
-            type="vn.gomicorp.seller.data.source.model.data.Collection" />
+            type="vn.gomisellers.apps.data.source.model.data.Collection" />
 
         <variable
             name="collectionHandler"
-            type="vn.gomicorp.seller.event.CollectionHandler" />
+            type="vn.gomisellers.apps.event.CollectionHandler" />
 
         <variable
             name="adapter"
-            type="vn.gomicorp.seller.adapter.ProductItemAdapter" />
+            type="vn.gomisellers.apps.adapter.ProductItemAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView

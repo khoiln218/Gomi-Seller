@@ -6,11 +6,11 @@
 
         <variable
             name="product"
-            type="vn.gomicorp.seller.data.source.model.data.Product" />
+            type="vn.gomisellers.apps.data.source.model.data.Product" />
 
         <variable
             name="listener"
-            type="vn.gomicorp.seller.event.OnSelectedListener" />
+            type="vn.gomisellers.apps.event.OnSelectedListener" />
     </data>
 
     <LinearLayout

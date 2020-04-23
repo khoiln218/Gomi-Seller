@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "439705524264",
-    "firebase_url": "https://eapps-7c1d7.firebaseio.com",
-    "project_id": "eapps-7c1d7",
-    "storage_bucket": "eapps-7c1d7.appspot.com"
+    "project_number": "642322610380",
+    "firebase_url": "https://gomiseller.firebaseio.com",
+    "project_id": "gomiseller",
+    "storage_bucket": "gomiseller.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:439705524264:android:d55875282bbb4af24b3d1d",
+        "mobilesdk_app_id": "1:642322610380:android:f412d470a663a454196a69",
         "android_client_info": {
-          "package_name": "vn.gomicorp.seller"
+          "package_name": "vn.gomisellers.apps"
         }
       },
       "oauth_client": [
         {
-          "client_id": "439705524264-lbb98q88eg966vvp5tmue3qj2etfutpm.apps.googleusercontent.com",
+          "client_id": "642322610380-fabur7p8bsj9rhc61dcpmck6mm46qbps.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFY_hsluUh09bmEuxLU_T8lOwMXxk-Dj8"
+          "current_key": "AIzaSyDCm1UMSDwH5eWHbQQq715FSGemPSiE0XU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "439705524264-lbb98q88eg966vvp5tmue3qj2etfutpm.apps.googleusercontent.com",
+              "client_id": "642322610380-fabur7p8bsj9rhc61dcpmck6mm46qbps.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

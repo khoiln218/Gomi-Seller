@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.home.HomeViewModel" />
+            type="vn.gomisellers.apps.main.home.HomeViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

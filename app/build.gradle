@@ -6,11 +6,11 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "vn.gomicorp.seller"
+        applicationId "vn.gomisellers.apps"
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -6,7 +6,7 @@
 
         <variable
             name="adapter"
-            type="vn.gomicorp.seller.adapter.CategoryItemAdapter" />
+            type="vn.gomisellers.apps.adapter.CategoryItemAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView

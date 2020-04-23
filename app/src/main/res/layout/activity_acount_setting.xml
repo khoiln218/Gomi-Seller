@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.mypage.setting.AccountSettingViewModel" />
+            type="vn.gomisellers.apps.main.mypage.setting.AccountSettingViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

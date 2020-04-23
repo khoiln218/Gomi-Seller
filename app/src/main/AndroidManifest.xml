@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="vn.gomicorp.seller">
+    package="vn.gomisellers.apps">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".EappsApplication"
+        android:name="vn.gomisellers.apps.EappsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,43 +21,43 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".main.mypage.setting.AccountSettingActivity"
+            android:name="vn.gomisellers.apps.main.mypage.setting.AccountSettingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
-            android:name=".main.mypage.info.AccountInformationActivity"
+            android:name="vn.gomisellers.apps.main.mypage.info.AccountInformationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.home.withdrawn.bank.BankListActivity"
+            android:name="vn.gomisellers.apps.main.home.withdrawn.bank.BankListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.home.withdrawn.bank.BankAccountInformationActivity"
+            android:name="vn.gomisellers.apps.main.home.withdrawn.bank.BankAccountInformationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.home.withdrawn.coupon.CouponActivity"
+            android:name="vn.gomisellers.apps.main.home.withdrawn.coupon.CouponActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.home.withdrawn.WithdrawnActivity"
+            android:name="vn.gomisellers.apps.main.home.withdrawn.WithdrawnActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.market.detail.ProductDetailActivity"
+            android:name="vn.gomisellers.apps.main.market.detail.ProductDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.market.collection.cate.CategoryActivity"
+            android:name="vn.gomisellers.apps.main.market.collection.cate.CategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.market.collection.subcate.SubCategoryActivity"
+            android:name="vn.gomisellers.apps.main.market.collection.subcate.SubCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.market.collection.CollectionActivity"
+            android:name="vn.gomisellers.apps.main.market.collection.CollectionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
@@ -65,7 +65,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".main.MainActivity"
+            android:name="vn.gomisellers.apps.main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,27 +74,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".shopinfo.ShopInformationActivity"
+            android:name="vn.gomisellers.apps.shopinfo.ShopInformationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".authen.forget.reset.ResetPasswordActivity"
+            android:name="vn.gomisellers.apps.authen.forget.reset.ResetPasswordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".authen.forget.ForgetPasswordActivity"
+            android:name="vn.gomisellers.apps.authen.forget.ForgetPasswordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".authen.signin.SignInActivity"
+            android:name="vn.gomisellers.apps.authen.signin.SignInActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".authen.signup.SignUpActivity"
+            android:name="vn.gomisellers.apps.authen.signup.SignUpActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".SplashActivity"
+            android:name="vn.gomisellers.apps.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

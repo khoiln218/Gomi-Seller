@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.home.withdrawn.bank.BankAccountInformationViewModel" />
+            type="vn.gomisellers.apps.main.home.withdrawn.bank.BankAccountInformationViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.main.market.MarketViewModel" />
+            type="vn.gomisellers.apps.main.market.MarketViewModel" />
     </data>
 
     <RelativeLayout

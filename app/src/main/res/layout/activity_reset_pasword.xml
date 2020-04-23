@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.authen.forget.reset.ResetPasswordViewModel" />
+            type="vn.gomisellers.apps.authen.forget.reset.ResetPasswordViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,12 +6,12 @@
 
         <variable
             name="collection"
-            type="vn.gomicorp.seller.data.source.model.data.Collection" />
+            type="vn.gomisellers.apps.data.source.model.data.Collection" />
 
-        <import type="vn.gomicorp.seller.utils.Utils" />
+        <import type="vn.gomisellers.apps.utils.Utils" />
     </data>
 
-    <vn.gomicorp.seller.widgets.slider.SliderLayout
+    <vn.gomisellers.apps.widgets.slider.SliderLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:setBannerSlider="@{collection}"

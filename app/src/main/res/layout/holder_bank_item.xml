@@ -5,7 +5,7 @@
 
         <variable
             name="bank"
-            type="vn.gomicorp.seller.data.source.model.data.Bank" />
+            type="vn.gomisellers.apps.data.source.model.data.Bank" />
     </data>
 
     <LinearLayout

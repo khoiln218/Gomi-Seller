@@ -8,7 +8,7 @@
 
         <variable
             name="location"
-            type="vn.gomicorp.seller.data.source.model.data.Location" />
+            type="vn.gomisellers.apps.data.source.model.data.Location" />
     </data>
 
     <LinearLayout

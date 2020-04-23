@@ -8,11 +8,11 @@
 
         <import type="android.text.TextUtils" />
 
-        <import type="vn.gomicorp.seller.utils.GomiConstants" />
+        <import type="vn.gomisellers.apps.utils.GomiConstants" />
 
         <variable
             name="viewModel"
-            type="vn.gomicorp.seller.shopinfo.ShopInformationViewModel" />
+            type="vn.gomisellers.apps.shopinfo.ShopInformationViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -192,7 +192,7 @@
                                 app:setError="@{viewModel.errorUrl}"
                                 app:setErrorEnabled="@{viewModel.enableErrorUrl}">
 
-                                <vn.gomicorp.seller.widgets.PrefixEditText
+                                <vn.gomisellers.apps.widgets.PrefixEditText
                                     android:id="@+id/input_shop_url"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
