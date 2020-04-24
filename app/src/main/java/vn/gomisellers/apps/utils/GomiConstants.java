@@ -2,7 +2,6 @@ package vn.gomisellers.apps.utils;
 
 public interface GomiConstants {
     boolean TEST = false;
-    String VERSION = "1.0.0";
 
     String SIMPLE_DATE_FORMAT = "yyyy.MM.dd";
     String INFO_DATE_FORMAT = "dd/MM/yyyy";

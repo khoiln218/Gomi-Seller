@@ -1,5 +1,8 @@
 package vn.gomisellers.apps.main.mypage.setting;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 import androidx.lifecycle.MutableLiveData;
 
 import vn.gomisellers.apps.BaseViewModel;
@@ -13,7 +16,6 @@ import vn.gomisellers.apps.data.source.model.api.SignOutRequest;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.MultableLiveEvent;
-import vn.gomisellers.apps.utils.GomiConstants;
 
 /**
  * Created by KHOI LE on 4/20/2020.
@@ -31,7 +33,17 @@ public class AccountSettingViewModel extends BaseViewModel {
         mAccountRepository = AccountRepository.getInstance();
         mAppPreferences = EappsApplication.getPreferences();
         cmd = new MultableLiveEvent<>();
-        version.setValue(GomiConstants.VERSION);
+        version.setValue(getVersionName());
+    }
+
+    private String getVersionName() {
+        try {
+            PackageInfo pInfo = EappsApplication.getInstance().getPackageManager().getPackageInfo(EappsApplication.getInstance().getPackageName(), 0);
+            return pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "1.0.0";
+        }
     }
 
     public void signOut() {
