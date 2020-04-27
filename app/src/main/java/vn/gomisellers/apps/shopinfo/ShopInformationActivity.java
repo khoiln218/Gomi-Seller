@@ -204,7 +204,7 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
         if (!dialogShowing) {
             dialogShowing = true;
 
-            AlertDialogs.show(this, String.format(getString(R.string.title_need_camera_permission), getString(R.string.app_name)), getString(R.string.msg_need_camera_permission), getString(R.string.btn_cancel), getString(R.string.btn_setting), new AlertDialogs.OnClickListener() {
+            AlertDialogs.show(this, String.format(getString(R.string.title_need_camera_permission), getString(R.string.app_name)), String.format(getString(R.string.msg_need_camera_permission), getString(R.string.app_name)), getString(R.string.btn_cancel), getString(R.string.btn_setting), new AlertDialogs.OnClickListener() {
                 @Override
                 public void onNegativeButtonClick(DialogInterface dialog, int which) {
                     dialogShowing = false;
