@@ -71,6 +71,10 @@ public class MyPageViewModel extends BaseViewModel {
         cmd.call(new MyPageEvent(MyPageEvent.SETTING));
     }
 
+    public void updateShop() {
+        cmd.call(new MyPageEvent(MyPageEvent.UPDATE_SHOP));
+    }
+
     void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {

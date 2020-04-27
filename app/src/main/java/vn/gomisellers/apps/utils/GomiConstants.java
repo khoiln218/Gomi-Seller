@@ -16,6 +16,7 @@ public interface GomiConstants {
     int REQUEST_FORGET_PASSWORD = 106;
     int REQUEST_RESET_PASSWORD = 107;
     int REQUEST_ACCOUNT_SIGN_OUT = 108;
+    int REQUEST_SHOP_UPDATE = 109;
 
     //REQUEST CODE
     int RC_SELLER_BANK = 201;
@@ -26,4 +27,5 @@ public interface GomiConstants {
     String EXTRA_TYPE = "EXTRA_TYPE";
     String EXTRA_ID = "EXTRA_ID";
     String EXTRA_TITLE = "EXTRA_TITLE";
+    String EXTRA_UPDATE = "EXTRA_UPDATE";
 }

@@ -7,17 +7,14 @@ import vn.gomisellers.apps.event.BaseEvent;
  */
 class ShopInfoEvent<T> extends BaseEvent<T> {
     static final int CREATE_SUCCESS = 0;
-    static final int CREATE_ERROR = 1;
-    static final int VERIFY_ERROR = 2;
-    static final int VERIFY_SUCCESS = 3;
-    static final int START_CROPPER = 4;
-    static final int REQUEST_PERMISSION = 5;
+    static final int UPDATE_SUCCESS = 1;
+    static final int START_CROPPER = 2;
+    static final int REQUEST_PERMISSION = 3;
+    static final int SHOW_COUNTRY_DIALOG = 4;
+    static final int SHOW_PROVINCE_DIALOG = 5;
+    static final int SHOW_DISTRICT_DIALOG = 6;
 
     ShopInfoEvent(int code) {
         super(code);
-    }
-
-    ShopInfoEvent(int code, String msg) {
-        super(code, msg);
     }
 }

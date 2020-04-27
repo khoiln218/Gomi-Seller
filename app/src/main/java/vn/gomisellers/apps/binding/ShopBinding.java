@@ -49,8 +49,22 @@ public class ShopBinding {
         params.height = (int) (Utils.getScreenWidth() * (3 / 4f));
     }
 
+    @BindingAdapter("setCoverShop")
+    public static void setCoverShop(ImageView imageView, String imageUrl) {
+        Glide.with(imageView)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.img_home_banner)
+                        .override(Utils.getScreenWidth())
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true))
+                .into(imageView);
+    }
+
     @BindingAdapter("setImageView")
     public static void loadImage(ImageView imageView, Uri imageUrl) {
+        if (imageUrl == null) return;
         Glide.with(imageView)
                 .load(imageUrl)
                 .apply(new RequestOptions()

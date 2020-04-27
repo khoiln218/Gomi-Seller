@@ -5,29 +5,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
-import vn.gomisellers.apps.adapter.LocationAdapter;
 import vn.gomisellers.apps.data.LocationRepository;
 import vn.gomisellers.apps.data.ResultListener;
 import vn.gomisellers.apps.data.ShopRepository;
 import vn.gomisellers.apps.data.source.local.prefs.AppPreferences;
 import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
+import vn.gomisellers.apps.data.source.model.api.ShopRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.data.source.model.data.Shop;
+import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.MediaHelper;
@@ -36,95 +35,128 @@ import vn.gomisellers.apps.utils.MediaHelper;
  * Created by KHOI LE on 3/19/2020.
  */
 public class ShopInformationViewModel extends BaseViewModel {
-    private static final int CODE_OK = 200;
     private static final int NONE_SELECT = -1;
 
-    private ShopRepository mShopRepository = ShopRepository.getInstance();
-    private LocationRepository mLocationRepository = LocationRepository.getInstance();
-    private AppPreferences mAppPreferences = EappsApplication.getPreferences();
+    private ShopRepository mShopRepository;
+    private LocationRepository mLocationRepository;
+    private AppPreferences mAppPreferences;
 
-    public MutableLiveData<String> sellerUrl = new MutableLiveData<>();
-    public MutableLiveData<String> fullSellerUrl = new MutableLiveData<>();
-    public MutableLiveData<Boolean> checkOkIsShow = new MutableLiveData<>();
-    public MutableLiveData<String> shopName = new MutableLiveData<>();
-    public MutableLiveData<String> description = new MutableLiveData<>();
-    public MutableLiveData<String> countDesc = new MutableLiveData<>();
+    public MutableLiveData<Uri> coverUri;
+    public MutableLiveData<String> shopName;
+    public MutableLiveData<String> sellerUrl;
+    public MutableLiveData<String> description;
+    public MutableLiveData<String> countryName;
+    public MutableLiveData<String> provinceName;
+    public MutableLiveData<String> districtName;
 
-    public MutableLiveData<Boolean> enableBtnSubmit = new MutableLiveData<>();
-    public MutableLiveData<Boolean> requestFocusUrl = new MutableLiveData<>();
-    public MutableLiveData<Boolean> requestFocusDes = new MutableLiveData<>();
-    public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
-    public MutableLiveData<Boolean> enableErrorUrl = new MutableLiveData<>();
-    public MutableLiveData<Boolean> enableErrorShopName = new MutableLiveData<>();
-    public MutableLiveData<String> errorUrl = new MutableLiveData<>();
-    public MutableLiveData<String> errorShopName = new MutableLiveData<>();
+    public MutableLiveData<String> coverUrl;
+    public MutableLiveData<String> fullSellerUrl;
+    public MutableLiveData<String> countDesc;
 
-    public MutableLiveData<Uri> coverUrl = new MutableLiveData<>();
+    public MutableLiveData<Boolean> enableBtnSubmit;
+    public MutableLiveData<Boolean> verifyIsShow;
+    public MutableLiveData<Boolean> checkOkIsShow;
+    public MutableLiveData<String> errorShopName;
+    public MutableLiveData<Boolean> enableErrorShopName;
+    public MutableLiveData<String> errorUrl;
+    public MutableLiveData<Boolean> enableErrorUrl;
+    public MutableLiveData<Boolean> requestFocusUrl;
+    public MutableLiveData<Boolean> requestFocusDes;
+    public MutableLiveData<Boolean> isUpdateInfo;
 
-    public MutableLiveData<LocationAdapter> countryAdapterMutableLiveData = new MutableLiveData<>();
-    public MutableLiveData<LocationAdapter> provinceAdapterMutableLiveData = new MutableLiveData<>();
-    public MutableLiveData<LocationAdapter> districtAdapterMutableLiveData = new MutableLiveData<>();
-
-    private MultableLiveEvent<ShopInfoEvent> cmd = new MultableLiveEvent<>();
+    private MultableLiveEvent<ShopInfoEvent> cmd;
 
     private List<Location> countries;
     private List<Location> provinces;
     private List<Location> districts;
-    private LocationAdapter countryAdapter;
-    private LocationAdapter provinceAdapter;
-    private LocationAdapter districtAdapter;
-
+    private Shop mShop;
     private Uri imageUri;
     private int selectCountry;
     private int selectProvince;
     private int selectDistrict;
+    private boolean isUpdate;
 
     public ShopInformationViewModel() {
+        mShopRepository = ShopRepository.getInstance();
+        mLocationRepository = LocationRepository.getInstance();
+        mAppPreferences = EappsApplication.getPreferences();
+
+        coverUri = new MutableLiveData<>();
+        shopName = new MutableLiveData<>();
+        sellerUrl = new MutableLiveData<>();
+        description = new MutableLiveData<>();
+        countryName = new MutableLiveData<>();
+        districtName = new MutableLiveData<>();
+        provinceName = new MutableLiveData<>();
+
+        coverUrl = new MutableLiveData<>();
+        countDesc = new MutableLiveData<>();
+        fullSellerUrl = new MutableLiveData<>();
+
+        enableBtnSubmit = new MutableLiveData<>();
+        checkOkIsShow = new MutableLiveData<>();
+        verifyIsShow = new MutableLiveData<>();
+        errorShopName = new MutableLiveData<>();
+        enableErrorShopName = new MutableLiveData<>();
+        errorUrl = new MutableLiveData<>();
+        enableErrorUrl = new MutableLiveData<>();
+        requestFocusUrl = new MutableLiveData<>();
+        requestFocusDes = new MutableLiveData<>();
+        isUpdateInfo = new MutableLiveData<>();
+
+        cmd = new MultableLiveEvent<>();
+
         showVerifyBtn();
-        countries = new ArrayList<>();
-        countryAdapter = new LocationAdapter(countries);
-        countryAdapterMutableLiveData.setValue(countryAdapter);
-        provinces = new ArrayList<>();
-        provinceAdapter = new LocationAdapter(provinces);
-        provinceAdapterMutableLiveData.setValue(provinceAdapter);
-        districts = new ArrayList<>();
-        districtAdapter = new LocationAdapter(districts);
-        districtAdapterMutableLiveData.setValue(districtAdapter);
         getFullSellerUrl();
         countDesc.setValue(String.format("%s/%s", 0, GomiConstants.MAX_CHAR));
+        selectCountry = NONE_SELECT;
+        selectProvince = NONE_SELECT;
+        selectDistrict = NONE_SELECT;
     }
 
     public void verifyUrl() {
         submitUrlForm();
     }
 
-    public void createShop() {
-        submitCreateShop();
+    public void submit() {
+        if (isUpdate) {
+            submitUpdateShop();
+        } else {
+            submitCreateShop();
+        }
+    }
+
+    private void submitUpdateShop() {
+        if (sellerUrlEror())
+            return;
+        if (LengthDesOver())
+            return;
+        requestUpdateShop();
     }
 
     private void submitCreateShop() {
-        if (!validateSellerUrl())
+        if (sellerUrlEror())
             return;
-        if (!checkLengthDes())
+        if (LengthDesOver())
             return;
         requestCreateShop();
     }
 
-    private boolean checkLengthDes() {
+    private boolean LengthDesOver() {
         if (description.getValue() != null && description.getValue().length() > GomiConstants.MAX_CHAR) {
             requestFocusDes.setValue(true);
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
-    private boolean validateSellerUrl() {
+    private boolean sellerUrlEror() {
         String url = fullSellerUrl.getValue();
         if (!TextUtils.isEmpty(url) && !Patterns.WEB_URL.matcher(url).matches()) {
             urlError();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void requestCreateShop() {
@@ -143,19 +175,27 @@ public class ShopInformationViewModel extends BaseViewModel {
             @Override
             public void onLoaded(ResponseData<Shop> result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     createSuccess(result.getResult());
                 } else {
-                    createShopError(result.getMessage());
+                    showToast(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                createShopError(error);
+                showToast(error);
             }
         });
+    }
+
+    private void requestUpdateShop() {
+        updateSuccess();
+    }
+
+    private void updateSuccess() {
+        cmd.call(new ShopInfoEvent(ShopInfoEvent.UPDATE_SUCCESS));
     }
 
     private void getFullSellerUrl() {
@@ -172,10 +212,6 @@ public class ShopInformationViewModel extends BaseViewModel {
 
     private void saveShopInfo(Shop shop) {
         mAppPreferences.setShop(shop);
-    }
-
-    private void createShopError(String error) {
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.CREATE_ERROR, error));
     }
 
     private void createSuccess(Shop shop) {
@@ -206,106 +242,39 @@ public class ShopInformationViewModel extends BaseViewModel {
         checkOkIsShow.setValue(true);
     }
 
-    void requestLocationCountryId() {
+    void requestShopInformation() {
         showProgressing();
-        clearCountry();
-        mLocationRepository.getLocationCountry(new ResultListener<ResponseData<List<Location>>>() {
+        ShopRequest request = new ShopRequest();
+        mShopRepository.findbyid(request, new ResultListener<ResponseData<Shop>>() {
             @Override
-            public void onLoaded(ResponseData<List<Location>> result) {
-                if (result.getCode() == CODE_OK) {
-                    int id = result.getResult().get(0).getId();
-                    countries.addAll(result.getResult());
-                    updateCountry();
-                    requestLocationProvinceId(id);
+            public void onLoaded(ResponseData<Shop> result) {
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    mShop = result.getResult();
+                    saveShopInfo(mShop);
+                    updateShopInformation();
+                    requestLocationCountryId();
                 } else {
                     loaded();
-                    clearCountry();
+                    showToast(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                clearCountry();
+                checkConnection(error);
             }
         });
     }
 
-    private void clearCountry() {
-        clearProvince();
-        selectCountry = NONE_SELECT;
-        countries.clear();
-        updateCountry();
-    }
-
-    private void updateCountry() {
-        countryAdapter.setData(countries);
-    }
-
-    private void requestLocationProvinceId(int countryId) {
-        clearProvince();
-        mLocationRepository.getLocationProvince(countryId, new ResultListener<ResponseData<List<Location>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Location>> result) {
-                if (result.getCode() == CODE_OK) {
-                    int id = result.getResult().get(0).getId();
-                    provinces.addAll(result.getResult());
-                    updateProvince();
-                    requestLocationDistrictId(id);
-                } else {
-                    loaded();
-                    clearProvince();
-                }
-            }
-
-            @Override
-            public void onDataNotAvailable(String error) {
-                loaded();
-                clearProvince();
-            }
-        });
-    }
-
-    private void clearProvince() {
-        clearDistrict();
-        selectProvince = NONE_SELECT;
-        provinces.clear();
-        updateProvince();
-    }
-
-    private void updateProvince() {
-        provinceAdapter.setData(provinces);
-    }
-
-    private void requestLocationDistrictId(int provinceId) {
-        clearDistrict();
-        mLocationRepository.getLocationDistrict(provinceId, new ResultListener<ResponseData<List<Location>>>() {
-            @Override
-            public void onLoaded(ResponseData<List<Location>> result) {
-                loaded();
-                if (result.getCode() == CODE_OK) {
-                    districts.addAll(result.getResult());
-                    updateDistrict();
-                } else
-                    clearDistrict();
-            }
-
-            @Override
-            public void onDataNotAvailable(String error) {
-                loaded();
-                clearDistrict();
-            }
-        });
-    }
-
-    private void clearDistrict() {
-        selectDistrict = NONE_SELECT;
-        districts.clear();
-        updateDistrict();
-    }
-
-    private void updateDistrict() {
-        districtAdapter.setData(districts);
+    private void updateShopInformation() {
+        coverUrl.setValue(mShop.getCover());
+        shopName.setValue(mShop.getShopName());
+        sellerUrl.setValue(mShop.getWebAddress());
+        description.setValue(mShop.getDescription());
+        countryName.setValue(mShop.getCountryName());
+        provinceName.setValue(mShop.getProvinceName());
+        districtName.setValue(mShop.getDistrictName());
     }
 
     void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -345,7 +314,7 @@ public class ShopInformationViewModel extends BaseViewModel {
 
     void setCover(Uri coverUrl) {
         imageUri = coverUrl;
-        this.coverUrl.setValue(imageUri);
+        this.coverUri.setValue(imageUri);
     }
 
     private void cropImage(Uri uri) {
@@ -362,11 +331,11 @@ public class ShopInformationViewModel extends BaseViewModel {
             @Override
             public void onLoaded(ResponseData result) {
                 loaded();
-                if (result.getCode() == CODE_OK) {
+                if (result.getCode() == ResultCode.CODE_OK) {
                     showCheckOk();
                 } else {
                     urlError();
-                    verifyError(result.getMessage());
+                    showToast(result.getMessage());
                 }
             }
 
@@ -374,13 +343,9 @@ public class ShopInformationViewModel extends BaseViewModel {
             public void onDataNotAvailable(String error) {
                 loaded();
                 urlError();
-                verifyError(error);
+                showToast(error);
             }
         });
-    }
-
-    private void verifyError(String error) {
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.VERIFY_ERROR, error));
     }
 
     public void afterUrlChanged() {
@@ -417,51 +382,179 @@ public class ShopInformationViewModel extends BaseViewModel {
         return !TextUtils.isEmpty(shopName.getValue());
     }
 
-    public void selectCountry(int position) {
-        if (countries.size() == 0) return;
-        selectCountry = position;
-        requestLocationProvinceId(countries.get(selectCountry).getId());
-        afterTextChanged();
+    void setUpdate(boolean update) {
+        isUpdate = update;
+        isUpdateInfo.setValue(isUpdate);
     }
 
+    void requestLocationCountryId() {
+        showProgressing();
+        clearCountry();
+        mLocationRepository.getLocationCountry(new ResultListener<ResponseData<List<Location>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Location>> result) {
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    countries = result.getResult();
+                    if (selectCountry == NONE_SELECT && isUpdate) {
+                        selectCountry = getPositionById(countries, mShop.getCountryId());
+                    } else {
+                        selectCountry = 0;
+                    }
+                    updateCountry();
+                    requestLocationProvinceId(countries.get(selectCountry).getId());
+                } else {
+                    loaded();
+                    clearCountry();
+                }
+            }
 
-    public boolean onTouchCountry(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (countries.size() == 0)
-                requestLocationCountryId();
+            @Override
+            public void onDataNotAvailable(String error) {
+                loaded();
+                clearCountry();
+            }
+        });
+    }
+
+    private void clearCountry() {
+        clearProvince();
+        countries = null;
+        countryName.setValue("");
+    }
+
+    private void updateCountry() {
+        countryName.setValue(countries.get(selectCountry).getName());
+    }
+
+    private void requestLocationProvinceId(int countryId) {
+        showProgressing();
+        clearProvince();
+        mLocationRepository.getLocationProvince(countryId, new ResultListener<ResponseData<List<Location>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Location>> result) {
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    provinces = result.getResult();
+                    if (selectProvince == NONE_SELECT && isUpdate) {
+                        selectProvince = getPositionById(provinces, mShop.getProvinceId());
+                    } else {
+                        selectProvince = 0;
+                    }
+                    updateProvince();
+                    requestLocationDistrictId(provinces.get(selectProvince).getId());
+                } else {
+                    loaded();
+                    clearProvince();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                loaded();
+                clearProvince();
+            }
+        });
+    }
+
+    private void clearProvince() {
+        clearDistrict();
+        provinces = null;
+        provinceName.setValue("");
+    }
+
+    private void updateProvince() {
+        provinceName.setValue(provinces.get(selectProvince).getName());
+    }
+
+    private void requestLocationDistrictId(int provinceId) {
+        showProgressing();
+        clearDistrict();
+        mLocationRepository.getLocationDistrict(provinceId, new ResultListener<ResponseData<List<Location>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Location>> result) {
+                loaded();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    districts = result.getResult();
+                    if (selectDistrict == NONE_SELECT && isUpdate) {
+                        selectDistrict = getPositionById(districts, mShop.getDistrictId());
+                    } else {
+                        selectDistrict = 0;
+                    }
+                    updateDistrict();
+                } else {
+                    clearDistrict();
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                loaded();
+                clearDistrict();
+            }
+        });
+    }
+
+    private void clearDistrict() {
+        districts = null;
+        districtName.setValue("");
+    }
+
+    private void updateDistrict() {
+        districtName.setValue(districts.get(selectDistrict).getName());
+    }
+
+    private int getPositionById(List<Location> locations, int countryId) {
+        for (int i = 0; i < locations.size(); i++) {
+            if (countryId == locations.get(i).getId()) {
+                return i;
+            }
         }
-        return false;
+        return 0;
     }
 
-
-    public void selectProvince(int position) {
-        if (provinces.size() == 0) return;
-        selectProvince = position;
-        requestLocationDistrictId(provinces.get(selectProvince).getId());
-        afterTextChanged();
+    public void showCountryDialog() {
+        if (countries == null || countries.size() == 0) return;
+        ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_COUNTRY_DIALOG);
+        event.setData(new LocationList(countries, selectCountry));
+        cmd.call(event);
     }
 
+    public void showProvinceDialog() {
+        if (provinces == null || provinces.size() == 0) return;
+        ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_PROVINCE_DIALOG);
+        event.setData(new LocationList(provinces, selectProvince));
+        cmd.call(event);
+    }
 
-    public boolean onTouchProvince(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (provinces.size() == 0 && selectCountry != NONE_SELECT)
-                requestLocationProvinceId(countries.get(selectCountry).getId());
+    public void showDistrictDialog() {
+        if (districts == null || districts.size() == 0) return;
+        ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_DISTRICT_DIALOG);
+        event.setData(new LocationList(districts, selectDistrict));
+        cmd.call(event);
+    }
+
+    void selectCountry(int position) {
+        if (position != selectCountry) {
+            selectCountry = position;
+            requestLocationProvinceId(countries.get(selectCountry).getId());
+            updateCountry();
+            afterTextChanged();
         }
-        return false;
     }
 
-
-    public void selectDistrict(int position) {
-        if (districts.size() == 0) return;
-        selectDistrict = position;
-        afterTextChanged();
-    }
-
-    public boolean onTouchDistrict(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (districts.size() == 0 && selectProvince != NONE_SELECT)
-                requestLocationDistrictId(provinces.get(selectProvince).getId());
+    void selectProvince(int position) {
+        if (position != selectProvince) {
+            selectProvince = position;
+            requestLocationDistrictId(provinces.get(selectProvince).getId());
+            updateProvince();
+            afterTextChanged();
         }
-        return false;
+    }
+
+    void selectDistrict(int position) {
+        if (position != selectDistrict) {
+            selectDistrict = position;
+            updateDistrict();
+            afterTextChanged();
+        }
     }
 }

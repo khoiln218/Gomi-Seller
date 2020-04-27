@@ -10,76 +10,70 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: wangjie
- * Email: tiantian.china.2@gmail.com
- * Date: 7/1/14.
- */
-public class WheelView extends ScrollView {
-    public static final String TAG = WheelView.class.getSimpleName();
+import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.data.source.model.data.Location;
 
-    public static class OnWheelViewListener {
-        public void onSelected(int selectedIndex, String item) {
-        }
+public class CountryView extends ScrollView {
+    public static final String TAG = CountryView.class.getSimpleName();
+
+    public interface OnWheelViewListener {
+        void onSelected(int selectedIndex, Location item);
     }
 
-
     private Context context;
-//    private ScrollView scrollView;
-
     private LinearLayout views;
 
-    public WheelView(Context context) {
+    public CountryView(Context context) {
         super(context);
         init(context);
     }
 
-    public WheelView(Context context, AttributeSet attrs) {
+    public CountryView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public WheelView(Context context, AttributeSet attrs, int defStyle) {
+    public CountryView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    //    String[] items;
-    List<String> items;
+    List<Location> items;
 
-    private List<String> getItems() {
+    private List<Location> getItems() {
         return items;
     }
 
-    public void setItems(List<String> list) {
+    public void setItems(List<Location> list) {
         if (null == items) {
-            items = new ArrayList<String>();
+            items = new ArrayList<Location>();
         }
         items.clear();
         items.addAll(list);
 
         // 前面和后面补全
         for (int i = 0; i < offset; i++) {
-            items.add(0, "");
-            items.add("");
+            items.add(0, null);
+            items.add(null);
         }
 
         initData();
-
     }
-
 
     public static final int OFF_SET_DEFAULT = 1;
     int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
@@ -93,17 +87,11 @@ public class WheelView extends ScrollView {
     }
 
     int displayItemCount; // 每页显示的数量
-
     int selectedIndex = 1;
-
+    int itemHeight;
 
     private void init(Context context) {
         this.context = context;
-
-//        scrollView = ((ScrollView)this.getParent());
-//        Log.d(TAG, "scrollview: " + scrollView);
-        Log.d(TAG, "parent: " + this.getParent());
-//        this.setOrientation(VERTICAL);
         this.setVerticalScrollBarEnabled(false);
 
         views = new LinearLayout(context);
@@ -111,52 +99,42 @@ public class WheelView extends ScrollView {
         this.addView(views);
 
         scrollerTask = new Runnable() {
-
             public void run() {
-
                 int newY = getScrollY();
                 if (initialY - newY == 0) { // stopped
                     final int remainder = initialY % itemHeight;
                     final int divided = initialY / itemHeight;
-//                    Log.d(TAG, "initialY: " + initialY);
-//                    Log.d(TAG, "remainder: " + remainder + ", divided: " + divided);
                     if (remainder == 0) {
                         selectedIndex = divided + offset;
 
                         onSeletedCallBack();
                     } else {
                         if (remainder > itemHeight / 2) {
-                            WheelView.this.post(new Runnable() {
+                            CountryView.this.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    WheelView.this.smoothScrollTo(0, initialY - remainder + itemHeight);
+                                    CountryView.this.smoothScrollTo(0, initialY - remainder + itemHeight);
                                     selectedIndex = divided + offset + 1;
                                     onSeletedCallBack();
                                 }
                             });
                         } else {
-                            WheelView.this.post(new Runnable() {
+                            CountryView.this.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    WheelView.this.smoothScrollTo(0, initialY - remainder);
+                                    CountryView.this.smoothScrollTo(0, initialY - remainder);
                                     selectedIndex = divided + offset;
                                     onSeletedCallBack();
                                 }
                             });
                         }
-
-
                     }
-
-
                 } else {
                     initialY = getScrollY();
-                    WheelView.this.postDelayed(scrollerTask, newCheck);
+                    CountryView.this.postDelayed(scrollerTask, newCheck);
                 }
             }
         };
-
-
     }
 
     int initialY;
@@ -173,68 +151,45 @@ public class WheelView extends ScrollView {
     private void initData() {
         displayItemCount = offset * 2 + 1;
 
-        for (String item : items) {
+        for (Location item : items) {
             views.addView(createView(item));
         }
 
         refreshItemView(0);
     }
 
-    int itemHeight = 0;
+    private View createView(Location item) {
+        View view = LayoutInflater.from(context).inflate(R.layout.location_item, null);
+        TextView textView = view.findViewById(R.id.textView);
 
-    private TextView createView(String item) {
-        TextView tv = new TextView(context);
-        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        tv.setSingleLine(true);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        tv.setText(item);
-        tv.setGravity(Gravity.CENTER);
-        int padding = dip2px(15);
-        tv.setPadding(padding, padding, padding, padding);
+        if (item != null) {
+            textView.setText(item.getName());
+            ImageView imageView = view.findViewById(R.id.imageView);
+
+            Glide.with(context)
+                    .load(item.getFlag())
+                    .error(R.drawable.ic_launcher_foreground)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(imageView);
+        } else {
+            textView.setText("");
+        }
+
         if (0 == itemHeight) {
-            itemHeight = getViewMeasuredHeight(tv);
-            Log.d(TAG, "itemHeight: " + itemHeight);
+            itemHeight = getViewMeasuredHeight(view);
             views.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight * displayItemCount));
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) this.getLayoutParams();
             this.setLayoutParams(new LinearLayout.LayoutParams(lp.width, itemHeight * displayItemCount));
         }
-        return tv;
-    }
 
+        return view;
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-
-//        Log.d(TAG, "l: " + l + ", t: " + t + ", oldl: " + oldl + ", oldt: " + oldt);
-
-//        try {
-//            Field field = ScrollView.class.getDeclaredField("mScroller");
-//            field.setAccessible(true);
-//            OverScroller mScroller = (OverScroller) field.get(this);
-//
-//
-//            if(mScroller.isFinished()){
-//                Log.d(TAG, "isFinished...");
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
         refreshItemView(t);
-
-        if (t > oldt) {
-//            Log.d(TAG, "向下滚动");
-            scrollDirection = SCROLL_DIRECTION_DOWN;
-        } else {
-//            Log.d(TAG, "向上滚动");
-            scrollDirection = SCROLL_DIRECTION_UP;
-
-        }
-
-
     }
 
     private void refreshItemView(int y) {
@@ -248,36 +203,11 @@ public class WheelView extends ScrollView {
             if (remainder > itemHeight / 2) {
                 position = divided + offset + 1;
             }
-
-//            if(remainder > itemHeight / 2){
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, ">down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, ">up...position: " + position);
-//                }
-//            }else{
-////                position = y / itemHeight + offset;
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, "<down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, "<up...position: " + position);
-//                }
-//            }
-//        }
-
-//        if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//            position = divided + offset;
-//        }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//            position = divided + offset + 1;
         }
 
         int childSize = views.getChildCount();
         for (int i = 0; i < childSize; i++) {
-            TextView itemView = (TextView) views.getChildAt(i);
+            TextView itemView = (TextView) views.getChildAt(i).findViewById(R.id.textView);
             if (null == itemView) {
                 return;
             }
@@ -303,8 +233,6 @@ public class WheelView extends ScrollView {
         return selectedAreaBorder;
     }
 
-
-    private int scrollDirection = -1;
     private static final int SCROLL_DIRECTION_UP = 0;
     private static final int SCROLL_DIRECTION_DOWN = 1;
 
@@ -316,7 +244,6 @@ public class WheelView extends ScrollView {
 
         if (viewWidth == 0) {
             viewWidth = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
-            Log.d(TAG, "viewWidth: " + viewWidth);
         }
 
         if (null == paint) {
@@ -377,13 +304,13 @@ public class WheelView extends ScrollView {
         this.post(new Runnable() {
             @Override
             public void run() {
-                WheelView.this.smoothScrollTo(0, p * itemHeight);
+                CountryView.this.smoothScrollTo(0, p * itemHeight);
             }
         });
 
     }
 
-    public String getSeletedItem() {
+    public Location getSeletedItem() {
         return items.get(selectedIndex);
     }
 
@@ -427,5 +354,4 @@ public class WheelView extends ScrollView {
         view.measure(width, expandSpec);
         return view.getMeasuredHeight();
     }
-
 }

@@ -38,7 +38,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/ic_action_bar" />
+                    android:src="@drawable/ic_action_bar"
+                    android:visibility="@{viewModel.isUpdateInfo?View.GONE:View.VISIBLE}" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -78,7 +79,8 @@
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_home_banner"
-                            app:setImageView="@{viewModel.coverUrl}" />
+                            app:setCoverShop="@{viewModel.coverUrl}"
+                            app:setImageView="@{viewModel.coverUri}" />
 
                         <TextView
                             android:id="@+id/text_shop_name"
@@ -179,7 +181,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/padding_medium"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -216,7 +217,7 @@
                                     android:layout_width="@dimen/button_width_108"
                                     android:layout_height="@dimen/button_height_small"
                                     android:layout_centerInParent="true"
-                                    android:enabled="@{viewModel.sellerUrl.length()>2?true:false, default=false}"
+                                    android:enabled="@{viewModel.sellerUrl.length()>2}"
                                     android:onClick="@{()->viewModel.verifyUrl()}"
                                     android:text="@string/verify_url"
                                     android:visibility="@{viewModel.verifyIsShow?View.VISIBLE:View.INVISIBLE, default=visible}" />
@@ -237,41 +238,114 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large">
+
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:text="@string/country_title"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
 
-                            <Spinner
-                                android:id="@+id/spn_country"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium">
+
+                            <EditText
+                                android:id="@+id/textView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/padding_medium"
-                                android:backgroundTint="@color/colorAccent"
-                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectCountry(pos)}"
-                                android:onTouch="@{(v, event)->viewModel.onTouchCountry(event)}"
-                                app:setLocationAdapter="@{viewModel.countryAdapterMutableLiveData}" />
+                                android:enabled="false"
+                                android:text="@{viewModel.countryName}"
+                                android:textAppearance="?android:textAppearance" />
 
-                            <Spinner
-                                android:id="@+id/spn_province"
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:onClick="@{(v)->viewModel.showCountryDialog()}"
+                                android:padding="@dimen/padding_xsmall"
+                                android:src="@drawable/ic_edit_black_48dp" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/province_title"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium">
+
+                            <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/padding_medium"
-                                android:backgroundTint="@color/colorAccent"
-                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectProvince(pos)}"
-                                android:onTouch="@{(v, event)->viewModel.onTouchProvince(event)}"
-                                app:setLocationAdapter="@{viewModel.provinceAdapterMutableLiveData}" />
+                                android:enabled="false"
+                                android:text="@{viewModel.provinceName}"
+                                android:textAppearance="?android:textAppearance" />
 
-                            <Spinner
-                                android:id="@+id/spn_district"
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:onClick="@{(v)->viewModel.showProvinceDialog()}"
+                                android:padding="@dimen/padding_xsmall"
+                                android:src="@drawable/ic_edit_black_48dp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/district_title"
+                            android:textAppearance="?android:textAppearance"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/colorAccent"
-                                android:onItemSelected="@{(p, v, pos, id) -> viewModel.selectDistrict(pos)}"
-                                android:onTouch="@{(v, event)->viewModel.onTouchDistrict(event)}"
-                                app:setLocationAdapter="@{viewModel.districtAdapterMutableLiveData}" />
-                        </LinearLayout>
+                                android:enabled="false"
+                                android:text="@{viewModel.districtName}"
+                                android:textAppearance="?android:textAppearance" />
 
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:onClick="@{(v)->viewModel.showDistrictDialog()}"
+                                android:padding="@dimen/padding_xsmall"
+                                android:src="@drawable/ic_edit_black_48dp" />
+
+                        </RelativeLayout>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -346,7 +420,7 @@
                     android:layout_marginTop="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/padding_large"
                     android:enabled="@{viewModel.enableBtnSubmit, default=false}"
-                    android:onClick="@{()->viewModel.createShop()}"
+                    android:onClick="@{()->viewModel.submit()}"
                     android:text="@string/btn_complete" />
 
             </LinearLayout>

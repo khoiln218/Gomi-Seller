@@ -10,7 +10,8 @@ import vn.gomisellers.apps.event.BaseEvent;
 class MyPageEvent extends BaseEvent<Uri> {
     static final int UPDATE_INFO = 0;
     static final int SETTING = 1;
-    static final int SIGN_OUT = 2;
+    static final int UPDATE_SHOP = 2;
+    static final int SIGN_OUT = 3;
 
     MyPageEvent(int code) {
         super(code);

@@ -7,7 +7,7 @@
     <string name="email">Email</string>
     <string name="phone_number">Số điện thoại</string>
     <string name="password">Mật Khẩu</string>
-    <string name="contry_id">Chọn quốc gia</string>
+    <string name="country_title">Chọn quốc gia</string>
     <string name="verify_code">Mã OTP</string>
     <string name="new_password">Mật khẩu mới</string>
     <string name="certification_code">Mã OTP</string>
@@ -124,4 +124,8 @@
     <string name="btn_confirm">Xác nhận</string>
     <string name="url">Địa chỉ website</string>
     <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="update_shop_info">Cập nhật thông tin cửa hàng</string>
+    <string name="district_title">Chọn Quận/Huyện</string>
+    <string name="select">Chọn</string>
+    <string name="province_title">Chọn Tỉnh/Thành Phố</string>
 </resources>

@@ -1,9 +1,14 @@
 package vn.gomisellers.apps.shopinfo;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +24,18 @@ import java.io.IOException;
 
 import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.databinding.ActivityShopInfomationBinding;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.utils.AlertDialogs;
+import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Intents;
 import vn.gomisellers.apps.utils.MediaHelper;
 import vn.gomisellers.apps.utils.PermissionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
+import vn.gomisellers.apps.widgets.CountryView;
+import vn.gomisellers.apps.widgets.LocationView;
+import vn.gomisellers.apps.widgets.WheelView;
 import vn.gomisellers.apps.widgets.dialog.ImageChooserDialogFragment;
 
 public class ShopInformationActivity extends BaseActivity<ShopInformationViewModel, ActivityShopInfomationBinding> {
@@ -35,10 +45,18 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() == null) finish();
+        boolean isUpdate = getIntent().getBooleanExtra(GomiConstants.EXTRA_UPDATE, false);
         initBinding();
         initCmd();
         permissionHelper = new PermissionHelper(this, PermissionHelper.photo_permissions);
-        getViewModel().requestLocationCountryId();
+        getViewModel().setUpdate(isUpdate);
+        if (isUpdate) {
+            initToolbar(getString(R.string.update_shop_info));
+            getViewModel().requestShopInformation();
+        } else {
+            getViewModel().requestLocationCountryId();
+        }
     }
 
     private void initCmd() {
@@ -46,14 +64,22 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
             @Override
             public void onChanged(ShopInfoEvent event) {
                 switch (event.getCode()) {
-                    case ShopInfoEvent.CREATE_ERROR:
-                    case ShopInfoEvent.VERIFY_ERROR:
-                        ToastUtils.showToast(event.getMessage());
-                        break;
                     case ShopInfoEvent.CREATE_SUCCESS:
                         createSuccess();
                         break;
-                    case ShopInfoEvent.VERIFY_SUCCESS:
+                    case ShopInfoEvent.UPDATE_SUCCESS:
+                        ToastUtils.showToast("Cập nhật cửa hàng thành công");
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                        break;
+                    case ShopInfoEvent.SHOW_COUNTRY_DIALOG:
+                        showCountryDialog((LocationList) event.getData());
+                        break;
+                    case ShopInfoEvent.SHOW_PROVINCE_DIALOG:
+                        showProvinceDialog((LocationList) event.getData());
+                        break;
+                    case ShopInfoEvent.SHOW_DISTRICT_DIALOG:
+                        showDistrictDialog((LocationList) event.getData());
                         break;
                     case ShopInfoEvent.START_CROPPER:
                         cropImage((Uri) event.getData());
@@ -76,6 +102,14 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
         viewModel = ViewModelProviders.of(this).get(ShopInformationViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -185,5 +219,82 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
                 }
             });
         }
+    }
+
+    private void showCountryDialog(LocationList locationList) {
+        final int[] selectIndex = {locationList.getSelectIndex()};
+        View outerView = LayoutInflater.from(this).inflate(R.layout.country_view, null);
+        final CountryView wv = outerView.findViewById(R.id.wheel_view_wv);
+        wv.setItems(locationList.getLocations());
+        wv.setSeletion(locationList.getSelectIndex());
+        wv.setOnWheelViewListener(new CountryView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, Location item) {
+                selectIndex[0] = wv.getSeletedIndex();
+            }
+        });
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.country_title)
+                .setView(outerView)
+                .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getViewModel().selectCountry(selectIndex[0]);
+                    }
+                })
+                .show();
+    }
+
+    private void showProvinceDialog(LocationList locationList) {
+        final int[] selectIndex = {locationList.getSelectIndex()};
+        View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);
+        final LocationView wv = outerView.findViewById(R.id.wheel_view_wv);
+        wv.setOffset(3);
+        wv.setLocations(locationList.getLocations());
+        wv.setSeletion(locationList.getSelectIndex());
+        wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                selectIndex[0] = wv.getSeletedIndex();
+            }
+        });
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.province_title)
+                .setView(outerView)
+                .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getViewModel().selectProvince(selectIndex[0]);
+                    }
+                })
+                .show();
+    }
+
+    private void showDistrictDialog(LocationList locationList) {
+        final int[] selectIndex = {locationList.getSelectIndex()};
+        View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);
+        final LocationView wv = outerView.findViewById(R.id.wheel_view_wv);
+        wv.setOffset(3);
+        wv.setLocations(locationList.getLocations());
+        wv.setSeletion(locationList.getSelectIndex());
+        wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                selectIndex[0] = wv.getSeletedIndex();
+            }
+        });
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.district_title)
+                .setView(outerView)
+                .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getViewModel().selectDistrict(selectIndex[0]);
+                    }
+                })
+                .show();
     }
 }
