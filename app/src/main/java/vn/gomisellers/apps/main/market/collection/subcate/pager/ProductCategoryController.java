@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.utils.ConnectionHelper;
+import vn.gomisellers.apps.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 4/6/2020.
@@ -88,10 +91,11 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
             @Override
             public void onLoaded(ResponseData<Product> result) {
                 loaded();
-                if (result.getCode() == ResultCode.CODE_OK)
-                    updateProduct(result.getResult());
-                else
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    notifyChange(result.getResult());
+                } else {
                     updateFail(result.getMessage());
+                }
             }
 
             @Override
@@ -102,11 +106,17 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
         });
     }
 
-    private void updateFail(String message) {
-        cmd.call(new ProductCategoryEvent(ProductCategoryEvent.SELECT_ERROR, message));
+    private void notifyChange(Product product) {
+        ProductCategoryEvent<Product> event = new ProductCategoryEvent<>(ProductCategoryEvent.ON_PICK);
+        event.setData(product);
+        EventBus.getDefault().post(event);
     }
 
-    private void updateProduct(Product product) {
+    private void updateFail(String message) {
+        ToastUtils.showToast(message);
+    }
+
+    void updateProduct(Product product) {
         for (Product item : products) {
             if (TextUtils.equals(product.getId(), item.getId())) {
                 item.setIsSelling(product.getIsSelling());

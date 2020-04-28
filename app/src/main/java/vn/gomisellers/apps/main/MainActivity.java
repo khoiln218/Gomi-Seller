@@ -19,7 +19,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,7 +128,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onMessageEvent(MainEvent event) {
         if (event.getCode() == MainEvent.REQUEST_PERMISSION) {
             requestPermission();

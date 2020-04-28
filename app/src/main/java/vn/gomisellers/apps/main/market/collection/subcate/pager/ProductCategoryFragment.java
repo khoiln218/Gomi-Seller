@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.lifecycle.Observer;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.data.source.model.data.Product;
@@ -14,7 +17,6 @@ import vn.gomisellers.apps.databinding.FragmentProductCategoryBinding;
 import vn.gomisellers.apps.event.OnSelectedListener;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Intents;
-import vn.gomisellers.apps.utils.ToastUtils;
 import vn.gomisellers.apps.widgets.dialog.SelectProductDialogFragment;
 
 public class ProductCategoryFragment extends BaseFragment<ProductCategoryController, FragmentProductCategoryBinding> {
@@ -66,6 +68,22 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
         getController().setCategoryType(categoryType);
         getController().showLoading();
         getController().onRefresh();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(ProductCategoryEvent event) {
+        if (event.getCode() == ProductCategoryEvent.ON_PICK) {
+            Product product = (Product) event.getData();
+            if (productCategoryController != null)
+                productCategoryController.updateProduct(product);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initCmd() {
@@ -73,9 +91,6 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
             @Override
             public void onChanged(ProductCategoryEvent event) {
                 switch (event.getCode()) {
-                    case ProductCategoryEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.getMessage());
-                        break;
                     case ProductCategoryEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
                         break;

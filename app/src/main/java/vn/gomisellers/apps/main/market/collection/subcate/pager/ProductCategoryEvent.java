@@ -6,9 +6,8 @@ import vn.gomisellers.apps.event.BaseEvent;
  * Created by KHOI LE on 4/6/2020.
  */
 class ProductCategoryEvent<T> extends BaseEvent<T> {
-    static final int SELECT_ERROR = 1;
-    static final int ON_PICK = 2;
-    static final int ON_SHOW = 3;
+    static final int ON_PICK = 0;
+    static final int ON_SHOW = 1;
 
     ProductCategoryEvent(int code) {
         super(code);
