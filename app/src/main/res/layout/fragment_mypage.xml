@@ -356,6 +356,28 @@
                         android:textColor="@color/colorSecondaryText" />
                 </TableRow>
 
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/padding_large"
+                    android:paddingTop="@dimen/padding_xsmall"
+                    android:paddingEnd="@dimen/padding_large"
+                    android:paddingBottom="@dimen/padding_xsmall">
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:onClick="@{(v)->viewModel.orderHistory()}"
+                        android:text="Lịch sử đơn hàng"
+                        android:textAlignment="textStart"
+                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/colorSecondaryText" />
+                </TableRow>
+
             </TableLayout>
 
         </LinearLayout>

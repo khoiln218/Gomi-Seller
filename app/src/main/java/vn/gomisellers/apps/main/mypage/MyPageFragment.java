@@ -15,6 +15,7 @@ import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.FragmentMypageBinding;
 import vn.gomisellers.apps.main.mypage.info.AccountInformationActivity;
+import vn.gomisellers.apps.main.mypage.order.OrderListActivity;
 import vn.gomisellers.apps.main.mypage.setting.AccountSettingActivity;
 import vn.gomisellers.apps.shopinfo.ShopInformationActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
@@ -55,6 +56,9 @@ public class MyPageFragment extends BaseFragment<MyPageViewModel, FragmentMypage
                         Intent intent = new Intent(getActivity(), ShopInformationActivity.class);
                         intent.putExtra(GomiConstants.EXTRA_UPDATE, true);
                         startActivityForResult(intent, GomiConstants.REQUEST_SHOP_UPDATE);
+                        break;
+                    case MyPageEvent.ORDER_HISTORY:
+                        startActivity(new Intent(getActivity(), OrderListActivity.class));
                         break;
                     case MyPageEvent.SIGN_OUT:
                         Intents.startLoginActivity(getActivity());

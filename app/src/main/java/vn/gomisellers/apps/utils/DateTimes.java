@@ -1,14 +1,28 @@
 package vn.gomisellers.apps.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class DateTimes {
 
     public static String toString(Date date) {
         return toString(date, GomiConstants.SIMPLE_DATE_FORMAT);
+    }
+
+    public static String toString(long time, String format) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT-7:00"));
+        calendar.setTimeInMillis(time);
+        try {
+            return new SimpleDateFormat(format, Locale.getDefault()).format(calendar.getTime());
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public static String toString(Date date, String format) {

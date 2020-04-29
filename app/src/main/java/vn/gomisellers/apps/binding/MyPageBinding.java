@@ -3,14 +3,20 @@ package vn.gomisellers.apps.binding;
 import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
+import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.adapter.GenderAdapter;
+import vn.gomisellers.apps.main.mypage.order.OrderAdapter;
+import vn.gomisellers.apps.utils.DateTimes;
+import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Strings;
 import vn.gomisellers.apps.utils.Utils;
 
@@ -18,6 +24,36 @@ import vn.gomisellers.apps.utils.Utils;
  * Created by KHOI LE on 3/31/2020.
  */
 public class MyPageBinding {
+
+    @BindingAdapter("setText")
+    public static void setCount(TextView textView, int count) {
+        textView.setText(String.valueOf(count) + " chiếc");
+    }
+
+    @BindingAdapter("setOrderDateCreate")
+    public static void setOrderDateCreate(TextView textView, long date) {
+        textView.setText(DateTimes.toString(date, GomiConstants.INFO_DATE_FORMAT));
+    }
+
+    @BindingAdapter("setImageOrder")
+    public static void setImageOrder(ImageView imageView, String imageUrl) {
+        Glide.with(imageView)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.ic_place_holder)
+                        .override(Utils.getScreenWidth() / 3)
+                        .centerCrop()
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                .into(imageView);
+    }
+
+    @BindingAdapter("setOrderAdapter")
+    public static void setOrderAdapter(RecyclerView recyclerView, OrderAdapter adapter) {
+        if (recyclerView.getAdapter() == null && adapter != null) {
+            recyclerView.setAdapter(adapter);
+        }
+    }
 
     @BindingAdapter("setGenderAdapter")
     public static void setGenderAdapter(Spinner spinner, GenderAdapter adapter) {

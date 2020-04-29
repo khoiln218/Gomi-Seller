@@ -12,6 +12,7 @@ class MyPageEvent extends BaseEvent<Uri> {
     static final int SETTING = 1;
     static final int UPDATE_SHOP = 2;
     static final int SIGN_OUT = 3;
+    static final int ORDER_HISTORY = 4;
 
     MyPageEvent(int code) {
         super(code);

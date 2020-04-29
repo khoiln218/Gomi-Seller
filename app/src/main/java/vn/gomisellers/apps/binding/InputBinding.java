@@ -3,6 +3,7 @@ package vn.gomisellers.apps.binding;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
@@ -16,6 +17,7 @@ import vn.gomisellers.apps.utils.Utils;
  * Created by KHOI LE on 3/27/2020.
  */
 public class InputBinding {
+
     @BindingAdapter("setErrorEnabled")
     public static void setErrorEnabled(TextInputLayout inputLayout, boolean enable) {
         inputLayout.setErrorEnabled(enable);
