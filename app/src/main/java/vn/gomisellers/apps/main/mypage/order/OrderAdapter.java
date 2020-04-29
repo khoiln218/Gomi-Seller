@@ -16,9 +16,11 @@ import vn.gomisellers.apps.databinding.OrderItemBinding;
  */
 public class OrderAdapter extends RecyclerView.Adapter {
     private List<Order> orderList;
+    private OrderHandler orderHandler;
 
-    public OrderAdapter(List<Order> orderList) {
+    public OrderAdapter(List<Order> orderList, OrderHandler orderHandler) {
         this.orderList = orderList;
+        this.orderHandler = orderHandler;
     }
 
     public void setOrderList(List<Order> orderList) {
@@ -34,7 +36,7 @@ public class OrderAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((OrderHolder) holder).bind(orderList.get(position));
+        ((OrderHolder) holder).bind(orderList.get(position), orderHandler);
     }
 
     @Override
@@ -56,8 +58,9 @@ public class OrderAdapter extends RecyclerView.Adapter {
             this.binding = binding;
         }
 
-        public void bind(Order order) {
+        public void bind(Order order, OrderHandler orderHandler) {
             binding.setOrder(order);
+            binding.setOrderHandler(orderHandler);
             binding.executePendingBindings();
         }
     }

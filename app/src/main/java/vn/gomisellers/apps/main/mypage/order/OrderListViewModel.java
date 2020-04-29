@@ -7,21 +7,25 @@ import java.util.List;
 
 import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.data.source.model.data.Order;
+import vn.gomisellers.apps.event.MultableLiveEvent;
 
 /**
  * Created by KHOI LE on 4/28/2020.
  */
-public class OrderListViewModel extends BaseViewModel {
+public class OrderListViewModel extends BaseViewModel implements OrderHandler {
 
     public MutableLiveData<OrderAdapter> orderAdapterMutableLiveData;
+
+    private MultableLiveEvent<OrderListEvent> cmd;
 
     private List<Order> orderList;
     private OrderAdapter adapter;
 
     public OrderListViewModel() {
+        cmd = new MultableLiveEvent<>();
         orderAdapterMutableLiveData = new MutableLiveData<>();
         orderList = new ArrayList<>();
-        adapter = new OrderAdapter(orderList);
+        adapter = new OrderAdapter(orderList, this);
         orderAdapterMutableLiveData.setValue(adapter);
 
         dummy();
@@ -41,5 +45,16 @@ public class OrderListViewModel extends BaseViewModel {
                     599000F, 10));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onShow(Order order) {
+        OrderListEvent event = new OrderListEvent(OrderListEvent.SHOW_DETAIL);
+        event.setData(order);
+        cmd.call(event);
+    }
+
+    MultableLiveEvent<OrderListEvent> getCmd() {
+        return cmd;
     }
 }

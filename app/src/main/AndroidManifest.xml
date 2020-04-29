@@ -24,7 +24,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".main.mypage.order.OrderListActivity"></activity>
+        <activity android:name=".main.mypage.order.detail.OrderDetailActivity"></activity>
+        <activity android:name=".main.mypage.order.OrderListActivity" />
         <activity
             android:name=".main.mypage.setting.AccountSettingActivity"
             android:screenOrientation="portrait"

@@ -129,4 +129,5 @@
     <string name="select">Chọn</string>
     <string name="province_title">Chọn Tỉnh/Thành Phố</string>
     <string name="order_title">Danh sách đơn hàng</string>
+    <string name="order_detail_title">Chi tiết đơn hàng</string>
 </resources>
