@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import vn.gomisellers.apps.data.source.local.prefs.AppPreferences;
+import vn.gomisellers.apps.utils.LogUtils;
 
 public class EappsApplication extends Application {
     private static EappsApplication instance;
@@ -14,6 +15,11 @@ public class EappsApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        if (BuildConfig.DEBUG) {
+            LogUtils.setLogLevel(LogUtils.LogLevel.LOG_LEVEL_VERBOSE);
+        } else {
+            LogUtils.setLogLevel(LogUtils.LogLevel.LOG_LEVEL_NONE);
+        }
     }
 
     public static synchronized EappsApplication getInstance() {

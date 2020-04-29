@@ -130,4 +130,8 @@
     <string name="province_title">Chọn Tỉnh/Thành Phố</string>
     <string name="order_title">Danh sách đơn hàng</string>
     <string name="order_detail_title">Chi tiết đơn hàng</string>
+
+    <string name="default_notification_channel_id">gomi_default_channel</string>
+    <string name="default_notification_channel_name">Gomi</string>
+    <string name="default_notification_channel_description">Gomi Notification</string>
 </resources>
