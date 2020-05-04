@@ -19,7 +19,7 @@ public class DateTimes {
         calendar.setTimeZone(TimeZone.getTimeZone("GMT-7:00"));
         calendar.setTimeInMillis(time);
         try {
-            return new SimpleDateFormat(format, Locale.getDefault()).format(calendar.getTime());
+            return new SimpleDateFormat(format, new Locale("vi")).format(calendar.getTime());
         } catch (Exception e) {
             return "";
         }

@@ -43,11 +43,19 @@ public class OrderDetailViewModel extends BaseViewModel implements ProductHandle
         List<OrderDetail> orderDetails = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             Product product = new Product();
-            product.setId("0000-0000-0000-000" + i);
+            product.setId("0000-0000-0000-000" + (2 * i));
             product.setThumbnail("http://192.168.1.33:2526/Product/gomi_dd24880d-b637-41c9-98fb-9eca87b33ff3-637207137845215685.jpg");
-            OrderDetail orderDetail = new OrderDetail("1", product,
+            OrderDetail orderDetail = new OrderDetail("#00000" + (2 * i), product,
                     "Mặt Nạ Tế Bào Gốc Ayo Premium Cell Essence Mask Pack (1 Box 5 miếng)",
                     599000F, 10);
+            orderDetails.add(orderDetail);
+
+            product = new Product();
+            product.setId("0000-0000-0000-000" + (2 * i + 1));
+            product.setThumbnail("http://192.168.1.33:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg");
+            orderDetail = new OrderDetail("#00000" + (2 * i + 1), product,
+                    "Xịt Trị Mụn Lưng Aetem Cleanback Mist",
+                    339000F, 12);
             orderDetails.add(orderDetail);
         }
         //--------------------------

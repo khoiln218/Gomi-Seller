@@ -27,12 +27,12 @@ public class MyPageBinding {
 
     @BindingAdapter("setText")
     public static void setCount(TextView textView, int count) {
-        textView.setText(String.valueOf(count) + " chiếc");
+        textView.setText(String.valueOf(count));
     }
 
     @BindingAdapter("setOrderDateCreate")
     public static void setOrderDateCreate(TextView textView, long date) {
-        textView.setText(DateTimes.toString(date, GomiConstants.INFO_DATE_FORMAT));
+        textView.setText(DateTimes.toString(date, GomiConstants.INFO_ORDER_DATE_FORMAT));
     }
 
     @BindingAdapter("setImageOrder")
