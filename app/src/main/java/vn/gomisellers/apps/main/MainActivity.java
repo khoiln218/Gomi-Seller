@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import vn.gomisellers.apps.BaseActivity;
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.main.home.HomeFragment;
@@ -32,6 +33,8 @@ import vn.gomisellers.apps.main.market.MarketFragment;
 import vn.gomisellers.apps.main.mypage.MyPageFragment;
 import vn.gomisellers.apps.main.notification.NotificationFragment;
 import vn.gomisellers.apps.utils.AlertDialogs;
+import vn.gomisellers.apps.utils.Intents;
+import vn.gomisellers.apps.utils.LogUtils;
 import vn.gomisellers.apps.utils.MediaHelper;
 import vn.gomisellers.apps.utils.PermissionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
@@ -56,7 +59,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO: check when user enter screen for notification bar
+        if (!EappsApplication.getPreferences().isLogin()) {
+            LogUtils.d("TAG", "user isn't login");
+            Intents.startLoginActivity(this);
+            finish();
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

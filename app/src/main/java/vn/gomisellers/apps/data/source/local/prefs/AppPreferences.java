@@ -100,4 +100,8 @@ public class AppPreferences {
         editor.putString(DEVICE_TOKEN, token);
         editor.commit();
     }
+
+    public boolean isLogin() {
+        return getUserId() != null;
+    }
 }
