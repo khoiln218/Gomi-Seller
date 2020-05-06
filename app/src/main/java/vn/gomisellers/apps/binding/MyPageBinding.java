@@ -48,13 +48,6 @@ public class MyPageBinding {
                 .into(imageView);
     }
 
-    @BindingAdapter("setOrderAdapter")
-    public static void setOrderAdapter(RecyclerView recyclerView, OrderAdapter adapter) {
-        if (recyclerView.getAdapter() == null && adapter != null) {
-            recyclerView.setAdapter(adapter);
-        }
-    }
-
     @BindingAdapter("setGenderAdapter")
     public static void setGenderAdapter(Spinner spinner, GenderAdapter adapter) {
         if (adapter != null && spinner.getAdapter() == null) {

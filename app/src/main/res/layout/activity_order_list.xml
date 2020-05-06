@@ -21,7 +21,6 @@
             setOrderAdapter="@{viewModel.orderAdapterMutableLiveData}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorDivider"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/order_item" />

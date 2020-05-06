@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import vn.gomisellers.apps.main.mypage.order.OrderAdapter;
 import vn.gomisellers.apps.main.mypage.order.detail.OrderDetailAdapter;
 import vn.gomisellers.apps.main.mypage.order.detail.OrderProductAdapter;
 
@@ -26,6 +27,18 @@ public class OrderBinding {
     @BindingAdapter("setOrderDetailAdapter")
     public static void setOrderDetailAdapter(RecyclerView recyclerView, OrderDetailAdapter adapter) {
         if (recyclerView.getAdapter() == null && adapter != null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    @BindingAdapter("setOrderAdapter")
+    public static void setOrderAdapter(RecyclerView recyclerView, OrderAdapter adapter) {
+        if (recyclerView.getAdapter() == null && adapter != null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(adapter);
         }
     }

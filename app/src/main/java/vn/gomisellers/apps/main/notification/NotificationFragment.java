@@ -1,5 +1,6 @@
 package vn.gomisellers.apps.main.notification;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,8 @@ import androidx.lifecycle.ViewModelProviders;
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.FragmentNotificationBinding;
-import vn.gomisellers.apps.utils.ToastUtils;
+import vn.gomisellers.apps.main.mypage.order.detail.OrderDetailActivity;
+import vn.gomisellers.apps.utils.GomiConstants;
 
 public class NotificationFragment extends BaseFragment<NotificationViewModel, FragmentNotificationBinding> {
 
@@ -38,7 +40,10 @@ public class NotificationFragment extends BaseFragment<NotificationViewModel, Fr
             @Override
             public void onChanged(NotificationEvent event) {
                 if (event.getCode() == NotificationEvent.ONCLICK) {
-                    ToastUtils.showToast("onCLick: " + ((Notification) event.getData()).getId());
+                    int id = ((Notification) event.getData()).getId();
+                    Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                    intent.putExtra(GomiConstants.EXTRA_ID, "0000-0000-00" + String.format("%02d", id));
+                    startActivity(intent);
                 }
             }
         });
