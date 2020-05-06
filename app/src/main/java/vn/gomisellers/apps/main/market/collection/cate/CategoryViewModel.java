@@ -21,7 +21,6 @@ import vn.gomisellers.apps.data.source.model.data.CategoryType;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.CategoryHandler;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.main.market.collection.subcate.CategoryItem;
@@ -29,8 +28,7 @@ import vn.gomisellers.apps.main.market.collection.subcate.CategoryItem;
 /**
  * Created by KHOI LE on 4/7/2020.
  */
-public class CategoryViewModel extends BaseViewModel implements CategoryHandler, ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
-    private final int ALL = 0;
+public class CategoryViewModel extends BaseViewModel<CategoryEvent> implements CategoryHandler, ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
     private final int INIT_PAGE = 1;
 
     private int page;
@@ -47,8 +45,6 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     public MutableLiveData<CategoryAdapter> categoryAdapterLiveData;
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
 
-    private MultableLiveEvent<CategoryEvent> cmd;
-
     private ProductItemAdapter adapter;
     private List<Product> products;
 
@@ -61,7 +57,6 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         categoryEmpty = new MutableLiveData<>();
         categoryAdapterLiveData = new MutableLiveData<>();
         productItemAdapter = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         page = INIT_PAGE;
         totalPage = 0;
         selectCategoryType = CategoryType.MEGA_CATEGORY;
@@ -77,6 +72,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     @Override
     public void onClick(Category category) {
         categoryAdapter.selectItem(category.getId());
+        int ALL = 0;
         if (category.getId() == ALL) {
             selectCategoryType = CategoryType.MEGA_CATEGORY;
             selectCategoryId = categoryId;
@@ -94,7 +90,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
         CategoryItem categoryItem = new CategoryItem(selectCategoryType, selectCategoryId, selectCategoryName);
         CategoryEvent<CategoryItem> event = new CategoryEvent<>(CategoryEvent.OPEN_SUB_CATEGORY);
         event.setData(categoryItem);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
@@ -199,7 +195,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     private void showDetail(Product product) {
         CategoryEvent<Product> event = new CategoryEvent<>(CategoryEvent.SHOW_DETAIL);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
@@ -211,7 +207,7 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
     private void pick(Product product) {
         CategoryEvent<Product> event = new CategoryEvent<>(CategoryEvent.PICK_PRODUCT);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     void requestPickProduct(Product product) {
@@ -245,9 +241,5 @@ public class CategoryViewModel extends BaseViewModel implements CategoryHandler,
                 break;
             }
         }
-    }
-
-    MultableLiveEvent<CategoryEvent> getCmd() {
-        return cmd;
     }
 }

@@ -24,8 +24,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter {
     private Order order;
     private OrderProductAdapter orderProductAdapter;
 
-    public OrderDetailAdapter(Order order, ProductHandler productHandler) {
-        this.order = order;
+    public OrderDetailAdapter(ProductHandler productHandler) {
         panelList = new ArrayList<>();
         orderProductAdapter = new OrderProductAdapter(new ArrayList<OrderDetail>(), productHandler);
         setPanelList();

@@ -10,11 +10,14 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ActivityAccountInformationBinding;
 
-public class AccountInformationActivity extends BaseActivity<AccountInformationViewModel, ActivityAccountInformationBinding> implements AccountInfoListener {
+public class AccountInformationActivity extends BaseActivity<AccountInformationViewModel, ActivityAccountInformationBinding> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class AccountInformationActivity extends BaseActivity<AccountInformationV
 
         getBinding().pager.setAdapter(new AccountInformationAdapter(this));
         setupTab();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -59,17 +63,19 @@ public class AccountInformationActivity extends BaseActivity<AccountInformationV
     }
 
     @Override
-    public void showLoading() {
-        getViewModel().showLoading();
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void hideLoading() {
-        getViewModel().hideLoading();
-    }
-
-    @Override
-    public void done() {
-        finish();
+    @Subscribe
+    public void onMessageEvent(AccountEvent event) {
+        if (event.getCode() == AccountEvent.SHOW_LOADDING) {
+            getViewModel().showLoading();
+        } else if (event.getCode() == AccountEvent.HIDE_LOADDING) {
+            getViewModel().hideLoading();
+        } else if (event.getCode() == AccountEvent.UPDATE_DONE) {
+            finish();
+        }
     }
 }

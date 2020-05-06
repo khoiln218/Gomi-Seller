@@ -18,12 +18,11 @@ import vn.gomisellers.apps.data.source.model.api.AccountUpdateRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.DateTimes;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Inputs;
 
-public class AccountInfoViewModel extends BaseViewModel {
+public class AccountInfoViewModel extends BaseViewModel<ChangeInfoEvent> {
     private AccountRepository mAccountRepository;
     private AppPreferences mAppPreferences;
 
@@ -42,8 +41,6 @@ public class AccountInfoViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> changeInfoFocus;
 
     public MutableLiveData<GenderAdapter> genderAdapter;
-
-    private MultableLiveEvent<ChangeInfoEvent> cmd;
 
     private boolean isInfoChanged;
     private Account account;
@@ -70,8 +67,6 @@ public class AccountInfoViewModel extends BaseViewModel {
 
         genderAdapter = new MutableLiveData<>();
 
-        cmd = new MultableLiveEvent<>();
-
         genderAdapter.setValue(new GenderAdapter());
 
         isInfoChanged = false;
@@ -83,7 +78,7 @@ public class AccountInfoViewModel extends BaseViewModel {
         long birthday = selectBirthday != null ? selectBirthday.getTimeInMillis() : account.getBirthDayLong();
         ChangeInfoEvent event = new ChangeInfoEvent(ChangeInfoEvent.SHOW_DATE_PICKER);
         event.setData(birthday);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     public void update() {
@@ -116,7 +111,7 @@ public class AccountInfoViewModel extends BaseViewModel {
     }
 
     private void hideKeyBoard() {
-        cmd.call(new ChangeInfoEvent(ChangeInfoEvent.HIDE_KEYBOARD));
+        getCmd().call(new ChangeInfoEvent(ChangeInfoEvent.HIDE_KEYBOARD));
     }
 
     void setBirthday(Calendar selectBirthday) {
@@ -182,7 +177,7 @@ public class AccountInfoViewModel extends BaseViewModel {
                     mAppPreferences.setAccount(result.getResult());
                     updateInfo();
                     showToast(EappsApplication.getInstance().getString(R.string.account_update_success));
-                    cmd.call(new ChangeInfoEvent(ChangeInfoEvent.UPDATE_DONE));
+                    getCmd().call(new ChangeInfoEvent(ChangeInfoEvent.UPDATE_DONE));
                 } else {
                     showToast(result.getMessage());
                 }
@@ -200,15 +195,11 @@ public class AccountInfoViewModel extends BaseViewModel {
 
     @Override
     protected void showProgressing() {
-        cmd.call(new ChangeInfoEvent(ChangeInfoEvent.SHOW_LOADING));
+        getCmd().call(new ChangeInfoEvent(ChangeInfoEvent.SHOW_LOADING));
     }
 
     @Override
     protected void hideProgressing() {
-        cmd.call(new ChangeInfoEvent(ChangeInfoEvent.HIDE_LOADING));
-    }
-
-    MutableLiveData<ChangeInfoEvent> getCmd() {
-        return cmd;
+        getCmd().call(new ChangeInfoEvent(ChangeInfoEvent.HIDE_LOADING));
     }
 }

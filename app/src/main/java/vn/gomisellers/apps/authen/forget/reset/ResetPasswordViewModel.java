@@ -13,13 +13,12 @@ import vn.gomisellers.apps.data.source.model.api.ResetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.Inputs;
 
 /**
  * Created by KHOI LE on 3/16/2020.
  */
-public class ResetPasswordViewModel extends BaseViewModel {
+public class ResetPasswordViewModel extends BaseViewModel<ResetEvent> {
     private AccountRepository mAccountRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> newPassword = new MutableLiveData<>();
@@ -31,8 +30,6 @@ public class ResetPasswordViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> enableBtn = new MutableLiveData<>();
 
     private String userId;
-
-    private MultableLiveEvent<ResetEvent> cmd = new MultableLiveEvent<>();
 
     public void reset() {
         hideKeyboard();
@@ -84,11 +81,11 @@ public class ResetPasswordViewModel extends BaseViewModel {
     }
 
     private void resetPwdSuccess() {
-        cmd.call(new ResetEvent(ResetEvent.RESET_SUCCESS));
+        getCmd().call(new ResetEvent(ResetEvent.RESET_SUCCESS));
     }
 
     private void hideKeyboard() {
-        cmd.call(new ResetEvent(ResetEvent.HIDE_KEYBOARD));
+        getCmd().call(new ResetEvent(ResetEvent.HIDE_KEYBOARD));
     }
 
     public void afterTextChanged() {
@@ -103,10 +100,6 @@ public class ResetPasswordViewModel extends BaseViewModel {
 
     private boolean checkLengthNewPwd() {
         return !TextUtils.isEmpty(newPassword.getValue()) && newPassword.getValue().length() > 3;
-    }
-
-    public MultableLiveEvent<ResetEvent> getCmd() {
-        return cmd;
     }
 
     void setUserId(String userId) {

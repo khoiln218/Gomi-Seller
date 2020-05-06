@@ -30,7 +30,7 @@ public class SignUpActivity extends BaseActivity<SignUpViewModel, ActivitySignUp
     }
 
     private void subscribeToNavigationChanges() {
-        getViewModel().getSignInCommand().observe(this, new Observer<SignUpEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<SignUpEvent>() {
             @Override
             public void onChanged(SignUpEvent event) {
                 switch (event.getCode()) {

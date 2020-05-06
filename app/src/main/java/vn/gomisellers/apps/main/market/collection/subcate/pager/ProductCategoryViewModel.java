@@ -10,8 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.gomisellers.apps.EappsApplication;
-import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.adapter.ProductItemAdapter;
 import vn.gomisellers.apps.data.ProductRepository;
 import vn.gomisellers.apps.data.ResultListener;
@@ -20,26 +19,19 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ToggleProductRequest;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.event.ProductHandler;
-import vn.gomisellers.apps.utils.ConnectionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class ProductCategoryController implements ProductHandler, OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class ProductCategoryViewModel extends BaseViewModel<ProductCategoryEvent> implements ProductHandler, OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private static final int INIT_PAGE = 1;
 
     private ProductRepository mProductRepository;
 
-    public MutableLiveData<Boolean> isProgressing;
-    public MutableLiveData<String> errorMessage;
-    public MutableLiveData<Boolean> refreshing;
-
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
-    private MultableLiveEvent<ProductCategoryEvent> cmd;
 
     private ProductItemAdapter adapter;
     private List<Product> products;
@@ -48,13 +40,9 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
     private int page;
     private int totalPage;
 
-    ProductCategoryController() {
+    ProductCategoryViewModel() {
         mProductRepository = ProductRepository.getInstance();
         productItemAdapter = new MutableLiveData<>();
-        isProgressing = new MutableLiveData<>();
-        errorMessage = new MutableLiveData<>();
-        refreshing = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         products = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
@@ -68,7 +56,7 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
     private void showDetail(Product product) {
         ProductCategoryEvent event = new ProductCategoryEvent(ProductCategoryEvent.ON_SHOW);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
@@ -79,7 +67,7 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
     private void pick(Product product) {
         ProductCategoryEvent event = new ProductCategoryEvent(ProductCategoryEvent.ON_PICK);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     void requestPickProduct(Product product) {
@@ -175,10 +163,6 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
         adapter.setProductList(products);
     }
 
-    MultableLiveEvent<ProductCategoryEvent> getCmd() {
-        return cmd;
-    }
-
     void setCategoryType(int categoryType) {
         this.categoryType = categoryType;
     }
@@ -189,41 +173,5 @@ public class ProductCategoryController implements ProductHandler, OnLoadMoreList
 
     void showLoading() {
         showProgressing();
-    }
-
-    protected void showProgressing() {
-        isProgressing.setValue(true);
-    }
-
-    private void hideProgressing() {
-        isProgressing.setValue(false);
-    }
-
-    private void setErrorMessage(String error) {
-        errorMessage.setValue(error);
-    }
-
-    private void checkEmpty(List<Product> products) {
-        setErrorMessage(products.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.empty));
-    }
-
-    private void refreshed() {
-        refreshing.setValue(false);
-    }
-
-    protected void loaded() {
-        hideProgressing();
-        refreshed();
-    }
-
-    private void checkConnection(final String error) {
-        ConnectionHelper.getInstance().checkNetwork(new ConnectionHelper.OnCheckNetworkListener() {
-            @Override
-            public void onCheck(boolean isOnline) {
-                if (!isOnline)
-                    errorMessage.setValue(EappsApplication.getInstance().getString(R.string.network_error));
-                else errorMessage.setValue(error);
-            }
-        });
     }
 }

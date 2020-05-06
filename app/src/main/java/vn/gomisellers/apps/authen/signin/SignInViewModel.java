@@ -2,7 +2,6 @@ package vn.gomisellers.apps.authen.signin;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.Editable;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -16,13 +15,12 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.SignInRequest;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Inputs;
 import vn.gomisellers.apps.utils.Strings;
 import vn.gomisellers.apps.utils.Utils;
 
-public class SignInViewModel extends BaseViewModel {
+public class SignInViewModel extends BaseViewModel<SignInEvent> {
 
     private AccountRepository mAppRepository = AccountRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
@@ -38,8 +36,6 @@ public class SignInViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> passwordRequestFocus = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> enableLoginBtn = new MutableLiveData<>();
-
-    private final MultableLiveEvent<SignInEvent> mLogInCommand = new MultableLiveEvent<>();
 
     public void signIn() {
         hideKeyboard();
@@ -64,7 +60,7 @@ public class SignInViewModel extends BaseViewModel {
         requestLogin();
     }
 
-    public void afterTextChanged(Editable s) {
+    public void afterTextChanged() {
         if (checkLengthUserName() && checkLengthPwd())
             enableLoginBtn.setValue(true);
         else
@@ -81,16 +77,16 @@ public class SignInViewModel extends BaseViewModel {
 
     public void forgetPassword() {
         hideKeyboard();
-        mLogInCommand.call(new SignInEvent(SignInEvent.FORGET_PASSWORD));
+        getCmd().call(new SignInEvent(SignInEvent.FORGET_PASSWORD));
     }
 
     public void signUp() {
         hideKeyboard();
-        mLogInCommand.call(new SignInEvent(SignInEvent.GOTO_SIGN_UP));
+        getCmd().call(new SignInEvent(SignInEvent.GOTO_SIGN_UP));
     }
 
     private void hideKeyboard() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.HIDE_KEYBOARD));
+        getCmd().call(new SignInEvent(SignInEvent.HIDE_KEYBOARD));
     }
 
     private void userNameError() {
@@ -109,10 +105,6 @@ public class SignInViewModel extends BaseViewModel {
 
     private void passwordSuccess() {
         passwordEnableError.setValue(false);
-    }
-
-    MultableLiveEvent<SignInEvent> getLoginCommand() {
-        return mLogInCommand;
     }
 
     private void requestLogin() {
@@ -142,7 +134,7 @@ public class SignInViewModel extends BaseViewModel {
     }
 
     private void loginSuccess() {
-        mLogInCommand.call(new SignInEvent(SignInEvent.LOG_IN_SUCCESS));
+        getCmd().call(new SignInEvent(SignInEvent.LOG_IN_SUCCESS));
     }
 
     private void saveAccount(Account account) {
@@ -171,6 +163,6 @@ public class SignInViewModel extends BaseViewModel {
     private void forgetSuccess(String userId) {
         SignInEvent event = new SignInEvent(SignInEvent.RESET_PASSWORD);
         event.setData(userId);
-        mLogInCommand.call(event);
+        getCmd().call(event);
     }
 }

@@ -19,9 +19,7 @@ import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Intents;
 import vn.gomisellers.apps.widgets.dialog.SelectProductDialogFragment;
 
-public class ProductCategoryFragment extends BaseFragment<ProductCategoryController, FragmentProductCategoryBinding> {
-
-    private ProductCategoryController productCategoryController;
+public class ProductCategoryFragment extends BaseFragment<ProductCategoryViewModel, FragmentProductCategoryBinding> {
     private int categoryType;
     private int categoryId;
 
@@ -49,25 +47,21 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
         View root = inflater.inflate(R.layout.fragment_product_category, container, false);
         if (binding == null)
             binding = FragmentProductCategoryBinding.bind(root);
-        productCategoryController = new ProductCategoryController();
-        getBinding().setViewModel(productCategoryController);
+        viewModel = new ProductCategoryViewModel();
+        getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(getActivity());
         initCmd();
 
         return binding.getRoot();
     }
 
-    private ProductCategoryController getController() {
-        return productCategoryController;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-        getController().setCategoryId(categoryId);
-        getController().setCategoryType(categoryType);
-        getController().showLoading();
-        getController().onRefresh();
+        getViewModel().setCategoryId(categoryId);
+        getViewModel().setCategoryType(categoryType);
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
         EventBus.getDefault().register(this);
     }
 
@@ -75,8 +69,8 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
     public void onMessageEvent(ProductCategoryEvent event) {
         if (event.getCode() == ProductCategoryEvent.ON_PICK) {
             Product product = (Product) event.getData();
-            if (productCategoryController != null)
-                productCategoryController.updateProduct(product);
+            if (getViewModel() != null)
+                getViewModel().updateProduct(product);
         }
     }
 
@@ -87,7 +81,7 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
     }
 
     private void initCmd() {
-        getController().getCmd().observe(this, new Observer<ProductCategoryEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<ProductCategoryEvent>() {
             @Override
             public void onChanged(ProductCategoryEvent event) {
                 switch (event.getCode()) {
@@ -109,7 +103,7 @@ public class ProductCategoryFragment extends BaseFragment<ProductCategoryControl
         selectProductDialogFragment.setListener(new OnSelectedListener() {
             @Override
             public void onSelected(Product product) {
-                getController().requestPickProduct(product);
+                getViewModel().requestPickProduct(product);
                 selectProductDialogFragment.dismiss();
             }
         });

@@ -6,14 +6,17 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import vn.gomisellers.apps.data.source.model.data.Product;
+import vn.gomisellers.apps.event.BaseEvent;
+import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.ConnectionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class BaseViewModel extends ViewModel {
+public class BaseViewModel<E extends BaseEvent> extends ViewModel {
 
+    private MultableLiveEvent<E> cmd = new MultableLiveEvent<>();
     public MutableLiveData<Boolean> isProgressing = new MutableLiveData<>();
     public MutableLiveData<String> errorMessage = new MutableLiveData<>();
     public MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
@@ -56,5 +59,9 @@ public class BaseViewModel extends ViewModel {
 
     protected void showToast(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    public MultableLiveEvent<E> getCmd() {
+        return cmd;
     }
 }

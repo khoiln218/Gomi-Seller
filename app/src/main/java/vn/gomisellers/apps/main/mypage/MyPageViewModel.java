@@ -21,7 +21,6 @@ import vn.gomisellers.apps.data.source.model.api.ChangeAvatarRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.main.MainEvent;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.MediaHelper;
@@ -29,7 +28,7 @@ import vn.gomisellers.apps.utils.MediaHelper;
 /**
  * Created by KHOI LE on 3/31/2020.
  */
-public class MyPageViewModel extends BaseViewModel {
+public class MyPageViewModel extends BaseViewModel<MyPageEvent> {
 
     private AccountRepository mAccountRepository;
     private AppPreferences mAppPreferences;
@@ -38,14 +37,11 @@ public class MyPageViewModel extends BaseViewModel {
     public MutableLiveData<Uri> avatarUri;
     public MutableLiveData<Boolean> btnChageHide;
 
-    private MultableLiveEvent<MyPageEvent> cmd;
-
     private Uri imageUri;
 
     public MyPageViewModel() {
         mAccountRepository = AccountRepository.getInstance();
         mAppPreferences = EappsApplication.getPreferences();
-        cmd = new MultableLiveEvent<>();
         account = new MutableLiveData<>();
         avatarUri = new MutableLiveData<>();
         btnChageHide = new MutableLiveData<>();
@@ -60,7 +56,7 @@ public class MyPageViewModel extends BaseViewModel {
     }
 
     public void updateInfo() {
-        cmd.call(new MyPageEvent(MyPageEvent.UPDATE_INFO));
+        getCmd().call(new MyPageEvent(MyPageEvent.UPDATE_INFO));
     }
 
     public void changeAvatar() {
@@ -68,15 +64,15 @@ public class MyPageViewModel extends BaseViewModel {
     }
 
     public void setting() {
-        cmd.call(new MyPageEvent(MyPageEvent.SETTING));
+        getCmd().call(new MyPageEvent(MyPageEvent.SETTING));
     }
 
     public void updateShop() {
-        cmd.call(new MyPageEvent(MyPageEvent.UPDATE_SHOP));
+        getCmd().call(new MyPageEvent(MyPageEvent.UPDATE_SHOP));
     }
 
     public void orderHistory() {
-        cmd.call(new MyPageEvent(MyPageEvent.ORDER_HISTORY));
+        getCmd().call(new MyPageEvent(MyPageEvent.ORDER_HISTORY));
     }
 
     void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -104,7 +100,7 @@ public class MyPageViewModel extends BaseViewModel {
                     }
                     break;
                 case GomiConstants.REQUEST_ACCOUNT_SIGN_OUT:
-                    cmd.call(new MyPageEvent(MyPageEvent.SIGN_OUT));
+                    getCmd().call(new MyPageEvent(MyPageEvent.SIGN_OUT));
                     break;
             }
         } else {
@@ -162,9 +158,5 @@ public class MyPageViewModel extends BaseViewModel {
         MainEvent<Uri> mainEvent = new MainEvent(MainEvent.CROP_IMAGE);
         mainEvent.setData(uri);
         EventBus.getDefault().post(mainEvent);
-    }
-
-    MultableLiveEvent<MyPageEvent> getCmd() {
-        return cmd;
     }
 }

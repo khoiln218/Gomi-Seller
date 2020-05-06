@@ -13,21 +13,18 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ToggleProductRequest;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 3/27/2020.
  */
-public class ProductDetailViewModel extends BaseViewModel implements ProductHandler, AppBarLayout.OnOffsetChangedListener {
+public class ProductDetailViewModel extends BaseViewModel<ProductDetailEvent> implements ProductHandler, AppBarLayout.OnOffsetChangedListener {
     private ProductRepository mProductRepository;
 
     public MutableLiveData<ProductDetailAdapter> adapter;
     public MutableLiveData<Product> product;
     public MutableLiveData<Boolean> isShow;
-
-    private MultableLiveEvent<ProductDetailEvent> cmd;
 
     private Product mProduct;
     private ProductDetailAdapter productDetailAdapter;
@@ -39,7 +36,6 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
         adapter = new MutableLiveData<>();
         product = new MutableLiveData<>();
         isShow = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         scrollRange = -1;
         isShow.setValue(true);
         productDetailAdapter = new ProductDetailAdapter(new Product(), this);
@@ -129,10 +125,6 @@ public class ProductDetailViewModel extends BaseViewModel implements ProductHand
     private void pick(Product product) {
         ProductDetailEvent event = new ProductDetailEvent(ProductDetailEvent.SHOW_DETAIL);
         event.setData(product);
-        cmd.call(event);
-    }
-
-    MultableLiveEvent<ProductDetailEvent> getCmd() {
-        return cmd;
+        getCmd().call(event);
     }
 }

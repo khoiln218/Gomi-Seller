@@ -36,7 +36,7 @@ public class SignInActivity extends BaseActivity<SignInViewModel, ActivitySignIn
     }
 
     private void subscribeToNavigationChanges() {
-        getViewModel().getLoginCommand().observe(this, new Observer<SignInEvent>() {
+        getViewModel().getCmd().observe(this, new Observer<SignInEvent>() {
             @Override
             public void onChanged(SignInEvent event) {
                 switch (event.getCode()) {

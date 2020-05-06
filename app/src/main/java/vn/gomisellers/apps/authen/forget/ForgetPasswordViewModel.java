@@ -13,13 +13,12 @@ import vn.gomisellers.apps.data.source.model.api.ForgetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.Inputs;
 
 /**
  * Created by KHOI LE on 3/16/2020.
  */
-public class ForgetPasswordViewModel extends BaseViewModel {
+public class ForgetPasswordViewModel extends BaseViewModel<ForgetEvent<Account>> {
     private AccountRepository mAppRepository = AccountRepository.getInstance();
 
     public MutableLiveData<String> username = new MutableLiveData<>();
@@ -28,8 +27,6 @@ public class ForgetPasswordViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> usernameRequestFocus = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> enableBtnForget = new MutableLiveData<>();
-
-    private MultableLiveEvent<ForgetEvent<Account>> cmd = new MultableLiveEvent<>();
 
     public ForgetPasswordViewModel() {
     }
@@ -85,11 +82,11 @@ public class ForgetPasswordViewModel extends BaseViewModel {
     private void forgetSuccess(Account account) {
         ForgetEvent<Account> event = new ForgetEvent<>(ForgetEvent.FORGER_SUCCESS);
         event.setData(account);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     private void hideKeyboard() {
-        cmd.call(new ForgetEvent(ForgetEvent.HIDE_KEYBOARD));
+        getCmd().call(new ForgetEvent(ForgetEvent.HIDE_KEYBOARD));
     }
 
     public void afterTextChanged() {
@@ -105,9 +102,5 @@ public class ForgetPasswordViewModel extends BaseViewModel {
 
     private void disableForgetPwd() {
         enableBtnForget.setValue(false);
-    }
-
-    MultableLiveEvent<ForgetEvent<Account>> getCmd() {
-        return cmd;
     }
 }

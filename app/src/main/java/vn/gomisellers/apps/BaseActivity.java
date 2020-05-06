@@ -17,7 +17,7 @@ import vn.gomisellers.apps.utils.ToastUtils;
 /**
  * Created by KHOI LE on 4/9/2020.
  */
-public abstract class BaseActivity<T, V> extends AppCompatActivity {
+public abstract class BaseActivity<VM extends ViewModel, V extends ViewDataBinding> extends AppCompatActivity {
     protected ViewDataBinding binding;
     protected ViewModel viewModel;
 
@@ -51,8 +51,8 @@ public abstract class BaseActivity<T, V> extends AppCompatActivity {
         }
     }
 
-    protected T getViewModel() {
-        return (T) viewModel;
+    protected VM getViewModel() {
+        return (VM) viewModel;
     }
 
     protected V getBinding() {

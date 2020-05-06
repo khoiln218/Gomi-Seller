@@ -10,11 +10,12 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.CategoryType;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
+import vn.gomisellers.apps.event.BaseEvent;
 
 /**
  * Created by KHOI LE on 4/6/2020.
  */
-public class SubCategoryViewModel extends BaseViewModel {
+public class SubCategoryViewModel extends BaseViewModel<BaseEvent> {
 
     private ShopRepository mShopRepository;
 

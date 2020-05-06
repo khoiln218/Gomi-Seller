@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="vn.gomisellers.apps.main.market.collection.subcate.pager.ProductCategoryController" />
+            type="vn.gomisellers.apps.main.market.collection.subcate.pager.ProductCategoryViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

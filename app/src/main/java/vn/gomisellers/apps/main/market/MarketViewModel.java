@@ -25,18 +25,15 @@ import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.CategoryHandler;
 import vn.gomisellers.apps.event.CollectionHandler;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends BaseViewModel implements ProductHandler, CategoryHandler, CollectionHandler {
+public class MarketViewModel extends BaseViewModel<MarketEvent> implements ProductHandler, CategoryHandler, CollectionHandler {
 
     private ProductRepository mProductRepository;
     public MutableLiveData<MarketListAdapter> marketListAdapter;
-
-    private MultableLiveEvent<MarketEvent> cmd;
 
     private List<Collection> collections;
     private MarketListAdapter adapter;
@@ -44,7 +41,6 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
     public MarketViewModel() {
         mProductRepository = ProductRepository.getInstance();
         marketListAdapter = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         collections = new ArrayList<>();
         adapter = new MarketListAdapter(collections, this);
         marketListAdapter.setValue(adapter);
@@ -74,7 +70,7 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
     }
 
     private void updateFail(String message) {
-        cmd.call(new MarketEvent(MarketEvent.SELECT_ERROR, message));
+        getCmd().call(new MarketEvent(MarketEvent.SELECT_ERROR, message));
     }
 
     private void productChange(Product product) {
@@ -154,10 +150,6 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
         adapter.setCollections(collections);
     }
 
-    public MultableLiveEvent<MarketEvent> getCmd() {
-        return cmd;
-    }
-
     private void refresh() {
         collections.clear();
         updateCollection();
@@ -165,30 +157,30 @@ public class MarketViewModel extends BaseViewModel implements ProductHandler, Ca
 
     @Override
     public void onShow(Product product) {
-        MarketEvent event = new MarketEvent(MarketEvent.SHOW_DETAIL);
+        MarketEvent<Product> event = new MarketEvent<>(MarketEvent.SHOW_DETAIL);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
     public void onPick(Product product) {
-        MarketEvent event = new MarketEvent(MarketEvent.ON_PICK);
+        MarketEvent<Product> event = new MarketEvent<>(MarketEvent.ON_PICK);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
     public void onClick(Category category) {
-        MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_CATEGORY);
+        MarketEvent<Category> event = new MarketEvent<>(MarketEvent.ONCLICK_CATEGORY);
         event.setData(category);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
     public void onSelect(Collection collection) {
-        MarketEvent event = new MarketEvent(MarketEvent.ONCLICK_COLLECTION);
+        MarketEvent<Collection> event = new MarketEvent<>(MarketEvent.ONCLICK_COLLECTION);
         collection.getData().clear();
         event.setData(collection);
-        cmd.call(event);
+        getCmd().call(event);
     }
 }

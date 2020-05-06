@@ -18,20 +18,17 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ToggleProductRequest;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 3/26/2020.
  */
-public class CollectionViewModel extends BaseViewModel implements ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
-    private final int INIT_PAGE = 1;
+public class CollectionViewModel extends BaseViewModel<CollectionEvent> implements ProductHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
 
     private ProductRepository mProductRepository;
 
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
-    private MultableLiveEvent<CollectionEvent> cmd;
 
     private List<Product> products;
     private ProductItemAdapter adapter;
@@ -43,7 +40,6 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
     public CollectionViewModel() {
         mProductRepository = ProductRepository.getInstance();
         productItemAdapter = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         products = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
@@ -52,13 +48,13 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
     private void pick(Product product) {
         CollectionEvent<Product> event = new CollectionEvent<>(CollectionEvent.ON_PICK);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     private void showDetail(Product product) {
         CollectionEvent<Product> event = new CollectionEvent<>(CollectionEvent.ON_SHOW);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     void requestPickProduct(Product product) {
@@ -96,7 +92,7 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
 
     @Override
     public void onRefresh() {
-        page = INIT_PAGE;
+        page = 1;
         products.clear();
         updateProductList();
         if (collectionId == MarketListAdapter.CollectionType.SEEN_PRODUCT) {
@@ -188,10 +184,6 @@ public class CollectionViewModel extends BaseViewModel implements ProductHandler
 
     private void updateProductList() {
         adapter.setProductList(products);
-    }
-
-    public MultableLiveEvent<CollectionEvent> getCmd() {
-        return cmd;
     }
 
     void setCollectionId(int collectionId) {

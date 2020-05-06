@@ -10,23 +10,15 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.greenrobot.eventbus.EventBus;
+
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ChangePasswordFragmentBinding;
-import vn.gomisellers.apps.main.mypage.info.AccountInfoListener;
+import vn.gomisellers.apps.main.mypage.info.AccountEvent;
 import vn.gomisellers.apps.utils.Utils;
 
 public class ChangePasswordFragment extends BaseFragment<ChangePasswordViewModel, ChangePasswordFragmentBinding> {
-
-    private AccountInfoListener listener;
-
-    public static ChangePasswordFragment newInstant(AccountInfoListener listener) {
-        return new ChangePasswordFragment(listener);
-    }
-
-    private ChangePasswordFragment(AccountInfoListener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -52,19 +44,17 @@ public class ChangePasswordFragment extends BaseFragment<ChangePasswordViewModel
             public void onChanged(ChangePasswordEvent event) {
                 switch (event.getCode()) {
                     case ChangePasswordEvent.SHOW_LOADING:
-                        if (listener != null)
-                            listener.showLoading();
+                        EventBus.getDefault().post(new AccountEvent<>(AccountEvent.SHOW_LOADDING));
                         break;
                     case ChangePasswordEvent.HIDE_LOADING:
-                        if (listener != null)
-                            listener.hideLoading();
+                        EventBus.getDefault().post(new AccountEvent<>(AccountEvent.HIDE_LOADDING));
                         break;
                     case ChangePasswordEvent.CHANGE_PASSWORD_DONE:
-                        if (listener != null)
-                            listener.done();
+                        EventBus.getDefault().post(new AccountEvent<>(AccountEvent.UPDATE_DONE));
                         break;
                     case ChangePasswordEvent.HIDE_KEY_BOARD:
-                        Utils.hideSoftKeyboard(getActivity());
+                        if (getActivity() != null)
+                            Utils.hideSoftKeyboard(getActivity());
                         break;
                 }
             }

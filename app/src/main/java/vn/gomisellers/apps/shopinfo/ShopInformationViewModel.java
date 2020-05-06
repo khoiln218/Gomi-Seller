@@ -27,14 +27,13 @@ import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.data.source.model.data.Shop;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.MediaHelper;
 
 /**
  * Created by KHOI LE on 3/19/2020.
  */
-public class ShopInformationViewModel extends BaseViewModel {
+public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     private static final int NONE_SELECT = -1;
 
     private ShopRepository mShopRepository;
@@ -63,8 +62,6 @@ public class ShopInformationViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> requestFocusUrl;
     public MutableLiveData<Boolean> requestFocusDes;
     public MutableLiveData<Boolean> isUpdateInfo;
-
-    private MultableLiveEvent<ShopInfoEvent> cmd;
 
     private List<Location> countries;
     private List<Location> provinces;
@@ -103,8 +100,6 @@ public class ShopInformationViewModel extends BaseViewModel {
         requestFocusUrl = new MutableLiveData<>();
         requestFocusDes = new MutableLiveData<>();
         isUpdateInfo = new MutableLiveData<>();
-
-        cmd = new MultableLiveEvent<>();
 
         showVerifyBtn();
         getFullSellerUrl();
@@ -195,7 +190,7 @@ public class ShopInformationViewModel extends BaseViewModel {
     }
 
     private void updateSuccess() {
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.UPDATE_SUCCESS));
+        getCmd().call(new ShopInfoEvent(ShopInfoEvent.UPDATE_SUCCESS));
     }
 
     private void getFullSellerUrl() {
@@ -207,7 +202,7 @@ public class ShopInformationViewModel extends BaseViewModel {
     }
 
     private void requestPermission() {
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.REQUEST_PERMISSION));
+        getCmd().call(new ShopInfoEvent(ShopInfoEvent.REQUEST_PERMISSION));
     }
 
     private void saveShopInfo(Shop shop) {
@@ -216,7 +211,7 @@ public class ShopInformationViewModel extends BaseViewModel {
 
     private void createSuccess(Shop shop) {
         saveShopInfo(shop);
-        cmd.call(new ShopInfoEvent(ShopInfoEvent.CREATE_SUCCESS));
+        getCmd().call(new ShopInfoEvent(ShopInfoEvent.CREATE_SUCCESS));
     }
 
     private void submitUrlForm() {
@@ -320,7 +315,7 @@ public class ShopInformationViewModel extends BaseViewModel {
     private void cropImage(Uri uri) {
         ShopInfoEvent<Uri> event = new ShopInfoEvent<>(ShopInfoEvent.START_CROPPER);
         event.setData(uri);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     private void requestShopVerifyUrl() {
@@ -352,10 +347,6 @@ public class ShopInformationViewModel extends BaseViewModel {
         showVerifyBtn();
         getFullSellerUrl();
         afterTextChanged();
-    }
-
-    MultableLiveEvent<ShopInfoEvent> getCmd() {
-        return cmd;
     }
 
     public void afterTextChanged() {
@@ -515,21 +506,21 @@ public class ShopInformationViewModel extends BaseViewModel {
         if (countries == null || countries.size() == 0) return;
         ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_COUNTRY_DIALOG);
         event.setData(new LocationList(countries, selectCountry));
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     public void showProvinceDialog() {
         if (provinces == null || provinces.size() == 0) return;
         ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_PROVINCE_DIALOG);
         event.setData(new LocationList(provinces, selectProvince));
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     public void showDistrictDialog() {
         if (districts == null || districts.size() == 0) return;
         ShopInfoEvent<LocationList> event = new ShopInfoEvent<>(ShopInfoEvent.SHOW_DISTRICT_DIALOG);
         event.setData(new LocationList(districts, selectDistrict));
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     void selectCountry(int position) {

@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel;
 /**
  * Created by KHOI LE on 4/15/2020.
  */
-public class BaseFragment<T, V> extends Fragment {
+public class BaseFragment<VM extends ViewModel, V extends ViewDataBinding> extends Fragment {
     protected ViewDataBinding binding;
     protected ViewModel viewModel;
 
-    protected T getViewModel() {
-        return (T) viewModel;
+    protected VM getViewModel() {
+        return (VM) viewModel;
     }
 
     protected V getBinding() {

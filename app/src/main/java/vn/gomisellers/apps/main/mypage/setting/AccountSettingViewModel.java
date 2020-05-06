@@ -15,24 +15,21 @@ import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.SignOutRequest;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 
 /**
  * Created by KHOI LE on 4/20/2020.
  */
-public class AccountSettingViewModel extends BaseViewModel {
+public class AccountSettingViewModel extends BaseViewModel<AccountSettingEvent> {
 
     private AccountRepository mAccountRepository;
     private AppPreferences mAppPreferences;
 
     public MutableLiveData<String> version;
-    public MultableLiveEvent<AccountSettingEvent> cmd;
 
     public AccountSettingViewModel() {
         version = new MutableLiveData<>();
         mAccountRepository = AccountRepository.getInstance();
         mAppPreferences = EappsApplication.getPreferences();
-        cmd = new MultableLiveEvent<>();
         version.setValue(getVersionName());
     }
 
@@ -47,7 +44,7 @@ public class AccountSettingViewModel extends BaseViewModel {
     }
 
     public void signOut() {
-        cmd.call(new AccountSettingEvent(AccountSettingEvent.SIGN_OUT));
+        getCmd().call(new AccountSettingEvent(AccountSettingEvent.SIGN_OUT));
     }
 
     void requestSignOut() {
@@ -69,9 +66,5 @@ public class AccountSettingViewModel extends BaseViewModel {
         });
 
         mAppPreferences.clear();
-    }
-
-    MultableLiveEvent<AccountSettingEvent> getCmd() {
-        return cmd;
     }
 }

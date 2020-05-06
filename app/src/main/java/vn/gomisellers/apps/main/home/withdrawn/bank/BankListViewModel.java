@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.data.source.model.data.Bank;
+import vn.gomisellers.apps.event.BaseEvent;
 
 /**
  * Created by KHOI LE on 4/9/2020.
  */
-public class BankListViewModel extends BaseViewModel implements SwipeRefreshLayout.OnRefreshListener {
+public class BankListViewModel extends BaseViewModel<BaseEvent> implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final int INIT_PAGE = 1;
 

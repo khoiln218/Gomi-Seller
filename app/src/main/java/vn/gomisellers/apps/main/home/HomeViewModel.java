@@ -21,7 +21,6 @@ import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.model.data.Shop;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.utils.ToastUtils;
@@ -29,7 +28,7 @@ import vn.gomisellers.apps.utils.ToastUtils;
 /**
  * Created by KHOI LE on 3/30/2020.
  */
-public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLoadMoreListener, TabLayout.OnTabSelectedListener {
+public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHandler, OnLoadMoreListener, TabLayout.OnTabSelectedListener {
     private static final int INIT_PAGE = 1;
     private static final int ALL = 0;
 
@@ -39,8 +38,6 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     public MutableLiveData<Shop> shop;
     public MutableLiveData<List<Category>> categories;
     public MutableLiveData<ProductItemAdapter> productItemAdapter;
-
-    private MultableLiveEvent<HomeEvent> cmd;
 
     private ProductItemAdapter adapter;
     private List<Product> products;
@@ -57,7 +54,6 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
         shop = new MutableLiveData<>();
         categories = new MutableLiveData<>();
         productItemAdapter = new MutableLiveData<>();
-        cmd = new MultableLiveEvent<>();
         products = new ArrayList<>();
         categoryList = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
@@ -118,25 +114,25 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
     public void onShow(Product product) {
         HomeEvent<Product> event = new HomeEvent<>(HomeEvent.SHOW_DETAIL);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     @Override
     public void onPick(Product product) {
         HomeEvent<Product> event = new HomeEvent<>(HomeEvent.REMOVE_PRODUCT);
         event.setData(product);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     public void withdrawn() {
-        cmd.call(new HomeEvent(HomeEvent.WITHDRAW));
+        getCmd().call(new HomeEvent(HomeEvent.WITHDRAW));
     }
 
     public void shareSNS() {
         String content = String.format("%s%s", EappsApplication.getPreferences().getSellerUrl(), mShop.getWebAddress());
         HomeEvent<String> event = new HomeEvent<>(HomeEvent.SHARE_SNS);
         event.setData(content);
-        cmd.call(event);
+        getCmd().call(event);
     }
 
     private void requestShopInformation() {
@@ -254,9 +250,5 @@ public class HomeViewModel extends BaseViewModel implements ProductHandler, OnLo
 
     private void updateProductList() {
         adapter.setProductList(products);
-    }
-
-    MultableLiveEvent<HomeEvent> getCmd() {
-        return cmd;
     }
 }

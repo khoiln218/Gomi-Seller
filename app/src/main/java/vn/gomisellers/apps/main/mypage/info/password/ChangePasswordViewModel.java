@@ -13,11 +13,10 @@ import vn.gomisellers.apps.data.source.model.api.AccountChangePasswordRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.Inputs;
 import vn.gomisellers.apps.utils.Strings;
 
-public class ChangePasswordViewModel extends BaseViewModel {
+public class ChangePasswordViewModel extends BaseViewModel<ChangePasswordEvent> {
 
     private AccountRepository mAccountRepository;
 
@@ -38,8 +37,6 @@ public class ChangePasswordViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> changePasswordEnable;
 
-    private MultableLiveEvent<ChangePasswordEvent> cmd;
-
     public ChangePasswordViewModel() {
         mAccountRepository = AccountRepository.getInstance();
 
@@ -59,8 +56,6 @@ public class ChangePasswordViewModel extends BaseViewModel {
         oldPasswordFocus = new MutableLiveData<>();
 
         changePasswordEnable = new MutableLiveData<>();
-
-        cmd = new MultableLiveEvent<>();
     }
 
     public void changePassword() {
@@ -78,7 +73,7 @@ public class ChangePasswordViewModel extends BaseViewModel {
     }
 
     private void hideKeyBoard() {
-        cmd.call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_KEY_BOARD));
+        getCmd().call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_KEY_BOARD));
     }
 
     private boolean confirmPassword() {
@@ -117,18 +112,18 @@ public class ChangePasswordViewModel extends BaseViewModel {
     }
 
     private void requestChangePassword() {
-        cmd.call(new ChangePasswordEvent(ChangePasswordEvent.SHOW_LOADING));
+        getCmd().call(new ChangePasswordEvent(ChangePasswordEvent.SHOW_LOADING));
         AccountChangePasswordRequest request = new AccountChangePasswordRequest();
         request.setPassword(oldPassword.getValue());
         request.setNewPassword(newPassword.getValue());
         mAccountRepository.changepassword(request, new ResultListener<ResponseData<Account>>() {
             @Override
             public void onLoaded(ResponseData<Account> result) {
-                cmd.call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_LOADING));
+                getCmd().call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_LOADING));
                 if (result.getCode() == ResultCode.CODE_OK) {
                     showToast(EappsApplication.getInstance().getString(R.string.change_password_success));
                     resetFormChangePassword();
-                    cmd.call(new ChangePasswordEvent(ChangePasswordEvent.CHANGE_PASSWORD_DONE));
+                    getCmd().call(new ChangePasswordEvent(ChangePasswordEvent.CHANGE_PASSWORD_DONE));
                 } else {
                     oldPasswordError.setValue(result.getMessage());
                     oldPasswordFocus.setValue(true);
@@ -137,13 +132,9 @@ public class ChangePasswordViewModel extends BaseViewModel {
 
             @Override
             public void onDataNotAvailable(String error) {
-                cmd.call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_LOADING));
+                getCmd().call(new ChangePasswordEvent(ChangePasswordEvent.HIDE_LOADING));
                 showToast(error);
             }
         });
-    }
-
-    MultableLiveEvent<ChangePasswordEvent> getCmd() {
-        return cmd;
     }
 }

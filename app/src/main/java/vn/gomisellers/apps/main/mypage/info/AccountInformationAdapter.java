@@ -19,8 +19,8 @@ public class AccountInformationAdapter extends FragmentStateAdapter {
 
     public AccountInformationAdapter(@NonNull AccountInformationActivity activity) {
         super(activity);
-        accountInformationFragment = AccountInformationFragment.newInstant(activity);
-        changePasswordFragment = ChangePasswordFragment.newInstant(activity);
+        accountInformationFragment = new AccountInformationFragment();
+        changePasswordFragment = new ChangePasswordFragment();
     }
 
     @NonNull

@@ -24,11 +24,10 @@ import vn.gomisellers.apps.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.MultableLiveEvent;
 import vn.gomisellers.apps.utils.Inputs;
 import vn.gomisellers.apps.utils.Utils;
 
-public class SignUpViewModel extends BaseViewModel {
+public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
     private AccountRepository accountRepository = AccountRepository.getInstance();
     private LocationRepository locationRepository = LocationRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
@@ -61,8 +60,6 @@ public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> countDown = new MutableLiveData<>();
 
     public MutableLiveData<LocationAdapter> locationAdapter = new MutableLiveData<>();
-
-    private final MultableLiveEvent<SignUpEvent> mSignUpCommand = new MultableLiveEvent<>();
 
     private LocationAdapter adapter;
     private List<Location> countries;
@@ -271,19 +268,15 @@ public class SignUpViewModel extends BaseViewModel {
     }
 
     private void gotoSignIn() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.GOTO_LOGIN));
+        getCmd().call(new SignUpEvent(SignUpEvent.GOTO_LOGIN));
     }
 
     private void signUpSuccess() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.SIGN_UP_SUCCESS));
+        getCmd().call(new SignUpEvent(SignUpEvent.SIGN_UP_SUCCESS));
     }
 
     private void hideKeyboard() {
-        mSignUpCommand.call(new SignUpEvent(SignUpEvent.HIDE_KEYBOARD));
-    }
-
-    MultableLiveEvent<SignUpEvent> getSignInCommand() {
-        return mSignUpCommand;
+        getCmd().call(new SignUpEvent(SignUpEvent.HIDE_KEYBOARD));
     }
 
     public void afterTextChanged() {
