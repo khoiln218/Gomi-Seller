@@ -17,4 +17,6 @@
 
     <color name="colorGreen">#34B44A</color>
     <color name="colorRed">#EC2226</color>
+
+    <color name="highlightNotify">#3FF05E26</color>
 </resources>

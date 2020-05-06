@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders;
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.FragmentNotificationBinding;
+import vn.gomisellers.apps.utils.ToastUtils;
 
 public class NotificationFragment extends BaseFragment<NotificationViewModel, FragmentNotificationBinding> {
 
@@ -26,11 +27,19 @@ public class NotificationFragment extends BaseFragment<NotificationViewModel, Fr
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getViewModel().requestNotifications();
+    }
+
     private void initCmd() {
         getViewModel().getCmd().observe(this, new Observer<NotificationEvent>() {
             @Override
             public void onChanged(NotificationEvent event) {
-
+                if (event.getCode() == NotificationEvent.ONCLICK) {
+                    ToastUtils.showToast("onCLick: " + ((Notification) event.getData()).getId());
+                }
             }
         });
     }
