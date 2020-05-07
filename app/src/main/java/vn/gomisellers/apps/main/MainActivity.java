@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -48,6 +53,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private boolean isExit = false;
     private Handler handler;
     private Runnable exitApp;
+    private View badge;
 
     private HomeFragment homeFragment;
     private MarketFragment marketFragment;
@@ -71,6 +77,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_main);
+
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) bottomNavigation.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(2);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+        badge = LayoutInflater.from(this).inflate(R.layout.layout_unread_message, itemView, false);
+        itemView.addView(badge);
+
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         permissionHelper = new PermissionHelper(this, PermissionHelper.photo_permissions);
@@ -143,7 +157,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             requestPermission();
         } else if (event.getCode() == MainEvent.CROP_IMAGE) {
             cropImage((Uri) event.getData());
+        } else if (event.getCode() == MainEvent.NOTIFY) {
+            int count = (int) event.getData();
+            updateNotificationBadges(count);
         }
+    }
+
+    private void updateNotificationBadges(int count) {
+        TextView tv = badge.findViewById(R.id.notification_badge);
+        tv.setText(count > 99 ? "99+" : String.valueOf(count));
+        tv.setVisibility(count > 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
