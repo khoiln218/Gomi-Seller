@@ -68,7 +68,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter {
                 ((SummaryHolder) holder).bind(order);
                 break;
             case PanelType.PRODUCT_LIST:
-                ((ProductHolder) holder).bind(order.getOrderDetails(), orderProductAdapter);
+                ((ProductHolder) holder).bind(order.getListItems(), orderProductAdapter);
                 break;
             case PanelType.PAYMENT:
                 ((PaymentHolder) holder).bind(order);

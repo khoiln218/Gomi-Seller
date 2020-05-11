@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.event.BaseEvent;
 import vn.gomisellers.apps.event.MultableLiveEvent;
@@ -35,6 +36,10 @@ public class BaseViewModel<E extends BaseEvent> extends ViewModel {
 
     protected void checkEmpty(List<Product> products) {
         setErrorMessage(products.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.empty));
+    }
+
+    protected void checkOrderEmpty(List<Order> orders) {
+        setErrorMessage(orders.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.order_empty));
     }
 
     private void refreshed() {

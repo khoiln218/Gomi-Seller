@@ -8,117 +8,47 @@ import vn.gomisellers.apps.main.mypage.order.detail.OrderDetail;
  * Created by KHOI LE on 4/28/2020.
  */
 public class Order {
+
     /**
-     * CustomerId : 00000000-0000-0000-0000-000000000000
-     * ShopId : 00000000-0000-0000-0000-000000000000
-     * OrderCode :
-     * FullName :
-     * Phone :
-     * AddressLine :
+     * Id : 3459fa9a-cc95-4953-9669-7add22db4610
+     * FullName : Đoàn Khương
+     * Note :
+     * OrderCode : #100002
+     * CreatedDate : 07/05/2020 15:49
+     * ConfirmStt : 0
+     * DeliveryStt : 0
+     * TransactionStt : 0
+     * CODStt : 0
+     * Status : 0
+     * TotalPrice : 400.000
+     * ProfitPerOrder : 40000
+     * TotalPage : 1
+     * TotalRows : 0
+     * listItems : null
      */
 
-    private String CustomerId;
-    private String ShopId;
-    private String OrderCode;
+    private String Id;
     private String FullName;
-    private String Phone;
-    private String AddressLine;
-
-    private String id;
-    private String name;
-    private long dateCreate;
-    private String thumnail;
-    private double price;
-    private int count;
-    private List<OrderDetail> orderDetails;
-
-    public Order(String id, String name, long dateCreate, String thumnail, double price, int count) {
-        this.id = id;
-        this.name = name;
-        this.dateCreate = dateCreate;
-        this.thumnail = thumnail;
-        this.price = price;
-        this.count = count;
-    }
+    private String Note;
+    private String OrderCode;
+    private String CreatedDate;
+    private int ConfirmStt;
+    private int DeliveryStt;
+    private int TransactionStt;
+    private int CODStt;
+    private int Status;
+    private String TotalPrice;
+    private int ProfitPerOrder;
+    private int TotalPage;
+    private int TotalRows;
+    private List<OrderDetail> listItems;
 
     public String getId() {
-        return id;
+        return Id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(long dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public String getThumnail() {
-        return thumnail;
-    }
-
-    public void setThumnail(String thumnail) {
-        this.thumnail = thumnail;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
-    public String getCustomerId() {
-        return CustomerId;
-    }
-
-    public void setCustomerId(String CustomerId) {
-        this.CustomerId = CustomerId;
-    }
-
-    public String getShopId() {
-        return ShopId;
-    }
-
-    public void setShopId(String ShopId) {
-        this.ShopId = ShopId;
-    }
-
-    public String getOrderCode() {
-        return OrderCode;
-    }
-
-    public void setOrderCode(String OrderCode) {
-        this.OrderCode = OrderCode;
+    public void setId(String Id) {
+        this.Id = Id;
     }
 
     public String getFullName() {
@@ -129,19 +59,107 @@ public class Order {
         this.FullName = FullName;
     }
 
-    public String getPhone() {
-        return Phone;
+    public String getNote() {
+        return Note;
     }
 
-    public void setPhone(String Phone) {
-        this.Phone = Phone;
+    public void setNote(String Note) {
+        this.Note = Note;
     }
 
-    public String getAddressLine() {
-        return AddressLine;
+    public String getOrderCode() {
+        return OrderCode;
     }
 
-    public void setAddressLine(String AddressLine) {
-        this.AddressLine = AddressLine;
+    public void setOrderCode(String OrderCode) {
+        this.OrderCode = OrderCode;
+    }
+
+    public String getCreatedDate() {
+        return CreatedDate;
+    }
+
+    public void setCreatedDate(String CreatedDate) {
+        this.CreatedDate = CreatedDate;
+    }
+
+    public int getConfirmStt() {
+        return ConfirmStt;
+    }
+
+    public void setConfirmStt(int ConfirmStt) {
+        this.ConfirmStt = ConfirmStt;
+    }
+
+    public int getDeliveryStt() {
+        return DeliveryStt;
+    }
+
+    public void setDeliveryStt(int DeliveryStt) {
+        this.DeliveryStt = DeliveryStt;
+    }
+
+    public int getTransactionStt() {
+        return TransactionStt;
+    }
+
+    public void setTransactionStt(int TransactionStt) {
+        this.TransactionStt = TransactionStt;
+    }
+
+    public int getCODStt() {
+        return CODStt;
+    }
+
+    public void setCODStt(int CODStt) {
+        this.CODStt = CODStt;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int Status) {
+        this.Status = Status;
+    }
+
+    public String getTotalPrice() {
+        return TotalPrice;
+    }
+
+    public void setTotalPrice(String TotalPrice) {
+        this.TotalPrice = TotalPrice;
+    }
+
+    public int getProfitPerOrder() {
+        return ProfitPerOrder;
+    }
+
+    public void setProfitPerOrder(int ProfitPerOrder) {
+        this.ProfitPerOrder = ProfitPerOrder;
+    }
+
+    public int getTotalPage() {
+        return TotalPage;
+    }
+
+    public void setTotalPage(int TotalPage) {
+        this.TotalPage = TotalPage;
+    }
+
+    public int getTotalRows() {
+        return TotalRows;
+    }
+
+    public void setTotalRows(int TotalRows) {
+        this.TotalRows = TotalRows;
+    }
+
+    public List<OrderDetail> getListItems() {
+        return listItems;
+    }
+
+    public void setListItems(List<OrderDetail> listItems) {
+        this.listItems = listItems;
     }
 }

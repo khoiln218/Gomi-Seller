@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="vn.gomisellers.apps.main.mypage.order.OrderListViewModel" />
@@ -17,12 +19,40 @@
 
         <include layout="@layout/layout_action_bar" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            setOrderAdapter="@{viewModel.orderAdapterMutableLiveData}"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/order_item" />
+            app:refreshing="@{viewModel.refreshing}"
+            app:setOnRefreshListener="@{()->viewModel.onRefresh()}">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    setOrderAdapter="@{viewModel.orderAdapterMutableLiveData}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/order_item" />
+
+                <include
+                    layout="@layout/layout_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?attr/actionBarSize"
+                    android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+                    app:msg="@{viewModel.errorMessage}" />
+
+                <include
+                    layout="@layout/layout_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?attr/actionBarSize"
+                    android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

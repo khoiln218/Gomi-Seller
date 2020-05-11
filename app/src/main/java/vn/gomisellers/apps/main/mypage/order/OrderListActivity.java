@@ -23,6 +23,9 @@ public class OrderListActivity extends BaseActivity<OrderListViewModel, Activity
         initBinding();
         initToolbar(getString(R.string.order_title));
         initCmd();
+
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 
     private void initCmd() {

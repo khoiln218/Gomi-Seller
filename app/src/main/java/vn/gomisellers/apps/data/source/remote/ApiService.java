@@ -18,6 +18,7 @@ import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.ForgetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.IntroduceRequest;
 import vn.gomisellers.apps.data.source.model.api.MegaCategoryRequest;
+import vn.gomisellers.apps.data.source.model.api.OrderRequest;
 import vn.gomisellers.apps.data.source.model.api.ProductDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.ResetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
@@ -32,6 +33,7 @@ import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Introduce;
 import vn.gomisellers.apps.data.source.model.data.Location;
+import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.model.data.Shop;
 
@@ -135,4 +137,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("account/logout")
     Call<ResponseData<Account>> logout(@Body SignOutRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("order/findbyshopid/page={page}")
+    Call<ResponseData<List<Order>>> findbyshopid(@Body OrderRequest request, @Path("page") int page);
 }

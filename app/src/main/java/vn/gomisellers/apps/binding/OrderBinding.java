@@ -39,6 +39,7 @@ public class OrderBinding {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setHasFixedSize(true);
             recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+            adapter.addOnScrollListener(recyclerView);
             recyclerView.setAdapter(adapter);
         }
     }

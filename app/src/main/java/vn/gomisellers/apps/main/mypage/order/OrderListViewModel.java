@@ -1,46 +1,94 @@
 package vn.gomisellers.apps.main.mypage.order;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomisellers.apps.BaseViewModel;
+import vn.gomisellers.apps.data.OrderRepository;
+import vn.gomisellers.apps.data.ResultListener;
+import vn.gomisellers.apps.data.source.model.api.OrderRequest;
+import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Order;
+import vn.gomisellers.apps.data.source.remote.ResultCode;
+import vn.gomisellers.apps.event.OnLoadMoreListener;
 
 /**
  * Created by KHOI LE on 4/28/2020.
  */
-public class OrderListViewModel extends BaseViewModel<OrderListEvent> implements OrderHandler {
+public class OrderListViewModel extends BaseViewModel<OrderListEvent> implements OrderHandler, SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+
+    private OrderRepository mOrderRepository;
 
     public MutableLiveData<OrderAdapter> orderAdapterMutableLiveData;
 
     private List<Order> orderList;
     private OrderAdapter adapter;
+    private int page;
+    private int totalPage;
 
     public OrderListViewModel() {
+        mOrderRepository = OrderRepository.getInstance();
         orderAdapterMutableLiveData = new MutableLiveData<>();
         orderList = new ArrayList<>();
-        adapter = new OrderAdapter(orderList, this);
+        adapter = new OrderAdapter(orderList, this, this);
         orderAdapterMutableLiveData.setValue(adapter);
 
-        dummy();
+        totalPage = 0;
+        page = 1;
     }
 
-    private void dummy() {
-        for (int i = 0; i < 10; i++) {
-            orderList.add(new Order("Đơn hàng 123450000088765",
-                    "Xịt trị mụn lưng Aetem CleanBack Mist",
-                    1588068563000L,
-                    "http://192.168.1.33:2526/Product/gomi_97b8318a-abfb-446b-9908-18facb413d86-637195148088041676.jpg",
-                    339000F, 16));
-            orderList.add(new Order("Đơn hàng 123450000088766",
-                    "Mặt Nạ Tế Bào Gốc Ayo Premium Cell Essence Mask Pack (1 Box 5 miếng)",
-                    1588128292000L,
-                    "http://192.168.1.33:2526/Product/gomi_dd24880d-b637-41c9-98fb-9eca87b33ff3-637207137845215685.jpg",
-                    599000F, 10));
-        }
-        adapter.notifyDataSetChanged();
+    @Override
+    public void onRefresh() {
+        page = 1;
+        orderList.clear();
+        updateOrders();
+        requestOrderList();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (page >= totalPage) return;
+        page++;
+        orderList.add(null);
+        updateOrders();
+        requestOrderList();
+    }
+
+    private void requestOrderList() {
+        adapter.setLoading();
+        OrderRequest request = new OrderRequest();
+        mOrderRepository.findbyshopid(request, page, new ResultListener<ResponseData<List<Order>>>() {
+            @Override
+            public void onLoaded(ResponseData<List<Order>> result) {
+                loaded();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    orderList.addAll(result.getResult());
+                    totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    orderList.remove(null);
+                    updateOrders();
+                    checkOrderEmpty(result.getResult());
+                } else {
+                    showToast(result.getMessage());
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                loaded();
+                checkConnection(error);
+            }
+        });
+    }
+
+    private void updateOrders() {
+        adapter.setOrderList(orderList);
+    }
+
+    void showLoading() {
+        showProgressing();
     }
 
     @Override
