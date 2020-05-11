@@ -6,11 +6,11 @@
 
         <variable
             name="orderDetail"
-            type="vn.gomisellers.apps.main.mypage.order.detail.OrderDetail" />
+            type="vn.gomisellers.apps.data.source.model.data.OrderDetail" />
 
         <variable
-            name="productHandler"
-            type="vn.gomisellers.apps.event.ProductHandler" />
+            name="orderHandler"
+            type="vn.gomisellers.apps.event.OrderHandler" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{(v)->productHandler.onShow(orderDetail.product)}"
+            android:onClick="@{(v)->orderHandler.onShowProduct(orderDetail.productId)}"
             android:orientation="horizontal"
             android:padding="8dp">
 
@@ -33,7 +33,7 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    setImageOrder="@{orderDetail.product.thumbnail}"
+                    setImageOrder="@{orderDetail.mediaPath}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:src="@drawable/ic_launcher_foreground"
@@ -95,7 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="1234567890000" />
+                        android:text="@{orderDetail.SKU}" />
 
                 </LinearLayout>
 
@@ -111,7 +111,7 @@
                         android:text="Số lượng: " />
 
                     <TextView
-                        setText="@{orderDetail.count}"
+                        setText="@{orderDetail.quantity}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold" />

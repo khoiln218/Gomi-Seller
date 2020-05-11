@@ -11,10 +11,11 @@ import java.util.List;
 
 import vn.gomisellers.apps.adapter.holder.LoadingHolder;
 import vn.gomisellers.apps.data.source.model.data.Order;
+import vn.gomisellers.apps.data.source.model.data.OrderDetail;
 import vn.gomisellers.apps.databinding.OrderProductListItemBinding;
 import vn.gomisellers.apps.databinding.OrderSummaryItemBinding;
 import vn.gomisellers.apps.databinding.PaymentItemBinding;
-import vn.gomisellers.apps.event.ProductHandler;
+import vn.gomisellers.apps.event.OrderHandler;
 
 /**
  * Created by KHOI LE on 4/29/2020.
@@ -24,9 +25,9 @@ public class OrderDetailAdapter extends RecyclerView.Adapter {
     private Order order;
     private OrderProductAdapter orderProductAdapter;
 
-    public OrderDetailAdapter(ProductHandler productHandler) {
+    public OrderDetailAdapter(OrderHandler orderHandler) {
         panelList = new ArrayList<>();
-        orderProductAdapter = new OrderProductAdapter(new ArrayList<OrderDetail>(), productHandler);
+        orderProductAdapter = new OrderProductAdapter(new ArrayList<OrderDetail>(), orderHandler);
         setPanelList();
     }
 

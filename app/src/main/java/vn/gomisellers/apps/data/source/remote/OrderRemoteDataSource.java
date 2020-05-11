@@ -7,6 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.gomisellers.apps.data.OrderDataSource;
 import vn.gomisellers.apps.data.ResultListener;
+import vn.gomisellers.apps.data.source.model.api.OrderDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.OrderRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Order;
@@ -32,6 +33,27 @@ public class OrderRemoteDataSource implements OrderDataSource {
 
             @Override
             public void onFailure(Call<ResponseData<List<Order>>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void findbyid(OrderDetailRequest request, final ResultListener<ResponseData<Order>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Order>> call = client.findbyid(request);
+        call.enqueue(new Callback<ResponseData<Order>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Order>> call, Response<ResponseData<Order>> response) {
+                if (response.body().isStatus()) {
+                    callback.onLoaded(response.body());
+                } else {
+                    callback.onDataNotAvailable(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Order>> call, Throwable t) {
                 callback.onDataNotAvailable(t.getMessage());
             }
         });

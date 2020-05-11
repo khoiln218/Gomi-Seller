@@ -21,6 +21,8 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailViewModel, Acti
         String id = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
         initBinding();
         initToolbar(getString(R.string.order_detail_title));
+        
+        getViewModel().showLoading();
         getViewModel().requestOrderInformation(id);
     }
 

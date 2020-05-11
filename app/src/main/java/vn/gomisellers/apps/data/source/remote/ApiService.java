@@ -18,6 +18,7 @@ import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.ForgetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.IntroduceRequest;
 import vn.gomisellers.apps.data.source.model.api.MegaCategoryRequest;
+import vn.gomisellers.apps.data.source.model.api.OrderDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.OrderRequest;
 import vn.gomisellers.apps.data.source.model.api.ProductDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.ResetPwdRequest;
@@ -141,4 +142,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("order/findbyshopid/page={page}")
     Call<ResponseData<List<Order>>> findbyshopid(@Body OrderRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("order/findbyid")
+    Call<ResponseData<Order>> findbyid(@Body OrderDetailRequest request);
 }

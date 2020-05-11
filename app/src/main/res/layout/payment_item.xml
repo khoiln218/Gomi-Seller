@@ -87,7 +87,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="Nguyễn Văn A"
+                    android:text="@{order.fullName}"
                     android:textColor="#707070"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -139,7 +139,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="1,000,000đ"
+                    android:text="@{order.totalPrice}"
                     android:textColor="#707070"
                     android:textSize="14sp"
                     android:textStyle="bold" />

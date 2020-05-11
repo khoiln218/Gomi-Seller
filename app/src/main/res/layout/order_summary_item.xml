@@ -27,7 +27,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{order.id}"
+                    android:text="@{order.orderCode}"
                     android:textColor="#707070"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="05 tháng 05 09:38"
+                    android:text="@{order.createdDate}"
                     android:textColor="#8b8b8b"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -60,10 +60,10 @@
                         android:text="Doanh thu: " />
 
                     <TextView
+                        setPrice="@{order.profitPerOrder}"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
-                        android:text="299,000đ"
                         android:textColor="#707070"
                         android:textSize="14sp"
                         android:textStyle="bold" />

@@ -8,19 +8,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import vn.gomisellers.apps.data.source.model.data.OrderDetail;
 import vn.gomisellers.apps.databinding.OrderProductItemBinding;
-import vn.gomisellers.apps.event.ProductHandler;
+import vn.gomisellers.apps.event.OrderHandler;
 
 /**
  * Created by KHOI LE on 4/29/2020.
  */
 public class OrderProductAdapter extends RecyclerView.Adapter {
     private List<OrderDetail> orderDetailList;
-    private ProductHandler productHandler;
+    private OrderHandler orderHandler;
 
-    public OrderProductAdapter(List<OrderDetail> orderDetailList, ProductHandler productHandler) {
+    public OrderProductAdapter(List<OrderDetail> orderDetailList, OrderHandler orderHandler) {
         this.orderDetailList = orderDetailList;
-        this.productHandler = productHandler;
+        this.orderHandler = orderHandler;
     }
 
     public void setOrderDetailList(List<OrderDetail> orderDetailList) {
@@ -36,7 +37,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((OrderProductItemHolder) holder).bind(orderDetailList.get(position), productHandler);
+        ((OrderProductItemHolder) holder).bind(orderDetailList.get(position), orderHandler);
     }
 
     @Override
@@ -59,9 +60,9 @@ public class OrderProductAdapter extends RecyclerView.Adapter {
             this.binding = binding;
         }
 
-        public void bind(OrderDetail orderDetail, ProductHandler productHandler) {
+        public void bind(OrderDetail orderDetail, OrderHandler orderHandler) {
             binding.setOrderDetail(orderDetail);
-            binding.setProductHandler(productHandler);
+            binding.setOrderHandler(orderHandler);
             binding.executePendingBindings();
         }
     }
