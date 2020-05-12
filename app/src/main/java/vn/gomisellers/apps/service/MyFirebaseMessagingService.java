@@ -19,7 +19,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
 import vn.gomisellers.apps.R;
-import vn.gomisellers.apps.main.MainActivity;
+import vn.gomisellers.apps.main.mypage.order.detail.OrderDetailActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.LogUtils;
 
@@ -38,15 +38,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             LogUtils.d(TAG, "payload: " + new Gson().toJson(remoteMessage.getData()));
-            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+            String id = remoteMessage.getData().get(GomiConstants.EXTRA_ID);
+            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), id);
         }
     }
 
-    private void sendNotification(String title, String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    private void sendNotification(String title, String messageBody, String id) {
+        Intent intent = new Intent(this, OrderDetailActivity.class);
+        intent.putExtra(GomiConstants.EXTRA_ID, id);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, GomiConstants.REQUEST_NOTIFY_ENTER, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

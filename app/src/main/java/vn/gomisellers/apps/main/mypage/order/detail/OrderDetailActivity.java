@@ -7,9 +7,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomisellers.apps.BaseActivity;
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ActivityOrderDetailBinding;
 import vn.gomisellers.apps.utils.GomiConstants;
+import vn.gomisellers.apps.utils.Intents;
+import vn.gomisellers.apps.utils.LogUtils;
 
 public class OrderDetailActivity extends BaseActivity<OrderDetailViewModel, ActivityOrderDetailBinding> {
 
@@ -18,6 +21,13 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailViewModel, Acti
         super.onCreate(savedInstanceState);
         if (getIntent() == null)
             finish();
+
+        if (!EappsApplication.getPreferences().isLogin()) {
+            LogUtils.d("TAG", "user isn't login");
+            Intents.startLoginActivity(this);
+            finish();
+        }
+
         String id = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
         initBinding();
         initToolbar(getString(R.string.order_detail_title));

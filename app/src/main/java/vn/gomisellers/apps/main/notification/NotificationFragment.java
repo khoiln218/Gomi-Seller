@@ -42,7 +42,7 @@ public class NotificationFragment extends BaseFragment<NotificationViewModel, Fr
                 if (event.getCode() == NotificationEvent.ONCLICK) {
                     int id = ((Notification) event.getData()).getId();
                     Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                    intent.putExtra(GomiConstants.EXTRA_ID, "0000-0000-00" + String.format("%02d", id));
+                    intent.putExtra(GomiConstants.EXTRA_ID, id);
                     startActivity(intent);
                 }
             }
