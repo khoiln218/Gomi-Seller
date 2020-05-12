@@ -60,7 +60,7 @@ public class Order {
     private int Status;
     private String StatusName;
     private String TotalPrice;
-    private int ProfitPerOrder;
+    private double ProfitPerOrder;
     private int TotalPage;
     private int TotalRows;
     private List<OrderDetail> listItems;
@@ -249,11 +249,11 @@ public class Order {
         this.TotalPrice = TotalPrice;
     }
 
-    public int getProfitPerOrder() {
+    public double getProfitPerOrder() {
         return ProfitPerOrder;
     }
 
-    public void setProfitPerOrder(int ProfitPerOrder) {
+    public void setProfitPerOrder(double ProfitPerOrder) {
         this.ProfitPerOrder = ProfitPerOrder;
     }
 

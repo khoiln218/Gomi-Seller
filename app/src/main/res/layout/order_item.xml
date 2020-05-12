@@ -85,7 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="Đang chờ xử lý"
+                    android:text="@{order.statusName}"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp"
                     android:textStyle="bold" />

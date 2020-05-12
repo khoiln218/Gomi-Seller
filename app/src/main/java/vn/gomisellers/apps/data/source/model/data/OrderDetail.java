@@ -27,7 +27,7 @@ public class OrderDetail {
     private String Title;
     private String SKU;
     private String MediaPath;
-    private double Price;
+    private String Price;
     private int Quantity;
     private String PriceTemp;
 
@@ -95,11 +95,11 @@ public class OrderDetail {
         this.MediaPath = MediaPath;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return Price;
     }
 
-    public void setPrice(double Price) {
+    public void setPrice(String Price) {
         this.Price = Price;
     }
 
