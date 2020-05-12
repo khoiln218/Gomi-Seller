@@ -56,12 +56,15 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    address="@{order.addressLine}"
+                    district="@{order.districtName}"
+                    province="@{order.provinceName}"
+                    ward="@{order.wardName}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="302 Nguyễn văn Đậu, P11, Q.Bình Thạnh, TP.HCM"
                     android:textColor="#707070"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -134,12 +137,12 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    setPrice="@{order.totalPrice}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="@{order.totalPrice}"
                     android:textColor="#707070"
                     android:textSize="14sp"
                     android:textStyle="bold" />

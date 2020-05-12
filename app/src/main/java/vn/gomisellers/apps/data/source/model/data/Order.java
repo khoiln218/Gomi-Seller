@@ -12,7 +12,7 @@ public class Order {
      * FullName : Khoi Le 02
      * Note :
      * OrderCode : #100015
-     * CreatedDate : Hôm nay 17:09
+     * CreatedDate : Hôm qua 17:09
      * AddressLine :
      * ProvinceId : 0
      * ProvinceName :
@@ -21,16 +21,12 @@ public class Order {
      * WardId : 0
      * WardName :
      * ConfirmStt : 0
-     * ConfirmName :
      * DeliveryStt : 0
-     * DeliveryName :
      * TransactionStt : 0
-     * TransactionName :
      * CODStt : 0
-     * CODSName :
      * Status : 0
-     * StatusName : Mới
-     * TotalPrice : 22.368.000
+     * StatusName :
+     * TotalPrice : 2.2368E7
      * ProfitPerOrder : 2236800
      * TotalPage : 2
      * TotalRows : 0
@@ -50,17 +46,13 @@ public class Order {
     private int WardId;
     private String WardName;
     private int ConfirmStt;
-    private String ConfirmName;
     private int DeliveryStt;
-    private String DeliveryName;
     private int TransactionStt;
-    private String TransactionName;
     private int CODStt;
-    private String CODSName;
     private int Status;
     private String StatusName;
-    private String TotalPrice;
-    private double ProfitPerOrder;
+    private double TotalPrice;
+    private int ProfitPerOrder;
     private int TotalPage;
     private int TotalRows;
     private List<OrderDetail> listItems;
@@ -169,28 +161,12 @@ public class Order {
         this.ConfirmStt = ConfirmStt;
     }
 
-    public String getConfirmName() {
-        return ConfirmName;
-    }
-
-    public void setConfirmName(String ConfirmName) {
-        this.ConfirmName = ConfirmName;
-    }
-
     public int getDeliveryStt() {
         return DeliveryStt;
     }
 
     public void setDeliveryStt(int DeliveryStt) {
         this.DeliveryStt = DeliveryStt;
-    }
-
-    public String getDeliveryName() {
-        return DeliveryName;
-    }
-
-    public void setDeliveryName(String DeliveryName) {
-        this.DeliveryName = DeliveryName;
     }
 
     public int getTransactionStt() {
@@ -201,28 +177,12 @@ public class Order {
         this.TransactionStt = TransactionStt;
     }
 
-    public String getTransactionName() {
-        return TransactionName;
-    }
-
-    public void setTransactionName(String TransactionName) {
-        this.TransactionName = TransactionName;
-    }
-
     public int getCODStt() {
         return CODStt;
     }
 
     public void setCODStt(int CODStt) {
         this.CODStt = CODStt;
-    }
-
-    public String getCODSName() {
-        return CODSName;
-    }
-
-    public void setCODSName(String CODSName) {
-        this.CODSName = CODSName;
     }
 
     public int getStatus() {
@@ -241,19 +201,19 @@ public class Order {
         this.StatusName = StatusName;
     }
 
-    public String getTotalPrice() {
+    public double getTotalPrice() {
         return TotalPrice;
     }
 
-    public void setTotalPrice(String TotalPrice) {
+    public void setTotalPrice(double TotalPrice) {
         this.TotalPrice = TotalPrice;
     }
 
-    public double getProfitPerOrder() {
+    public int getProfitPerOrder() {
         return ProfitPerOrder;
     }
 
-    public void setProfitPerOrder(double ProfitPerOrder) {
+    public void setProfitPerOrder(int ProfitPerOrder) {
         this.ProfitPerOrder = ProfitPerOrder;
     }
 

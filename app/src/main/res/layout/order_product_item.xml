@@ -122,9 +122,9 @@
                         android:text=" | Giá: " />
 
                     <TextView
+                        setPrice="@{orderDetail.price}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{orderDetail.price}"
                         android:textStyle="bold" />
 
                 </LinearLayout>

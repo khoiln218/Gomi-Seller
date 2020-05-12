@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{order.orderCode}"
                     android:textColor="#707070"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView

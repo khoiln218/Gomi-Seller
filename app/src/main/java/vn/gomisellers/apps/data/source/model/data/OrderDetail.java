@@ -8,15 +8,15 @@ public class OrderDetail {
     /**
      * Id : 00000000-0000-0000-0000-000000000000
      * OrderId : 00000000-0000-0000-0000-000000000000
-     * ProductId : e6196bf4-6f32-4a51-b8d4-640d27d3f09f
+     * ProductId : ff961d03-fa40-4988-967a-3cf4c087d176
      * DetailId : 0
-     * Name : Dầu Gội Ngăn Rụng Tóc Aheads Premium Hidden Therapy Shampoo
+     * Name : Lăn Loại Bỏ Tế Bào Chết Và Dưỡng Ẩm Cho Bàn Chân - Athis BHA+ Foot Stick Softening
      * Title :
-     * SKU : AHPRHITS43001
-     * MediaPath : http://192.168.1.33:2526/Product/gomi_1bff68d9-9766-4052-aa0b-417c1a404d0c-637213342121682313.jpg
-     * Price : 426.000
-     * Quantity : 5
-     * PriceTemp : 2.130.000
+     * SKU : ATFOSS0001601
+     * MediaPath : http://192.168.1.24:2526/Product/gomi_ace40c39-e618-4f72-b125-8fa21c1f5c5b-637207134087619844.jpg
+     * Price : 199000
+     * Quantity : 1
+     * PriceTemp : 199000
      */
 
     private String Id;
@@ -27,9 +27,9 @@ public class OrderDetail {
     private String Title;
     private String SKU;
     private String MediaPath;
-    private String Price;
+    private int Price;
     private int Quantity;
-    private String PriceTemp;
+    private int PriceTemp;
 
     public String getId() {
         return Id;
@@ -95,11 +95,11 @@ public class OrderDetail {
         this.MediaPath = MediaPath;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return Price;
     }
 
-    public void setPrice(String Price) {
+    public void setPrice(int Price) {
         this.Price = Price;
     }
 
@@ -111,11 +111,11 @@ public class OrderDetail {
         this.Quantity = Quantity;
     }
 
-    public String getPriceTemp() {
+    public int getPriceTemp() {
         return PriceTemp;
     }
 
-    public void setPriceTemp(String PriceTemp) {
+    public void setPriceTemp(int PriceTemp) {
         this.PriceTemp = PriceTemp;
     }
 }
