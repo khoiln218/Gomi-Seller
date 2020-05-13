@@ -1,7 +1,5 @@
 package vn.gomisellers.apps.main.mypage.order.detail;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import vn.gomisellers.apps.BaseViewModel;
@@ -10,16 +8,13 @@ import vn.gomisellers.apps.data.ResultListener;
 import vn.gomisellers.apps.data.source.model.api.OrderDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.data.Order;
-import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
-import vn.gomisellers.apps.event.BaseEvent;
 import vn.gomisellers.apps.event.OrderHandler;
-import vn.gomisellers.apps.event.ProductHandler;
 
 /**
  * Created by KHOI LE on 4/29/2020.
  */
-public class OrderDetailViewModel extends BaseViewModel<BaseEvent> implements OrderHandler {
+public class OrderDetailViewModel extends BaseViewModel<OrderDetailEvent> implements OrderHandler {
 
     private OrderRepository mOrderRepository;
 
@@ -68,6 +63,8 @@ public class OrderDetailViewModel extends BaseViewModel<BaseEvent> implements Or
 
     @Override
     public void onShowProduct(String id) {
-
+        OrderDetailEvent<String> event = new OrderDetailEvent<>(OrderDetailEvent.SHOW_DETAIL);
+        event.setData(id);
+        getCmd().call(event);
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomisellers.apps.BaseActivity;
@@ -31,9 +32,20 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailViewModel, Acti
         String id = getIntent().getStringExtra(GomiConstants.EXTRA_ID);
         initBinding();
         initToolbar(getString(R.string.order_detail_title));
-        
+        initCmd();
+
         getViewModel().showLoading();
         getViewModel().requestOrderInformation(id);
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<OrderDetailEvent>() {
+            @Override
+            public void onChanged(OrderDetailEvent event) {
+                String productId = (String) event.getData();
+                Intents.startProductDetailActivity(OrderDetailActivity.this, productId);
+            }
+        });
     }
 
     @Override
