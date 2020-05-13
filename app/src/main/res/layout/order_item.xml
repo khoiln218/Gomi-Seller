@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{order.orderCode}"
                     android:textColor="#707070"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -46,6 +46,15 @@
                     android:textColor="#8b8b8b"
                     android:textSize="14sp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:text="@{order.description}"
+                android:textColor="#707070"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"

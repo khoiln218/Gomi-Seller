@@ -57,6 +57,8 @@ public class Order {
     private int TotalRows;
     private List<OrderDetail> listItems;
 
+    private String Description;
+
     public String getId() {
         return Id;
     }
@@ -239,5 +241,13 @@ public class Order {
 
     public void setListItems(List<OrderDetail> listItems) {
         this.listItems = listItems;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String Description) {
+        this.Description = Description;
     }
 }
