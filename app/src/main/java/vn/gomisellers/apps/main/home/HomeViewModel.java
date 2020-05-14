@@ -202,7 +202,7 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
 
     private void requestMegaCategory() {
         showProgressing();
-        final MegaCategoryRequest request = new MegaCategoryRequest();
+        MegaCategoryRequest request = new MegaCategoryRequest();
         mShopRepository.megacategory(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override
             public void onLoaded(ResponseData<List<Category>> result) {
@@ -230,7 +230,7 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
 
     private void requestProduct() {
         adapter.setLoading();
-        final ShopRequest request = new ShopRequest();
+        ShopRequest request = new ShopRequest();
         request.setFindById(categoryId);
         mProductRepository.findbyshop(request, page, new ResultListener<ResponseData<List<Product>>>() {
             @Override

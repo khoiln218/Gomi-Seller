@@ -10,10 +10,18 @@
             type="vn.gomisellers.apps.main.notification.NotificationViewModel" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        setNotifyAdapter="@{viewModel.notificationAdapterMutableLiveData}"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/notify_item" />
+        android:layout_height="match_parent"
+        app:refreshing="@{viewModel.refreshing}"
+        app:setOnRefreshListener="@{()->viewModel.onRefresh()}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            setNotifyAdapter="@{viewModel.notificationAdapterMutableLiveData}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/notify_item" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </layout>

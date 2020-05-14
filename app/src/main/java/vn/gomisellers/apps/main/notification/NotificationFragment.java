@@ -32,7 +32,7 @@ public class NotificationFragment extends BaseFragment<NotificationViewModel, Fr
     @Override
     public void onResume() {
         super.onResume();
-        getViewModel().requestNotifications();
+        getViewModel().onRefresh();
     }
 
     private void initCmd() {
