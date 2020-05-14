@@ -12,6 +12,7 @@ import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.MegaCategoryRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ShopRequest;
+import vn.gomisellers.apps.data.source.model.api.UpdateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Shop;
@@ -113,6 +114,29 @@ public class ShopRemoteDataSource implements ShopDataSource {
     public void findbyid(ShopRequest request, final ResultListener<ResponseData<Shop>> callback) {
         ApiService client = ApiConfig.getClient();
         Call<ResponseData<Shop>> call = client.findbyid(request);
+        call.enqueue(new Callback<ResponseData<Shop>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Shop>> call, Response<ResponseData<Shop>> response) {
+                try {
+                    if (response.body().isStatus())
+                        callback.onLoaded(response.body());
+                    else callback.onDataNotAvailable(response.body().getMessage());
+                } catch (Exception e) {
+                    callback.onDataNotAvailable(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Shop>> call, Throwable t) {
+                callback.onDataNotAvailable(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void updateinfo(UpdateShopRequest request, final ResultListener<ResponseData<Shop>> callback) {
+        ApiService client = ApiConfig.getClient();
+        Call<ResponseData<Shop>> call = client.updateinfo(request);
         call.enqueue(new Callback<ResponseData<Shop>>() {
             @Override
             public void onResponse(Call<ResponseData<Shop>> call, Response<ResponseData<Shop>> response) {

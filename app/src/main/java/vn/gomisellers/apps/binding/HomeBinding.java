@@ -63,7 +63,7 @@ public class HomeBinding {
                         .override(Utils.getScreenWidth())
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .skipMemoryCache(false))
                 .into(imageView);
     }
 

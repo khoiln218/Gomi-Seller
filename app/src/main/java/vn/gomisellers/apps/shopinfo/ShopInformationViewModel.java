@@ -23,6 +23,7 @@ import vn.gomisellers.apps.data.source.local.prefs.AppPreferences;
 import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ShopRequest;
+import vn.gomisellers.apps.data.source.model.api.UpdateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.data.source.model.data.Shop;
@@ -72,6 +73,7 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     private int selectProvince;
     private int selectDistrict;
     private boolean isUpdate;
+    private boolean isCoverChange;
 
     public ShopInformationViewModel() {
         mShopRepository = ShopRepository.getInstance();
@@ -122,7 +124,7 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     }
 
     private void submitUpdateShop() {
-        if (sellerUrlEror())
+        if (sellerUrlError())
             return;
         if (LengthDesOver())
             return;
@@ -130,7 +132,7 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     }
 
     private void submitCreateShop() {
-        if (sellerUrlEror())
+        if (sellerUrlError())
             return;
         if (LengthDesOver())
             return;
@@ -138,14 +140,14 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     }
 
     private boolean LengthDesOver() {
-        if (description.getValue() != null && description.getValue().length() > GomiConstants.MAX_CHAR) {
+        if (maxDesLength()) {
             requestFocusDes.setValue(true);
             return true;
         }
         return false;
     }
 
-    private boolean sellerUrlEror() {
+    private boolean sellerUrlError() {
         String url = fullSellerUrl.getValue();
         if (!TextUtils.isEmpty(url) && !Patterns.WEB_URL.matcher(url).matches()) {
             urlError();
@@ -186,7 +188,35 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     }
 
     private void requestUpdateShop() {
-        updateSuccess();
+        showProgressing();
+        UpdateShopRequest request = new UpdateShopRequest();
+        request.setShopName(shopName.getValue());
+        request.setCountryId(countries.get(selectCountry).getId());
+        request.setProvinceId(provinces.get(selectProvince).getId());
+        request.setDistrictId(districts.get(selectDistrict).getId());
+        request.setWebAddress(sellerUrl.getValue());
+        String des = description.getValue();
+        request.setDescription(des == null ? "" : des);
+        if (imageUri != null)
+            request.setCover(MediaHelper.getBase64FromImageUri(EappsApplication.getInstance(), imageUri, 1024, 1024));
+        mShopRepository.updateinfo(request, new ResultListener<ResponseData<Shop>>() {
+            @Override
+            public void onLoaded(ResponseData<Shop> result) {
+                loaded();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    showToast(result.getMessage());
+                    updateSuccess();
+                } else {
+                    showToast(result.getMessage());
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                loaded();
+                showToast(error);
+            }
+        });
     }
 
     private void updateSuccess() {
@@ -310,6 +340,8 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     void setCover(Uri coverUrl) {
         imageUri = coverUrl;
         this.coverUri.setValue(imageUri);
+        isCoverChange = true;
+        if (isUpdate) afterTextChanged();
     }
 
     private void cropImage(Uri uri) {
@@ -350,15 +382,42 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     }
 
     public void afterTextChanged() {
-        if (validateShopName() && validateUrl() && validateLocation())
-            enableBtnSubmit.setValue(true);
-        else
-            enableBtnSubmit.setValue(false);
+        if (isUpdate && validateLocation()) {
+            enableBtnSubmit.setValue(isChange());
+        } else {
+            if (validateShopName() && validateUrl() && validateLocation() && !maxDesLength())
+                enableBtnSubmit.setValue(true);
+            else
+                enableBtnSubmit.setValue(false);
+        }
+    }
+
+    private boolean isChange() {
+        if (TextUtils.isEmpty(shopName.getValue()) || TextUtils.isEmpty(sellerUrl.getValue()))
+            return false;
+        if (selectDistrict == NONE_SELECT || selectProvince == NONE_SELECT || selectCountry == NONE_SELECT)
+            return false;
+        if (maxDesLength())
+            return false;
+        if (!TextUtils.equals(shopName.getValue(), mShop.getShopName()))
+            return true;
+        if (!TextUtils.equals(sellerUrl.getValue(), mShop.getWebAddress()))
+            return true;
+        if (!TextUtils.equals(description.getValue(), mShop.getDescription()))
+            return true;
+        if (districts.get(selectDistrict).getId() != mShop.getDistrictId())
+            return true;
+        if (provinces.get(selectProvince).getId() != mShop.getProvinceId())
+            return true;
+        if (countries.get(selectCountry).getId() != mShop.getCountryId())
+            return true;
+        return isCoverChange;
     }
 
     public void descriptionTextChange() {
         if (description.getValue() == null) return;
         countDesc.setValue(String.format("%s/%s", description.getValue().length(), GomiConstants.MAX_CHAR));
+        afterTextChanged();
     }
 
     private boolean validateLocation() {
@@ -371,6 +430,10 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
 
     private boolean validateShopName() {
         return !TextUtils.isEmpty(shopName.getValue());
+    }
+
+    private boolean maxDesLength() {
+        return description.getValue() != null && description.getValue().length() > GomiConstants.MAX_CHAR;
     }
 
     void setUpdate(boolean update) {
@@ -410,10 +473,12 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     private void clearCountry() {
         clearProvince();
         countries = null;
+        selectCountry = NONE_SELECT;
         countryName.setValue("");
     }
 
     private void updateCountry() {
+        afterTextChanged();
         countryName.setValue(countries.get(selectCountry).getName());
     }
 
@@ -449,11 +514,13 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
     private void clearProvince() {
         clearDistrict();
         provinces = null;
+        selectProvince = NONE_SELECT;
         provinceName.setValue("");
     }
 
     private void updateProvince() {
         provinceName.setValue(provinces.get(selectProvince).getName());
+        afterTextChanged();
     }
 
     private void requestLocationDistrictId(int provinceId) {
@@ -486,11 +553,13 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
 
     private void clearDistrict() {
         districts = null;
+        selectDistrict = NONE_SELECT;
         districtName.setValue("");
     }
 
     private void updateDistrict() {
         districtName.setValue(districts.get(selectDistrict).getName());
+        afterTextChanged();
     }
 
     private int getPositionById(List<Location> locations, int countryId) {
@@ -528,7 +597,6 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
             selectCountry = position;
             requestLocationProvinceId(countries.get(selectCountry).getId());
             updateCountry();
-            afterTextChanged();
         }
     }
 
@@ -537,7 +605,6 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
             selectProvince = position;
             requestLocationDistrictId(provinces.get(selectProvince).getId());
             updateProvince();
-            afterTextChanged();
         }
     }
 
@@ -545,7 +612,6 @@ public class ShopInformationViewModel extends BaseViewModel<ShopInfoEvent> {
         if (position != selectDistrict) {
             selectDistrict = position;
             updateDistrict();
-            afterTextChanged();
         }
     }
 }

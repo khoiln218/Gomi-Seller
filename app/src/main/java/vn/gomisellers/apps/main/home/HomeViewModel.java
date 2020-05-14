@@ -55,18 +55,16 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
         categories = new MutableLiveData<>();
         productItemAdapter = new MutableLiveData<>();
         products = new ArrayList<>();
-        categoryList = new ArrayList<>();
         adapter = new ProductItemAdapter(products, this, this);
         productItemAdapter.setValue(adapter);
         categoryId = ALL;
     }
 
-    void onRefreshProduct() {
+    public void onRefresh() {
         page = INIT_PAGE;
         products.clear();
         updateProductList();
 
-        showProgressing();
         if (mShop == null) {
             requestShopInformation();
         } else if (categoryList == null) {
@@ -107,7 +105,9 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
     private void selectCategory(int position) {
         Category selectedCategory = categoryList.get(position);
         categoryId = selectedCategory.getId();
-        onRefreshProduct();
+
+        showProgressing();
+        onRefresh();
     }
 
     @Override
@@ -135,7 +135,8 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
         getCmd().call(event);
     }
 
-    private void requestShopInformation() {
+    void requestShopInformation() {
+        showProgressing();
         ShopRequest request = new ShopRequest();
         mShopRepository.findbyid(request, new ResultListener<ResponseData<Shop>>() {
             @Override
@@ -143,7 +144,11 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
                 if (result.getCode() == ResultCode.CODE_OK) {
                     mShop = result.getResult();
                     updateShopInformation();
-                    requestMegaCategory();
+                    if (categoryList == null) {
+                        requestMegaCategory();
+                    } else {
+                        loaded();
+                    }
                 } else {
                     loaded();
                     ToastUtils.showToast(result.getMessage());
@@ -196,6 +201,7 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
     }
 
     private void requestMegaCategory() {
+        showProgressing();
         final MegaCategoryRequest request = new MegaCategoryRequest();
         mShopRepository.megacategory(request, new ResultListener<ResponseData<List<Category>>>() {
             @Override

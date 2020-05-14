@@ -28,6 +28,7 @@ import vn.gomisellers.apps.data.source.model.api.SignInRequest;
 import vn.gomisellers.apps.data.source.model.api.SignOutRequest;
 import vn.gomisellers.apps.data.source.model.api.SignUpRequest;
 import vn.gomisellers.apps.data.source.model.api.ToggleProductRequest;
+import vn.gomisellers.apps.data.source.model.api.UpdateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyPhoneNumberRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Account;
@@ -78,6 +79,10 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("shop/create")
     Call<ResponseData<Shop>> createShop(@Body CreateShopRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("shop/updateinfo")
+    Call<ResponseData<Shop>> updateinfo(@Body UpdateShopRequest request);
 
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("product/introduce")

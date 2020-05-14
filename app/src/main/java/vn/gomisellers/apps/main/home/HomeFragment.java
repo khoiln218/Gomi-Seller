@@ -62,7 +62,7 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
     @Override
     public void onResume() {
         super.onResume();
-        getViewModel().onRefreshProduct();
+        getViewModel().requestShopInformation();
     }
 
     private void showDialogPickProduct(Product product) {

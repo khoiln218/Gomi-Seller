@@ -16,6 +16,7 @@ import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.MegaCategoryRequest;
 import vn.gomisellers.apps.data.source.model.api.ResponseData;
 import vn.gomisellers.apps.data.source.model.api.ShopRequest;
+import vn.gomisellers.apps.data.source.model.api.UpdateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.VerifyUrlRequest;
 import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Shop;
@@ -172,6 +173,11 @@ public class MockShopDataSource implements ShopDataSource {
 
     @Override
     public void findbyid(ShopRequest request, ResultListener<ResponseData<Shop>> callback) {
+
+    }
+
+    @Override
+    public void updateinfo(UpdateShopRequest request, ResultListener<ResponseData<Shop>> callback) {
 
     }
 

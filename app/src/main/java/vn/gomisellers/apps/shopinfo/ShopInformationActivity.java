@@ -32,7 +32,6 @@ import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Intents;
 import vn.gomisellers.apps.utils.MediaHelper;
 import vn.gomisellers.apps.utils.PermissionHelper;
-import vn.gomisellers.apps.utils.ToastUtils;
 import vn.gomisellers.apps.widgets.CountryView;
 import vn.gomisellers.apps.widgets.LocationView;
 import vn.gomisellers.apps.widgets.WheelView;
@@ -68,9 +67,7 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
                         createSuccess();
                         break;
                     case ShopInfoEvent.UPDATE_SUCCESS:
-                        ToastUtils.showToast("Cập nhật cửa hàng thành công");
-                        setResult(Activity.RESULT_OK);
-                        finish();
+                        updateSuccess();
                         break;
                     case ShopInfoEvent.SHOW_COUNTRY_DIALOG:
                         showCountryDialog((LocationList) event.getData());
@@ -90,6 +87,11 @@ public class ShopInformationActivity extends BaseActivity<ShopInformationViewMod
                 }
             }
         });
+    }
+
+    private void updateSuccess() {
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
     private void createSuccess() {

@@ -160,27 +160,34 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <RelativeLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/padding_medium"
             android:paddingEnd="@dimen/padding_medium"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:refreshing="@{viewModel.refreshing}"
+            app:setOnRefreshListener="@{()->viewModel.onRefresh()}">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_product"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+                android:layout_height="match_parent">
 
-            <include
-                layout="@layout/layout_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="300dp"
-                android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
-                app:msg="@{viewModel.errorMessage}" />
-        </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:setCollectionAdapter="@{viewModel.productItemAdapter}" />
+
+                <include
+                    layout="@layout/layout_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="300dp"
+                    android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+                    app:msg="@{viewModel.errorMessage}" />
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <include
             layout="@layout/layout_progress"
