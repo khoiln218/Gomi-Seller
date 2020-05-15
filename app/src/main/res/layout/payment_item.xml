@@ -48,12 +48,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Địa chỉ giao hàng:"
+                    android:text="@string/order_address"
                     android:textColor="#707070"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     address="@{order.addressLine}"
@@ -62,12 +61,11 @@
                     ward="@{order.wardName}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="3dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textColor="#707070"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -77,23 +75,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Khách hàng:"
+                    android:text="@string/order_customer"
                     android:textColor="#707070"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="3dp"
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="@{order.fullName}"
-                    android:textColor="#707070"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -103,23 +99,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Phương thức thanh toán:"
+                    android:text="@string/order_payment_method"
                     android:textColor="#707070"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="3dp"
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="Thanh toán khi nhận hàng"
-                    android:textColor="#707070"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -129,23 +123,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Thành tiền đơn hàng:"
+                    android:text="@string/order_total_price"
                     android:textColor="#707070"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     setPrice="@{order.totalPrice}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="3dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textColor="#707070"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 

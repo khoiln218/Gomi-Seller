@@ -136,4 +136,9 @@
     <string name="default_notification_channel_id">gomi_default_channel</string>
     <string name="default_notification_channel_name">Gomi</string>
     <string name="default_notification_channel_description">Gomi Notification</string>
+    <string name="order_profit">Doanh thu:</string>
+    <string name="order_total_price">Thành tiền đơn hàng:</string>
+    <string name="order_payment_method">Phương thức thanh toán:</string>
+    <string name="order_customer">Khách hàng:</string>
+    <string name="order_address">Địa chỉ giao hàng:</string>
 </resources>

@@ -32,7 +32,6 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
 
     private int page;
     private int totalPage;
-    private int unreadBadges;
 
     public NotificationViewModel() {
         mNotificationRepository = NotificationRepository.getInstance();
@@ -44,7 +43,6 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
 
     public void onRefresh() {
         page = 1;
-        unreadBadges = 0;
         notifications.clear();
         updateNotification();
 
@@ -74,12 +72,15 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
                     updateNotificationBadges();
                     updateNotification();
                     checkNotifyEmpty(notifications);
+                } else {
+                    showToast(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-
+                loaded();
+                checkConnection(error);
             }
         });
     }
