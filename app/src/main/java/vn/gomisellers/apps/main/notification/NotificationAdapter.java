@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import vn.gomisellers.apps.adapter.holder.LoadingHolder;
+import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.databinding.NotifyItemBinding;
 import vn.gomisellers.apps.event.NotificationHandler;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
@@ -57,15 +58,6 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     public void setNotifications(List<Notification> notificationList) {
         this.notificationList = notificationList;
         notifyDataSetChanged();
-    }
-
-    public void notifyItemChanged(Notification notification) {
-        if (notification.isRead()) return;
-        int indexChange = notificationList.indexOf(notification);
-        if (indexChange != -1) {
-            notificationList.get(indexChange).setRead(true);
-            notifyItemChanged(indexChange);
-        }
     }
 
     @NonNull

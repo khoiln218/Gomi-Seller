@@ -9,7 +9,7 @@ import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.event.BaseEvent;
 import vn.gomisellers.apps.event.MultableLiveEvent;
-import vn.gomisellers.apps.main.notification.Notification;
+import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.utils.ConnectionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
 

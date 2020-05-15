@@ -18,6 +18,7 @@ import vn.gomisellers.apps.data.source.model.api.CreateShopRequest;
 import vn.gomisellers.apps.data.source.model.api.ForgetPwdRequest;
 import vn.gomisellers.apps.data.source.model.api.IntroduceRequest;
 import vn.gomisellers.apps.data.source.model.api.MegaCategoryRequest;
+import vn.gomisellers.apps.data.source.model.api.NotificationRequest;
 import vn.gomisellers.apps.data.source.model.api.OrderDetailRequest;
 import vn.gomisellers.apps.data.source.model.api.OrderRequest;
 import vn.gomisellers.apps.data.source.model.api.ProductDetailRequest;
@@ -35,6 +36,7 @@ import vn.gomisellers.apps.data.source.model.data.Account;
 import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Introduce;
 import vn.gomisellers.apps.data.source.model.data.Location;
+import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.model.data.Shop;
@@ -151,4 +153,8 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("order/findbyid")
     Call<ResponseData<Order>> findbyid(@Body OrderDetailRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("notify/findby/page={page}")
+    Call<ResponseData<List<Notification>>> findby(@Body NotificationRequest request, @Path("page") int page);
 }

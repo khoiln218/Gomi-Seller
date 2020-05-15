@@ -1,16 +1,19 @@
 package vn.gomisellers.apps.main.notification;
 
-import android.os.Handler;
-
 import androidx.lifecycle.MutableLiveData;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import vn.gomisellers.apps.BaseViewModel;
+import vn.gomisellers.apps.data.NotificationRepository;
+import vn.gomisellers.apps.data.ResultListener;
+import vn.gomisellers.apps.data.source.model.api.NotificationRequest;
+import vn.gomisellers.apps.data.source.model.api.ResponseData;
+import vn.gomisellers.apps.data.source.model.data.Notification;
+import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.NotificationHandler;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.main.MainEvent;
@@ -19,6 +22,8 @@ import vn.gomisellers.apps.main.MainEvent;
  * Created by KHOI LE on 5/5/2020.
  */
 public class NotificationViewModel extends BaseViewModel<NotificationEvent> implements NotificationHandler, OnLoadMoreListener {
+
+    private NotificationRepository mNotificationRepository;
 
     public MutableLiveData<NotificationAdapter> notificationAdapterMutableLiveData;
 
@@ -30,6 +35,7 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
     private int unreadBadges;
 
     public NotificationViewModel() {
+        mNotificationRepository = NotificationRepository.getInstance();
         notificationAdapterMutableLiveData = new MutableLiveData<>();
         notifications = new ArrayList<>();
         adapter = new NotificationAdapter(this, this);
@@ -56,34 +62,34 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
     private void requestNotifications() {
         showProgressing();
         adapter.setLoading();
-        dummy();
-    }
-
-    private void dummy() {
-        new Handler().postDelayed(new Runnable() {
+        NotificationRequest request = new NotificationRequest();
+        mNotificationRepository.findby(request, page, new ResultListener<ResponseData<List<Notification>>>() {
             @Override
-            public void run() {
-                int maxItems = 20;
-                int start = maxItems * (page - 1);
-                for (int i = start; i < start + maxItems; i++) {
-                    boolean isRead = new Random().nextBoolean();
-                    Notification notification = new Notification(i);
-                    notification.setRead(isRead);
-                    notifications.add(notification);
-                    if (!isRead) unreadBadges++;
-                }
-                totalPage = 10;
-                notifications.remove(null);
-                updateNotificationBadges(unreadBadges);
-                updateNotification();
-                checkNotifyEmpty(notifications);
+            public void onLoaded(ResponseData<List<Notification>> result) {
                 loaded();
+                if (result.getCode() == ResultCode.CODE_OK) {
+                    notifications.addAll(result.getResult());
+                    totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    notifications.remove(null);
+                    requestNotificationBadges();
+                    updateNotification();
+                    checkNotifyEmpty(notifications);
+                }
             }
-        }, 300);
+
+            @Override
+            public void onDataNotAvailable(String error) {
+
+            }
+        });
     }
 
     private void updateNotification() {
         adapter.setNotifications(notifications);
+    }
+
+    private void requestNotificationBadges() {
+        updateNotificationBadges(unreadBadges);
     }
 
     private void updateNotificationBadges(int count) {

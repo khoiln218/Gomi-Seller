@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.databinding.FragmentNotificationBinding;
 import vn.gomisellers.apps.main.mypage.order.detail.OrderDetailActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
@@ -40,7 +41,7 @@ public class NotificationFragment extends BaseFragment<NotificationViewModel, Fr
             @Override
             public void onChanged(NotificationEvent event) {
                 if (event.getCode() == NotificationEvent.ONCLICK) {
-                    int id = ((Notification) event.getData()).getId();
+                    String id = ((Notification) event.getData()).getObjectId();
                     Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
                     intent.putExtra(GomiConstants.EXTRA_ID, id);
                     startActivity(intent);

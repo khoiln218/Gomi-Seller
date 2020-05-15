@@ -6,7 +6,7 @@
 
         <variable
             name="notification"
-            type="vn.gomisellers.apps.main.notification.Notification" />
+            type="vn.gomisellers.apps.data.source.model.data.Notification" />
 
         <variable
             name="notificationHandler"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom=".5dp"
-        android:background="@{notification.read?@android:color/white:@color/highlightNotify}"
+        android:background="@{notification.status==1?@android:color/white:@color/highlightNotify}"
         android:onClick="@{(v)->notificationHandler.onClick(notification)}"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -47,20 +47,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:text="Tiêu đề thông báo"
+                android:text="@{notification.title}"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Nội dung thông báo" />
+                android:text="@{notification.content}" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="06 tháng 5 11:21"
+                android:text="@{notification.createdDate}"
                 android:textColor="#a0a0a0"
                 android:textSize="12sp"
                 android:textStyle="bold" />

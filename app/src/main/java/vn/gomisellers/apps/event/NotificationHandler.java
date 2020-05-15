@@ -1,6 +1,6 @@
 package vn.gomisellers.apps.event;
 
-import vn.gomisellers.apps.main.notification.Notification;
+import vn.gomisellers.apps.data.source.model.data.Notification;
 
 /**
  * Created by KHOI LE on 5/6/2020.
