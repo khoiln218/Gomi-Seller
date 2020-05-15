@@ -18,7 +18,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.main.MainEvent;
 import vn.gomisellers.apps.main.mypage.order.detail.OrderDetailActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.LogUtils;
@@ -40,6 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             LogUtils.d(TAG, "payload: " + new Gson().toJson(remoteMessage.getData()));
             String id = remoteMessage.getData().get(GomiConstants.EXTRA_ID);
             sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), id);
+            updateNotificationBadges();
         }
     }
 
@@ -71,6 +75,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
         notificationManager.notify(getID(), notification);
+    }
+
+    private void updateNotificationBadges() {
+        MainEvent<Integer> event = new MainEvent<>(MainEvent.NOTIFY);
+        EventBus.getDefault().post(event);
     }
 
     public static int notifyId = 0;

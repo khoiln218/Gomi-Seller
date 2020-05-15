@@ -71,7 +71,7 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
                     notifications.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     notifications.remove(null);
-                    requestNotificationBadges();
+                    updateNotificationBadges();
                     updateNotification();
                     checkNotifyEmpty(notifications);
                 }
@@ -88,13 +88,8 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
         adapter.setNotifications(notifications);
     }
 
-    private void requestNotificationBadges() {
-        updateNotificationBadges(unreadBadges);
-    }
-
-    private void updateNotificationBadges(int count) {
+    private void updateNotificationBadges() {
         MainEvent<Integer> event = new MainEvent<>(MainEvent.NOTIFY);
-        event.setData(count);
         EventBus.getDefault().post(event);
     }
 

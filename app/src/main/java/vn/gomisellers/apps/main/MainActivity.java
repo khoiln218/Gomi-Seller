@@ -13,8 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -32,6 +35,7 @@ import java.util.Objects;
 import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
+import vn.gomisellers.apps.databinding.ActivityMainBinding;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.main.home.HomeFragment;
 import vn.gomisellers.apps.main.market.MarketFragment;
@@ -45,7 +49,7 @@ import vn.gomisellers.apps.utils.PermissionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
 import vn.gomisellers.apps.widgets.dialog.ImageChooserDialogFragment;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBinding> implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private PermissionHelper permissionHelper;
     private boolean dialogShowing = false;
@@ -63,7 +67,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        initBinding();
+        initCmd();
 
         if (!EappsApplication.getPreferences().isLogin()) {
             LogUtils.d("TAG", "user isn't login");
@@ -107,9 +112,29 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         EventBus.getDefault().register(this);
     }
 
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<MainEvent>() {
+            @Override
+            public void onChanged(MainEvent event) {
+                if (event.getCode() == MainEvent.NOTIFY) {
+                    int count = (int) event.getData();
+                    updateNotificationBadges(count);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getViewModel().requestNotificationBadges();
+    }
+
     @Override
     protected void initBinding() {
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        binding.setLifecycleOwner(this);
     }
 
     private void loadFragment(Fragment fragment) {
@@ -158,8 +183,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         } else if (event.getCode() == MainEvent.CROP_IMAGE) {
             cropImage((Uri) event.getData());
         } else if (event.getCode() == MainEvent.NOTIFY) {
-            int count = (int) event.getData();
-            updateNotificationBadges(count);
+            getViewModel().requestNotificationBadges();
         }
     }
 
