@@ -17,6 +17,7 @@ import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.NotificationHandler;
 import vn.gomisellers.apps.event.OnLoadMoreListener;
 import vn.gomisellers.apps.main.MainEvent;
+import vn.gomisellers.apps.utils.LogUtils;
 
 /**
  * Created by KHOI LE on 5/5/2020.
@@ -99,5 +100,24 @@ public class NotificationViewModel extends BaseViewModel<NotificationEvent> impl
         NotificationEvent<Notification> event = new NotificationEvent(NotificationEvent.ONCLICK);
         event.setData(notification);
         getCmd().call(event);
+
+        requestUpdateStatus(notification);
+    }
+
+    private void requestUpdateStatus(Notification notification) {
+        if (notification.getStatus() == 1) return;
+        NotificationRequest request = new NotificationRequest();
+        request.setId(notification.getId());
+        mNotificationRepository.updatestatus(request, new ResultListener<ResponseData<Notification>>() {
+            @Override
+            public void onLoaded(ResponseData<Notification> result) {
+                LogUtils.d("TAG", result.getMessage());
+            }
+
+            @Override
+            public void onDataNotAvailable(String error) {
+                LogUtils.d("TAG", error);
+            }
+        });
     }
 }

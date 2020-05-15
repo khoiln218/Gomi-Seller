@@ -78,14 +78,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:background="@drawable/bg_order_status"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="3dp"
+                android:padding="6dp"
                 android:text="@{order.statusName, default=Mới}"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
 </layout>

@@ -37,6 +37,7 @@ import vn.gomisellers.apps.data.source.model.data.Category;
 import vn.gomisellers.apps.data.source.model.data.Introduce;
 import vn.gomisellers.apps.data.source.model.data.Location;
 import vn.gomisellers.apps.data.source.model.data.Notification;
+import vn.gomisellers.apps.data.source.model.data.NotificationNew;
 import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.model.data.Shop;
@@ -157,4 +158,12 @@ public interface ApiService {
     @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
     @POST("notify/findby/page={page}")
     Call<ResponseData<List<Notification>>> findby(@Body NotificationRequest request, @Path("page") int page);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("notify/countnew")
+    Call<ResponseData<NotificationNew>> countnew(@Body NotificationRequest request);
+
+    @Headers({"Accept:application/json\", \"Content-Type:application/json;charset=utf-8"})
+    @POST("notify/updatestatus")
+    Call<ResponseData<Notification>> updatestatus(@Body NotificationRequest request);
 }
