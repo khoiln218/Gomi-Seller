@@ -30,4 +30,5 @@ public interface GomiConstants {
     String EXTRA_ID = "EXTRA_ID";
     String EXTRA_TITLE = "EXTRA_TITLE";
     String EXTRA_UPDATE = "EXTRA_UPDATE";
+    String EXTRA_DATA = "EXTRA_DATA";
 }

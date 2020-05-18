@@ -23,6 +23,7 @@ import vn.gomisellers.apps.databinding.HolderProductDescriptionBinding;
 import vn.gomisellers.apps.databinding.LayoutNoResultBinding;
 import vn.gomisellers.apps.databinding.LayoutProductAttributeBinding;
 import vn.gomisellers.apps.databinding.LayoutSummaryBinding;
+import vn.gomisellers.apps.event.ProductDetailHandler;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.utils.Strings;
 import vn.gomisellers.apps.utils.Utils;
@@ -34,11 +35,13 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
     private Product product;
     private List<Integer> panelList;
     private ProductHandler productHandler;
+    private ProductDetailHandler productDetailHandler;
 
-    public ProductDetailAdapter(Product product, ProductHandler productHandler) {
+    public ProductDetailAdapter(Product product, ProductHandler productHandler, ProductDetailHandler productDetailHandler) {
         this.panelList = new ArrayList<>();
         this.product = product;
         this.productHandler = productHandler;
+        this.productDetailHandler = productDetailHandler;
     }
 
     public void setProduct(Product product) {
@@ -86,7 +89,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof AttributeHolder) {
             ((AttributeHolder) holder).bind(product.getAttributeList());
         } else if (holder instanceof DescriptionHolder) {
-            ((DescriptionHolder) holder).bind(product.getDescription());
+            ((DescriptionHolder) holder).bind(product.getDescription(), productDetailHandler);
         }
     }
 
@@ -175,17 +178,18 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
             });
         }
 
-        public void bind(String description) {
+        public void bind(final String description, final ProductDetailHandler productDetailHandler) {
             final String data = EappsApplication.getInstance().getString(R.string.html).replace("{body_content}", description)
                     .replace("{width}", String.valueOf(Utils.getScreenWidth()));
             binding.webView.loadData(data, "text/html", "UTF-8");
             binding.btnViewDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    binding.webContainer.setLayoutParams(params);
-                    binding.btnViewDetail.setVisibility(View.GONE);
+//                    ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
+//                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                    binding.webContainer.setLayoutParams(params);
+//                    binding.btnViewDetail.setVisibility(View.GONE);
+                    productDetailHandler.onViewDescription(description);
                 }
             });
         }

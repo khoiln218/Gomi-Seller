@@ -1,5 +1,6 @@
 package vn.gomisellers.apps.main.market.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.databinding.ActivityProductDetailBinding;
 import vn.gomisellers.apps.event.OnSelectedListener;
+import vn.gomisellers.apps.main.market.detail.description.DescriptionActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.widgets.dialog.SelectProductDialogFragment;
 
@@ -28,7 +30,9 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
         initBinding();
         initToolbar();
         initCmd();
+
         getViewModel().setProductId(getIntent().getStringExtra(GomiConstants.EXTRA_ID));
+        getViewModel().requestProductById();
     }
 
     private void initCmd() {
@@ -36,8 +40,13 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
             @Override
             public void onChanged(ProductDetailEvent event) {
                 if (event.getCode() == ProductDetailEvent.SHOW_DETAIL) {
-                    Product product = event.getData();
+                    Product product = (Product) event.getData();
                     showDialogPickProduct(product);
+                } else if (event.getCode() == ProductDetailEvent.VIEW_DESCRIPTION) {
+                    String description = (String) event.getData();
+                    Intent intent = new Intent(ProductDetailActivity.this, DescriptionActivity.class);
+                    intent.putExtra(GomiConstants.EXTRA_DATA, description);
+                    startActivity(intent);
                 }
             }
         });
@@ -49,12 +58,6 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
         viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getViewModel().requestProductById();
     }
 
     @Override
