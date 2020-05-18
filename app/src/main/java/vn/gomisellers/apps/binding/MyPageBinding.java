@@ -6,7 +6,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -14,7 +13,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.adapter.GenderAdapter;
-import vn.gomisellers.apps.main.mypage.order.OrderAdapter;
 import vn.gomisellers.apps.utils.DateTimes;
 import vn.gomisellers.apps.utils.GomiConstants;
 import vn.gomisellers.apps.utils.Strings;
@@ -71,7 +69,7 @@ public class MyPageBinding {
                             .centerCrop()
                             .circleCrop()
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true))
+                            .skipMemoryCache(false))
                     .into(imageView);
         }
     }
@@ -86,7 +84,7 @@ public class MyPageBinding {
                         .centerCrop()
                         .circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true))
+                        .skipMemoryCache(false))
                 .into(imageView);
     }
 }
