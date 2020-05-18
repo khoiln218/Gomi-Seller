@@ -94,6 +94,10 @@ public class AppPreferences {
         return prefs.getString(SHOP_ID, null);
     }
 
+    public String getWebAddress() {
+        return prefs.getString(SHOP_WEB_ADDRESS, null);
+    }
+
     public void clear() {
         String token = getDeviceToken();
         editor.clear();

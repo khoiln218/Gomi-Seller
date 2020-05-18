@@ -2,6 +2,8 @@ package vn.gomisellers.apps.main.market.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +20,7 @@ import vn.gomisellers.apps.databinding.ActivityProductDetailBinding;
 import vn.gomisellers.apps.event.OnSelectedListener;
 import vn.gomisellers.apps.main.market.detail.description.DescriptionActivity;
 import vn.gomisellers.apps.utils.GomiConstants;
+import vn.gomisellers.apps.utils.Intents;
 import vn.gomisellers.apps.widgets.dialog.SelectProductDialogFragment;
 
 public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, ActivityProductDetailBinding> {
@@ -39,14 +42,21 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
         getViewModel().getCmd().observe(this, new Observer<ProductDetailEvent>() {
             @Override
             public void onChanged(ProductDetailEvent event) {
-                if (event.getCode() == ProductDetailEvent.SHOW_DETAIL) {
-                    Product product = (Product) event.getData();
-                    showDialogPickProduct(product);
-                } else if (event.getCode() == ProductDetailEvent.VIEW_DESCRIPTION) {
-                    String description = (String) event.getData();
-                    Intent intent = new Intent(ProductDetailActivity.this, DescriptionActivity.class);
-                    intent.putExtra(GomiConstants.EXTRA_DATA, description);
-                    startActivity(intent);
+                switch (event.getCode()) {
+                    case ProductDetailEvent.SHOW_DETAIL:
+                        Product product = (Product) event.getData();
+                        showDialogPickProduct(product);
+                        break;
+                    case ProductDetailEvent.VIEW_DESCRIPTION:
+                        String description = (String) event.getData();
+                        Intent intent = new Intent(ProductDetailActivity.this, DescriptionActivity.class);
+                        intent.putExtra(GomiConstants.EXTRA_DATA, description);
+                        startActivity(intent);
+                        break;
+                    case ProductDetailEvent.SHARE_SNS:
+                        String content = (String) event.getData();
+                        Intents.startActionSend(ProductDetailActivity.this, getString(R.string.share), getString(R.string.share_sub), content);
+                        break;
                 }
             }
         });
@@ -61,9 +71,19 @@ public class ProductDetailActivity extends BaseActivity<ProductDetailViewModel, 
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_product_detail, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_share) {
+            getViewModel().shareSNS();
             return true;
         }
         return super.onOptionsItemSelected(item);

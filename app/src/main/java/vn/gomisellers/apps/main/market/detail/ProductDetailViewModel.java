@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.appbar.AppBarLayout;
 
 import vn.gomisellers.apps.BaseViewModel;
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.adapter.ProductDetailAdapter;
 import vn.gomisellers.apps.data.ProductRepository;
 import vn.gomisellers.apps.data.ResultListener;
@@ -15,7 +16,6 @@ import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.event.ProductDetailHandler;
 import vn.gomisellers.apps.event.ProductHandler;
-import vn.gomisellers.apps.utils.ToastUtils;
 
 /**
  * Created by KHOI LE on 3/27/2020.
@@ -55,6 +55,14 @@ public class ProductDetailViewModel extends BaseViewModel<ProductDetailEvent> im
         }
     }
 
+    void shareSNS() {
+        String shopUrl = String.format("%s%s", EappsApplication.getPreferences().getSellerUrl(), EappsApplication.getPreferences().getWebAddress());
+        String contentShare = String.format("%s/%s", shopUrl, mProduct.getUrl());
+        ProductDetailEvent<String> event = new ProductDetailEvent<>(ProductDetailEvent.SHARE_SNS);
+        event.setData(contentShare);
+        getCmd().call(event);
+    }
+
     void requestProductById() {
         ProductDetailRequest request = new ProductDetailRequest();
         request.setProductId(productId);
@@ -65,13 +73,13 @@ public class ProductDetailViewModel extends BaseViewModel<ProductDetailEvent> im
                     mProduct = result.getResult();
                     updateProduct();
                 } else {
-                    ToastUtils.showToast(result.getMessage());
+                    showToast(result.getMessage());
                 }
             }
 
             @Override
             public void onDataNotAvailable(String error) {
-                ToastUtils.showToast(error);
+                showToast(error);
             }
         });
     }
@@ -89,19 +97,15 @@ public class ProductDetailViewModel extends BaseViewModel<ProductDetailEvent> im
                     mProduct.setIsSelling(result.getResult().getIsSelling());
                     updateProduct();
                 } else
-                    updateFail(result.getMessage());
+                    showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                updateFail(error);
+                showToast(error);
             }
         });
-    }
-
-    private void updateFail(String message) {
-        ToastUtils.showToast(message);
     }
 
     private void updateProduct() {

@@ -8,6 +8,7 @@ import vn.gomisellers.apps.event.BaseEvent;
 class ProductDetailEvent<T> extends BaseEvent<T> {
     static final int SHOW_DETAIL = 0;
     static final int VIEW_DESCRIPTION = 1;
+    static final int SHARE_SNS = 2;
 
     ProductDetailEvent(int code) {
         super(code);
