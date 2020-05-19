@@ -1,0 +1,171 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <vn.gomisellers.apps.main.live.main.ui.VideoGridContainer
+        android:id="@+id/live_video_grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/live_room_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_top_layout_height"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="@dimen/live_leave_btn_size"
+            android:layout_height="@dimen/live_leave_btn_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/live_top_layout_margin"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/rounded_bg_half_transparent"
+            android:onClick="onLeaveClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_leave" />
+
+        <RelativeLayout
+            android:id="@+id/live_name_space_layout"
+            android:layout_width="@dimen/live_name_board_width"
+            android:layout_height="@dimen/live_name_board_height"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/live_top_layout_margin"
+            android:background="@drawable/live_name_board_bg">
+
+            <ImageView
+                android:id="@+id/live_name_board_icon"
+                android:layout_width="@dimen/live_name_board_icon_size"
+                android:layout_height="@dimen/live_name_board_icon_size"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/live_name_board_icon_margin"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/fav_icon"
+                android:layout_width="@dimen/live_name_board_fav_icon_size"
+                android:layout_height="@dimen/live_name_board_fav_icon_size"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/live_name_board_fav_icon_margin"
+                android:layout_marginLeft="@dimen/live_name_board_fav_icon_margin"
+                android:layout_marginEnd="@dimen/live_name_board_fav_icon_margin"
+                android:layout_marginRight="@dimen/live_name_board_fav_icon_margin"
+                android:background="@drawable/live_name_board_fav_bg"
+                android:src="@drawable/ic_fav" />
+
+            <TextView
+                android:id="@+id/live_room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/live_name_text_height"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="@dimen/live_name_text_margin_left"
+                android:layout_toStartOf="@id/fav_icon"
+                android:layout_toEndOf="@id/live_name_board_icon"
+                android:ellipsize="marquee"
+                android:gravity="bottom"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:textAlignment="gravity"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/live_room_broadcaster_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/live_name_text_height"
+                android:layout_below="@id/live_room_name"
+                android:layout_marginStart="@dimen/live_name_text_margin_left"
+                android:layout_toStartOf="@id/fav_icon"
+                android:layout_toEndOf="@id/live_name_board_icon"
+                android:gravity="top"
+                android:text="Khôi Lê"
+                android:textAlignment="gravity"
+                android:textColor="@color/gray_lightest"
+                android:textSize="@dimen/text_size_small" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/live_bottom_layout_margin"
+        android:layout_marginLeft="@dimen/live_bottom_layout_margin"
+        android:layout_marginEnd="@dimen/live_bottom_layout_margin"
+        android:layout_marginRight="@dimen/live_bottom_layout_margin"
+        android:layout_marginBottom="@dimen/live_bottom_layout_margin">
+
+        <ImageView
+            android:id="@+id/live_btn_switch_camera"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onSwitchCameraClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_switch_camera" />
+
+        <ImageView
+            android:id="@+id/live_btn_beautification"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/live_bottom_btn_margin"
+            android:layout_toEndOf="@id/live_btn_switch_camera"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onBeautyClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_beauty" />
+
+        <ImageView
+            android:id="@+id/live_btn_more"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/live_bottom_btn_margin"
+            android:layout_toEndOf="@id/live_btn_beautification"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onMoreClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_more" />
+
+        <ImageView
+            android:id="@+id/live_btn_push_stream"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onPushStreamClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_push_stream" />
+
+        <ImageView
+            android:id="@+id/live_btn_mute_audio"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/live_bottom_btn_margin"
+            android:layout_toStartOf="@id/live_btn_push_stream"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onMuteAudioClicked"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_mute_audio" />
+
+        <ImageView
+            android:id="@+id/live_btn_mute_video"
+            android:layout_width="@dimen/live_bottom_btn_size"
+            android:layout_height="@dimen/live_bottom_btn_size"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/live_bottom_btn_margin"
+            android:layout_toStartOf="@id/live_btn_mute_audio"
+            android:background="@drawable/rounded_bg_full_transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/btn_mute_video" />
+    </RelativeLayout>
+</RelativeLayout>

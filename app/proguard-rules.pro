@@ -101,3 +101,5 @@
 }
 
 ##---------------End: proguard configuration for Gson  ----------
+
+-keep class io.agora.**{*;}
