@@ -15,6 +15,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/nav_live"
+        android:icon="@drawable/ic_nav_live_tv"
+        android:title="LIVE"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/nav_notify"
         android:icon="@drawable/ic_nav_notify"
         android:title="NOTIFICATION"

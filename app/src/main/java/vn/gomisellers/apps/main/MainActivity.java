@@ -38,6 +38,7 @@ import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ActivityMainBinding;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.main.home.HomeFragment;
+import vn.gomisellers.apps.main.live.LiveFragment;
 import vn.gomisellers.apps.main.market.MarketFragment;
 import vn.gomisellers.apps.main.mypage.MyPageFragment;
 import vn.gomisellers.apps.main.notification.NotificationFragment;
@@ -51,6 +52,12 @@ import vn.gomisellers.apps.widgets.dialog.ImageChooserDialogFragment;
 
 public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBinding> implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    public static final int SHOP_INDEX = 0;
+    public static final int MALL_INDEX = SHOP_INDEX + 1;
+    public static final int LIVE_INDEX = MALL_INDEX + 1;
+    public static final int NOTIFY_INDEX = LIVE_INDEX + 1;
+    public static final int ACCOUNT_INDEX = NOTIFY_INDEX + 1;
+
     private PermissionHelper permissionHelper;
     private boolean dialogShowing = false;
 
@@ -61,6 +68,7 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
 
     private HomeFragment homeFragment;
     private MarketFragment marketFragment;
+    private LiveFragment liveFragment;
     private NotificationFragment notificationFragment;
     private MyPageFragment myPageFragment;
 
@@ -85,7 +93,7 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
 
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) bottomNavigation.getChildAt(0);
-        View v = bottomNavigationMenuView.getChildAt(2);
+        View v = bottomNavigationMenuView.getChildAt(NOTIFY_INDEX);
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
         badge = LayoutInflater.from(this).inflate(R.layout.layout_unread_message, itemView, false);
         itemView.addView(badge);
@@ -104,6 +112,7 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
 
         homeFragment = new HomeFragment();
         marketFragment = new MarketFragment();
+        liveFragment = new LiveFragment();
         notificationFragment = new NotificationFragment();
         myPageFragment = new MyPageFragment();
 
@@ -138,6 +147,7 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
     }
 
     private void loadFragment(Fragment fragment) {
+        if (fragment == null) return;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
@@ -161,6 +171,10 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
 
             case R.id.nav_market:
                 loadFragment(marketFragment);
+                return true;
+
+            case R.id.nav_live:
+                loadFragment(liveFragment);
                 return true;
 
             case R.id.nav_notify:
