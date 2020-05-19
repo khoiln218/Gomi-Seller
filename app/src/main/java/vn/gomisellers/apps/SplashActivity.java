@@ -31,6 +31,10 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (EappsApplication.getPreferences().isLogin()) {
+                    Intents.directToMainActivity(SplashActivity.this);
+                    return;
+                }
                 startSigIn();
             }
         }, 1500);
