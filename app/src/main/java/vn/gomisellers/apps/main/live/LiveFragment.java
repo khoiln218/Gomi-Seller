@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import vn.gomisellers.apps.BaseFragment;
@@ -24,6 +25,21 @@ public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBindin
         viewModel = ViewModelProviders.of(this).get(LiveViewModel.class);
         getBinding().setViewModel(getViewModel());
         binding.setLifecycleOwner(this);
+        initCmd();
         return binding.getRoot();
+    }
+
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<LiveEvent>() {
+            @Override
+            public void onChanged(LiveEvent event) {
+                if (event.getCode() == LiveEvent.START_BROADCAST) {
+                    startBroadcast();
+                }
+            }
+        });
+    }
+
+    private void startBroadcast() {
     }
 }

@@ -1,7 +1,10 @@
 package vn.gomisellers.apps.main.live;
 
-import androidx.lifecycle.ViewModel;
+import vn.gomisellers.apps.BaseViewModel;
 
-public class LiveViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+public class LiveViewModel extends BaseViewModel<LiveEvent> {
+
+    public void startBroadcast() {
+        getCmd().call(new LiveEvent(LiveEvent.START_BROADCAST));
+    }
 }

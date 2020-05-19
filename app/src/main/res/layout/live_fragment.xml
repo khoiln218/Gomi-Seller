@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -9,15 +8,38 @@
             type="vn.gomisellers.apps.main.live.LiveViewModel" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.live.LiveFragment">
+        android:background="@drawable/live_background">
+
+        <ImageView
+            android:id="@+id/main_logo"
+            android:layout_width="158dp"
+            android:layout_height="158dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="120dp"
+            android:layout_marginBottom="48dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/live_logo" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello" />
+            android:id="@+id/start_broadcast_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_logo"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_primary_selector"
+            android:gravity="center"
+            android:onClick="@{(v)->viewModel.startBroadcast()}"
+            android:paddingHorizontal="45dp"
+            android:paddingVertical="8dp"
+            android:text="Live"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+    </RelativeLayout>
 
-    </FrameLayout>
 </layout>
