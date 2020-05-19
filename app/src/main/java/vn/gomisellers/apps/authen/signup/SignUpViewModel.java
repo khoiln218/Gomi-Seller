@@ -1,7 +1,10 @@
 package vn.gomisellers.apps.authen.signup;
 
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -27,7 +30,7 @@ import vn.gomisellers.apps.data.source.remote.ResultCode;
 import vn.gomisellers.apps.utils.Inputs;
 import vn.gomisellers.apps.utils.Utils;
 
-public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
+public class SignUpViewModel extends BaseViewModel<SignUpEvent> implements TextView.OnEditorActionListener {
     private AccountRepository accountRepository = AccountRepository.getInstance();
     private LocationRepository locationRepository = LocationRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
@@ -39,20 +42,26 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
     public MutableLiveData<String> confirmPassword = new MutableLiveData<>();
     public MutableLiveData<String> certificationCode = new MutableLiveData<>();
 
+    public MutableLiveData<String> errorFullNameMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorEmailMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorPhoneNumberMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorPwdMsg = new MutableLiveData<>();
     public MutableLiveData<String> errorConfirmPwdMsg = new MutableLiveData<>();
+    public MutableLiveData<String> errorOTPMsg = new MutableLiveData<>();
 
+    public MutableLiveData<Boolean> errorEnableFullName = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnableEmail = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnablePhoneNumber = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnablePwd = new MutableLiveData<>();
     public MutableLiveData<Boolean> errorEnableConfirmPwd = new MutableLiveData<>();
+    public MutableLiveData<Boolean> errorEnableOTP = new MutableLiveData<>();
 
+    public MutableLiveData<Boolean> requestFocusFullName = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusEmail = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusPhoneNumber = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusPwd = new MutableLiveData<>();
     public MutableLiveData<Boolean> requestFocusConfirmPwd = new MutableLiveData<>();
+    public MutableLiveData<Boolean> requestFocusOTP = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> countDownIsShow = new MutableLiveData<>();
     public MutableLiveData<Boolean> verifyIsShow = new MutableLiveData<>();
@@ -163,6 +172,13 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
     }
 
     private void submitForm() {
+        if (!checkLengthName()) {
+            fullNameError();
+            return;
+        } else {
+            fullNameSuccess();
+        }
+
         if (!Inputs.validateEmail(email.getValue())) {
             emailError();
             return;
@@ -177,6 +193,13 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
             phoneNumberSuccess();
         }
 
+        if (!checkLengthVerifyCode()) {
+            verifyCodeError();
+            return;
+        } else {
+            verifyCodeSuccess();
+        }
+
         if (!Inputs.validatePassword(password.getValue())) {
             passwordError();
             return;
@@ -188,6 +211,24 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
             return;
 
         requestSignUp();
+    }
+
+    private void verifyCodeSuccess() {
+        errorEnableOTP.setValue(false);
+    }
+
+    private void verifyCodeError() {
+        errorOTPMsg.setValue(EappsApplication.getInstance().getString(R.string.err_input_verify_code));
+        requestFocusOTP.setValue(true);
+    }
+
+    private void fullNameSuccess() {
+        errorEnableFullName.setValue(false);
+    }
+
+    private void fullNameError() {
+        errorFullNameMsg.setValue(EappsApplication.getInstance().getString(R.string.err_input_full_name));
+        requestFocusFullName.setValue(true);
     }
 
     private boolean confirmPassword() {
@@ -280,11 +321,11 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
     }
 
     public void afterTextChanged() {
-        if (checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLenghtConfirmPwd() && checkLengthVerifyCode()) {
-            enableBtnSigup.setValue(true);
-        } else {
-            enableBtnSigup.setValue(false);
-        }
+        enableBtnSigup.setValue(isReadySignUp());
+    }
+
+    private boolean isReadySignUp() {
+        return checkLengthName() && checkLengthEmail() && checkLengthPhoneNumber() && checkLengthPwd() && checkLenghtConfirmPwd() && checkLengthVerifyCode();
     }
 
     private boolean checkLenghtConfirmPwd() {
@@ -325,6 +366,14 @@ public class SignUpViewModel extends BaseViewModel<SignUpEvent> {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (countries.size() == 0)
                 requestCountryId();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            signUp();
         }
         return false;
     }

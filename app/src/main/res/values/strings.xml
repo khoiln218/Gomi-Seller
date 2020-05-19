@@ -21,10 +21,12 @@
     <string name="hint_new_password">Mật khẩu mới</string>
     <string name="hint_certification_code">Mã OTP</string>
 
+    <string name="err_input_full_name">Vui lòng nhập họ tên</string>
     <string name="err_input_email">Vui lòng nhập lại email</string>
     <string name="err_input_username">Tên đăng nhập không đúng</string>
     <string name="err_input_password">Mật khẩu sai. Vui lòng nhập từ 6 đến 32 ký tự</string>
     <string name="err_input_phone_number">Vui lòng nhập lại số điện thoại</string>
+    <string name="err_input_verify_code">Vui lòng nhập mã OTP</string>
 
     <string name="forget_password">Quên mật khẩu</string>
     <string name="reset_password">Tạo lại mật khẩu</string>

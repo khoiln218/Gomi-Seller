@@ -2,6 +2,9 @@ package vn.gomisellers.apps.authen.signin;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,7 +23,7 @@ import vn.gomisellers.apps.utils.Inputs;
 import vn.gomisellers.apps.utils.Strings;
 import vn.gomisellers.apps.utils.Utils;
 
-public class SignInViewModel extends BaseViewModel<SignInEvent> {
+public class SignInViewModel extends BaseViewModel<SignInEvent> implements TextView.OnEditorActionListener {
 
     private AccountRepository mAppRepository = AccountRepository.getInstance();
     private AppPreferences mAppPreferences = EappsApplication.getPreferences();
@@ -164,5 +167,13 @@ public class SignInViewModel extends BaseViewModel<SignInEvent> {
         SignInEvent event = new SignInEvent(SignInEvent.RESET_PASSWORD);
         event.setData(userId);
         getCmd().call(event);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            signIn();
+        }
+        return false;
     }
 }

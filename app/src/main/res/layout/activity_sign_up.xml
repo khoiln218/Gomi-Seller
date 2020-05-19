@@ -93,7 +93,9 @@
                     android:layout_marginEnd="32dp"
                     app:hintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvname">
+                    app:layout_constraintTop_toBottomOf="@+id/tvname"
+                    app:setError="@{signUpViewModel.errorFullNameMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnableFullName}">
 
                     <EditText
                         android:id="@+id/txt_name"
@@ -105,7 +107,8 @@
                         android:inputType="textCapWords"
                         android:singleLine="true"
                         android:text="@={signUpViewModel.fullName}"
-                        android:textAppearance="?android:textAppearance" />
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusFullName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!--User name-->
@@ -240,7 +243,9 @@
                     android:layout_marginEnd="32dp"
                     app:hintEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_verify_phone_number">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_verify_phone_number"
+                    app:setError="@{signUpViewModel.errorOTPMsg}"
+                    app:setErrorEnabled="@{signUpViewModel.errorEnableOTP}">
 
                     <EditText
                         android:id="@+id/txt_certification_code"
@@ -251,7 +256,8 @@
                         android:importantForAutofill="no"
                         android:singleLine="true"
                         android:text="@={signUpViewModel.certificationCode}"
-                        android:textAppearance="?android:textAppearance" />
+                        android:textAppearance="?android:textAppearance"
+                        app:requestFocus="@{signUpViewModel.requestFocusOTP}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -337,7 +343,8 @@
                         android:singleLine="true"
                         android:text="@={signUpViewModel.confirmPassword}"
                         android:textAppearance="?android:textAppearance"
-                        app:requestFocus="@{signUpViewModel.requestFocusConfirmPwd}" />
+                        app:requestFocus="@{signUpViewModel.requestFocusConfirmPwd}"
+                        app:setOnEditorActionListener="@{signUpViewModel}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

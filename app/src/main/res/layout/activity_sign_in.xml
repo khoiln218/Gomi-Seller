@@ -76,7 +76,8 @@
                 android:singleLine="true"
                 android:text="@={signInViewModel.password}"
                 android:textAppearance="?android:textAppearance"
-                app:requestFocus="@{signInViewModel.passwordRequestFocus}" />
+                app:requestFocus="@{signInViewModel.passwordRequestFocus}"
+                app:setOnEditorActionListener="@{signInViewModel}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
