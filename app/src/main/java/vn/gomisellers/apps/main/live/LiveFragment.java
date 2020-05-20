@@ -1,6 +1,5 @@
 package vn.gomisellers.apps.main.live;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.greenrobot.eventbus.EventBus;
+
 import vn.gomisellers.apps.BaseFragment;
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.LiveFragmentBinding;
-import vn.gomisellers.apps.main.live.main.LiveActivity;
+import vn.gomisellers.apps.main.MainEvent;
 
 public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBinding> {
 
@@ -43,6 +45,7 @@ public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBindin
     }
 
     private void startBroadcast() {
-        startActivity(new Intent(getActivity(), LiveActivity.class));
+        EappsApplication.getInstance().engineConfig().setChannelName(EappsApplication.getPreferences().getWebAddress());
+        EventBus.getDefault().post(new MainEvent<>(MainEvent.REQUEST_PERMISSION_LIVE));
     }
 }

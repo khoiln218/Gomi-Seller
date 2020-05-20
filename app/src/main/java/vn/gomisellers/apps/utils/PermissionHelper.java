@@ -17,6 +17,7 @@ import java.util.List;
 public class PermissionHelper {
 
     public static final String[] photo_permissions = {
+            Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA

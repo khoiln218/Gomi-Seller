@@ -81,7 +81,7 @@
                 android:layout_toStartOf="@id/fav_icon"
                 android:layout_toEndOf="@id/live_name_board_icon"
                 android:gravity="top"
-                android:text="Khôi Lê"
+                android:text="@string/app_name"
                 android:textAlignment="gravity"
                 android:textColor="@color/gray_lightest"
                 android:textSize="@dimen/text_size_small" />
@@ -165,6 +165,7 @@
             android:layout_marginEnd="@dimen/live_bottom_btn_margin"
             android:layout_toStartOf="@id/live_btn_mute_audio"
             android:background="@drawable/rounded_bg_full_transparent"
+            android:onClick="onMuteVideoClicked"
             android:scaleType="centerCrop"
             android:src="@drawable/btn_mute_video" />
     </RelativeLayout>

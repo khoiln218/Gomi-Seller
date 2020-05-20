@@ -7,8 +7,9 @@ import vn.gomisellers.apps.event.BaseEvent;
  */
 public class MainEvent<T> extends BaseEvent<T> {
     public static final int REQUEST_PERMISSION = 0;
-    public static final int CROP_IMAGE = 1;
-    public static final int NOTIFY = 2;
+    public static final int REQUEST_PERMISSION_LIVE = 1;
+    public static final int CROP_IMAGE = 2;
+    public static final int NOTIFY = 3;
 
     public MainEvent(int code) {
         super(code);

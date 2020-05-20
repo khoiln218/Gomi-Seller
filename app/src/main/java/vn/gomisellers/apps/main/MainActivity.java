@@ -39,6 +39,7 @@ import vn.gomisellers.apps.databinding.ActivityMainBinding;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.main.home.HomeFragment;
 import vn.gomisellers.apps.main.live.LiveFragment;
+import vn.gomisellers.apps.main.live.main.LiveActivity;
 import vn.gomisellers.apps.main.market.MarketFragment;
 import vn.gomisellers.apps.main.mypage.MyPageFragment;
 import vn.gomisellers.apps.main.notification.NotificationFragment;
@@ -192,12 +193,17 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
 
     @Subscribe
     public void onMessageEvent(MainEvent event) {
-        if (event.getCode() == MainEvent.REQUEST_PERMISSION) {
-            requestPermission();
-        } else if (event.getCode() == MainEvent.CROP_IMAGE) {
-            cropImage((Uri) event.getData());
-        } else if (event.getCode() == MainEvent.NOTIFY) {
-            getViewModel().requestNotificationBadges();
+        switch (event.getCode()) {
+            case MainEvent.REQUEST_PERMISSION:
+            case MainEvent.REQUEST_PERMISSION_LIVE:
+                requestPermission(event.getCode());
+                break;
+            case MainEvent.CROP_IMAGE:
+                cropImage((Uri) event.getData());
+                break;
+            case MainEvent.NOTIFY:
+                getViewModel().requestNotificationBadges();
+                break;
         }
     }
 
@@ -286,11 +292,15 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
     /**
      * Check Photo Permissions
      */
-    public void requestPermission() {
+    public void requestPermission(final int type) {
         permissionHelper.request(new PermissionHelper.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                showImageOptions();
+                if (type == MainEvent.REQUEST_PERMISSION) {
+                    showImageOptions();
+                } else if (type == MainEvent.REQUEST_PERMISSION_LIVE) {
+                    startBroadcast();
+                }
             }
 
             @Override
@@ -308,6 +318,10 @@ public class MainActivity extends BaseActivity<MainViewModel, ActivityMainBindin
                 showPermissionDialog();
             }
         });
+    }
+
+    private void startBroadcast() {
+        startActivity(new Intent(this, LiveActivity.class));
     }
 
     private void showPermissionDialog() {
