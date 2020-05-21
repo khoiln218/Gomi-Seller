@@ -1,5 +1,6 @@
 package vn.gomisellers.apps.main.live;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.Objects;
 
 import vn.gomisellers.apps.BaseFragment;
-import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.LiveFragmentBinding;
-import vn.gomisellers.apps.main.MainEvent;
+import vn.gomisellers.apps.utils.ToastUtils;
 
 public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBinding> {
 
@@ -37,15 +40,32 @@ public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBindin
         getViewModel().getCmd().observe(this, new Observer<LiveEvent>() {
             @Override
             public void onChanged(LiveEvent event) {
-                if (event.getCode() == LiveEvent.START_BROADCAST) {
-                    startBroadcast();
-                }
+
             }
         });
     }
 
-    private void startBroadcast() {
-        EappsApplication.getInstance().engineConfig().setChannelName(EappsApplication.getPreferences().getWebAddress());
-        EventBus.getDefault().post(new MainEvent<>(MainEvent.REQUEST_PERMISSION_LIVE));
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(final LiveEvent event) {
+        if (event.getCode() == LiveEvent.LOGIN_FAILS) {
+            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ToastUtils.showToast(event.getMessage());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

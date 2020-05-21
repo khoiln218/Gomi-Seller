@@ -39,7 +39,7 @@ import vn.gomisellers.apps.databinding.ActivityMainBinding;
 import vn.gomisellers.apps.event.OnClickListener;
 import vn.gomisellers.apps.main.home.HomeFragment;
 import vn.gomisellers.apps.main.live.LiveFragment;
-import vn.gomisellers.apps.main.live.main.LiveActivity;
+import vn.gomisellers.apps.main.live.video.LiveActivity;
 import vn.gomisellers.apps.main.market.MarketFragment;
 import vn.gomisellers.apps.main.mypage.MyPageFragment;
 import vn.gomisellers.apps.main.notification.NotificationFragment;

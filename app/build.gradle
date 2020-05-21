@@ -69,4 +69,5 @@ dependencies {
 
     //Agora
     implementation 'io.agora.rtc:full-sdk:3.0.0'
+    implementation 'io.agora.rtm:rtm-sdk:1.1.0'
 }

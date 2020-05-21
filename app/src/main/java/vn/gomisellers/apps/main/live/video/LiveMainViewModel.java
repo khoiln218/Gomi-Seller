@@ -1,4 +1,4 @@
-package vn.gomisellers.apps.main.live.main;
+package vn.gomisellers.apps.main.live.video;
 
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -7,6 +7,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -20,8 +23,9 @@ import vn.gomisellers.apps.data.source.model.data.stats.RemoteStatsData;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsData;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
 import vn.gomisellers.apps.event.EventHandler;
+import vn.gomisellers.apps.main.live.message.MessageAdapter;
+import vn.gomisellers.apps.main.live.message.MessageBean;
 import vn.gomisellers.apps.utils.LiveConstants;
-import vn.gomisellers.apps.utils.LogUtils;
 
 /**
  * Created by KHOI LE on 5/21/2020.
@@ -31,6 +35,11 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
     public MutableLiveData<StatsManager> statsManagerMLD;
     public MutableLiveData<String> channelName;
     public MutableLiveData<String> avatar;
+    public MutableLiveData<MessageAdapter> adapterMutableLiveData;
+    public MutableLiveData<Integer> msgCount;
+
+    private List<MessageBean> mMessageBeanList;
+    private MessageAdapter mMessageAdapter;
 
     private VideoEncoderConfiguration.VideoDimensions mVideoDimension;
 
@@ -38,8 +47,15 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         statsManagerMLD = new MutableLiveData<>();
         channelName = new MutableLiveData<>();
         avatar = new MutableLiveData<>();
+        adapterMutableLiveData = new MutableLiveData<>();
+        msgCount = new MutableLiveData<>();
+
+        mMessageBeanList = new ArrayList<>();
+        mMessageAdapter = new MessageAdapter(mMessageBeanList);
+        adapterMutableLiveData.setValue(mMessageAdapter);
 
         statsManagerMLD.setValue(statsManager());
+        config().setChannelName(EappsApplication.getPreferences().getWebAddress());
         channelName.setValue(config().getChannelName());
         avatar.setValue(EappsApplication.getPreferences().getAvatar());
     }
@@ -275,6 +291,9 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
     }
 
     private void sendMessage(String msg) {
-        LogUtils.d("TAG", "sendMessage: " + msg);
+        MessageBean messageBean = new MessageBean(EappsApplication.getPreferences().getUserName(), msg, true);
+        mMessageBeanList.add(messageBean);
+        mMessageAdapter.notifyItemRangeChanged(mMessageBeanList.size(), 1);
+        msgCount.setValue(mMessageBeanList.size());
     }
 }

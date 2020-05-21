@@ -28,7 +28,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
         <activity
-            android:name=".main.live.main.LiveActivity"
+            android:name=".main.live.video.LiveActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity

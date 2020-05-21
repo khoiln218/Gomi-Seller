@@ -1,9 +1,10 @@
-package vn.gomisellers.apps.main.live.main;
+package vn.gomisellers.apps.main.live.video;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.RelativeLayout;
@@ -11,10 +12,12 @@ import android.widget.RelativeLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ActivityLiveRoomBinding;
+import vn.gomisellers.apps.utils.Utils;
 import vn.gomisellers.apps.utils.WindowUtil;
 
 public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRoomBinding> {
@@ -78,6 +81,11 @@ public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRo
         params.height = mStatusBarHeight + topLayout.getMeasuredHeight();
         topLayout.setLayoutParams(params);
         topLayout.setPadding(0, mStatusBarHeight, 0, 0);
+
+        RecyclerView recyclerView = findViewById(R.id.chat_box);
+        ViewGroup.LayoutParams paramsMsg = recyclerView.getLayoutParams();
+        paramsMsg.width = Utils.getScreenWidth() * 5 / 6;
+        recyclerView.setLayoutParams(paramsMsg);
     }
 
     private void renderRemoteUser(int uid) {

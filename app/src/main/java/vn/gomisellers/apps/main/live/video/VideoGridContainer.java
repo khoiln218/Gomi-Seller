@@ -1,4 +1,4 @@
-package vn.gomisellers.apps.main.live.main;
+package vn.gomisellers.apps.main.live.video;
 
 import android.content.Context;
 import android.graphics.Color;

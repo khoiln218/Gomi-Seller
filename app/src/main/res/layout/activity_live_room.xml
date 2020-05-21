@@ -4,14 +4,14 @@
 
         <variable
             name="viewModel"
-            type="vn.gomisellers.apps.main.live.main.LiveMainViewModel" />
+            type="vn.gomisellers.apps.main.live.video.LiveMainViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <vn.gomisellers.apps.main.live.main.VideoGridContainer
+        <vn.gomisellers.apps.main.live.video.VideoGridContainer
             android:id="@+id/live_video_grid_layout"
             setStatsManager="@{viewModel.statsManagerMLD}"
             android:layout_width="match_parent"
@@ -102,6 +102,9 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_box"
+            scrollToPosition="@{viewModel.msgCount}"
+            setMsgAdapter="@{viewModel.adapterMutableLiveData}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/bottom_container"

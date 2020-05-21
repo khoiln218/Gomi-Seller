@@ -6,12 +6,13 @@ import android.content.SharedPreferences;
 
 import io.agora.rtc.RtcEngine;
 import vn.gomisellers.apps.data.source.local.prefs.AppPreferences;
-import vn.gomisellers.apps.event.AgoraEventHandler;
-import vn.gomisellers.apps.main.live.main.EngineConfig;
-import vn.gomisellers.apps.event.EventHandler;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
-import vn.gomisellers.apps.utils.LiveConstants;
+import vn.gomisellers.apps.event.AgoraEventHandler;
+import vn.gomisellers.apps.event.EventHandler;
+import vn.gomisellers.apps.main.live.message.ChatManager;
+import vn.gomisellers.apps.main.live.video.EngineConfig;
 import vn.gomisellers.apps.utils.FileUtil;
+import vn.gomisellers.apps.utils.LiveConstants;
 import vn.gomisellers.apps.utils.LogUtils;
 import vn.gomisellers.apps.utils.PrefManager;
 
@@ -21,6 +22,7 @@ public class EappsApplication extends Application {
     private static AppPreferences appPreferences;
 
     private RtcEngine mRtcEngine;
+    private ChatManager mChatManager;
     private EngineConfig mGlobalConfig = new EngineConfig();
     private AgoraEventHandler mHandler = new AgoraEventHandler();
     private StatsManager mStatsManager = new StatsManager();
@@ -30,6 +32,10 @@ public class EappsApplication extends Application {
         super.onCreate();
         instance = this;
         try {
+            mChatManager = new ChatManager(this);
+            mChatManager.init();
+            mChatManager.enableOfflineMessage(true);
+
             mRtcEngine = RtcEngine.create(getApplicationContext(), getString(R.string.private_app_id), mHandler);
             mRtcEngine.setChannelProfile(io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
             mRtcEngine.enableVideo();
@@ -66,6 +72,10 @@ public class EappsApplication extends Application {
 
     public RtcEngine rtcEngine() {
         return mRtcEngine;
+    }
+
+    public ChatManager getChatManager() {
+        return mChatManager;
     }
 
     public StatsManager statsManager() {
