@@ -3,7 +3,7 @@ package vn.gomisellers.apps.utils;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
-public class Constants {
+public class LiveConstants {
     private static final int BEAUTY_EFFECT_DEFAULT_CONTRAST = BeautyOptions.LIGHTENING_CONTRAST_NORMAL;
     private static final float BEAUTY_EFFECT_DEFAULT_LIGHTNESS = 0.7f;
     private static final float BEAUTY_EFFECT_DEFAULT_SMOOTHNESS = 0.5f;
@@ -30,7 +30,7 @@ public class Constants {
             io.agora.rtc.Constants.VIDEO_MIRROR_MODE_DISABLED,
     };
 
-    public static final String PREF_NAME = "io.agora.openlive";
+    public static final String PREF_NAME = "vn.gomisellers.apps.agora";
     public static final int DEFAULT_PROFILE_IDX = 2;
     public static final String PREF_RESOLUTION_IDX = "pref_profile_index";
     public static final String PREF_ENABLE_STATS = "pref_enable_stats";

@@ -42,7 +42,7 @@
     <dimen name="live_name_board_width">186dp</dimen>
     <dimen name="live_name_board_height">48dp</dimen>
     <dimen name="live_name_board_icon_size">44dp</dimen>
-    <dimen name="live_name_board_icon_margin">22dp</dimen>
+    <dimen name="live_name_board_icon_margin">2dp</dimen>
     <dimen name="live_name_board_fav_icon_size">36dp</dimen>
     <dimen name="live_name_board_fav_icon_margin">6dp</dimen>
     <dimen name="live_name_text_height">24dp</dimen>

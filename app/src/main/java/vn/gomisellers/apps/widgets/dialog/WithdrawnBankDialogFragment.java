@@ -164,11 +164,11 @@ public class WithdrawnBankDialogFragment extends BottomSheetDialogFragment imple
 //        if (amount == 0)
 //            msg = getString(R.string.err_empty_amount);
 //
-//        else if (amount < Constants.MINIMUM_AMOUNT)
-//            msg = getString(R.string.err_minimum_amount).replace("{amount}", Numbers.currencyFormat(Constants.MINIMUM_AMOUNT));
+//        else if (amount < LiveConstants.MINIMUM_AMOUNT)
+//            msg = getString(R.string.err_minimum_amount).replace("{amount}", Numbers.currencyFormat(LiveConstants.MINIMUM_AMOUNT));
 //
-//        else if (amount > Constants.MAXIMUM_AMOUNT)
-//            msg = getString(R.string.err_maximum_amount).replace("{amount}", Numbers.currencyFormat(Constants.MAXIMUM_AMOUNT));
+//        else if (amount > LiveConstants.MAXIMUM_AMOUNT)
+//            msg = getString(R.string.err_maximum_amount).replace("{amount}", Numbers.currencyFormat(LiveConstants.MAXIMUM_AMOUNT));
 //
 //        else if (amount > AppController.getPreferences().getBalance())
 //            msg = getString(R.string.err_not_enough);

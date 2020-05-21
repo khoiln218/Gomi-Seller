@@ -7,10 +7,10 @@ import android.content.SharedPreferences;
 import io.agora.rtc.RtcEngine;
 import vn.gomisellers.apps.data.source.local.prefs.AppPreferences;
 import vn.gomisellers.apps.event.AgoraEventHandler;
-import vn.gomisellers.apps.event.EngineConfig;
+import vn.gomisellers.apps.main.live.main.EngineConfig;
 import vn.gomisellers.apps.event.EventHandler;
-import vn.gomisellers.apps.main.live.main.stats.StatsManager;
-import vn.gomisellers.apps.utils.Constants;
+import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
+import vn.gomisellers.apps.utils.LiveConstants;
 import vn.gomisellers.apps.utils.FileUtil;
 import vn.gomisellers.apps.utils.LogUtils;
 import vn.gomisellers.apps.utils.PrefManager;
@@ -49,15 +49,15 @@ public class EappsApplication extends Application {
     private void initConfig() {
         SharedPreferences pref = PrefManager.getPreferences(getApplicationContext());
         mGlobalConfig.setVideoDimenIndex(pref.getInt(
-                Constants.PREF_RESOLUTION_IDX, Constants.DEFAULT_PROFILE_IDX));
+                LiveConstants.PREF_RESOLUTION_IDX, LiveConstants.DEFAULT_PROFILE_IDX));
 
-        boolean showStats = pref.getBoolean(Constants.PREF_ENABLE_STATS, false);
+        boolean showStats = pref.getBoolean(LiveConstants.PREF_ENABLE_STATS, false);
         mGlobalConfig.setIfShowVideoStats(showStats);
         mStatsManager.enableStats(showStats);
 
-        mGlobalConfig.setMirrorLocalIndex(pref.getInt(Constants.PREF_MIRROR_LOCAL, 0));
-        mGlobalConfig.setMirrorRemoteIndex(pref.getInt(Constants.PREF_MIRROR_REMOTE, 0));
-        mGlobalConfig.setMirrorEncodeIndex(pref.getInt(Constants.PREF_MIRROR_ENCODE, 0));
+        mGlobalConfig.setMirrorLocalIndex(pref.getInt(LiveConstants.PREF_MIRROR_LOCAL, 0));
+        mGlobalConfig.setMirrorRemoteIndex(pref.getInt(LiveConstants.PREF_MIRROR_REMOTE, 0));
+        mGlobalConfig.setMirrorEncodeIndex(pref.getInt(LiveConstants.PREF_MIRROR_ENCODE, 0));
     }
 
     public EngineConfig engineConfig() {

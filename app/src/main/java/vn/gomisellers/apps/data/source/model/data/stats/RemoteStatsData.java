@@ -1,4 +1,4 @@
-package vn.gomisellers.apps.main.live.main.stats;
+package vn.gomisellers.apps.data.source.model.data.stats;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package vn.gomisellers.apps.main.live.main.ui;
+package vn.gomisellers.apps.main.live.main;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.gomisellers.apps.R;
-import vn.gomisellers.apps.main.live.main.stats.StatsData;
-import vn.gomisellers.apps.main.live.main.stats.StatsManager;
+import vn.gomisellers.apps.data.source.model.data.stats.StatsData;
+import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
 
 public class VideoGridContainer extends RelativeLayout implements Runnable {
     private static final int MAX_USER = 4;

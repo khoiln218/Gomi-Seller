@@ -1,82 +1,77 @@
 package vn.gomisellers.apps.main.live.main;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.R;
-import vn.gomisellers.apps.main.live.main.stats.LocalStatsData;
-import vn.gomisellers.apps.main.live.main.stats.RemoteStatsData;
-import vn.gomisellers.apps.main.live.main.stats.StatsData;
-import vn.gomisellers.apps.main.live.main.ui.VideoGridContainer;
+import vn.gomisellers.apps.databinding.ActivityLiveRoomBinding;
+import vn.gomisellers.apps.utils.WindowUtil;
 
-public class LiveActivity extends RtcBaseActivity {
-    private static final String TAG = LiveActivity.class.getSimpleName();
-
+public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRoomBinding> {
     private VideoGridContainer mVideoGridContainer;
-    private ImageView mMuteAudioBtn;
-    private ImageView mMuteVideoBtn;
 
-    private VideoEncoderConfiguration.VideoDimensions mVideoDimension;
+    protected DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+    protected int mStatusBarHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_live_room);
-        initUI();
-        initData();
-    }
-
-    private void initUI() {
-        TextView roomName = findViewById(R.id.live_room_name);
-        roomName.setText(config().getChannelName());
-        roomName.setSelected(true);
-
-        initUserIcon();
-
-        mMuteVideoBtn = findViewById(R.id.live_btn_mute_video);
-        mMuteVideoBtn.setActivated(true);
-
-        mMuteAudioBtn = findViewById(R.id.live_btn_mute_audio);
-        mMuteAudioBtn.setActivated(true);
-
-        ImageView beautyBtn = findViewById(R.id.live_btn_beautification);
-        beautyBtn.setActivated(true);
-        rtcEngine().setBeautyEffectOptions(beautyBtn.isActivated(), vn.gomisellers.apps.utils.Constants.DEFAULT_BEAUTY_OPTIONS);
+        WindowUtil.hideWindowStatusBar(getWindow());
+        setGlobalLayoutListener();
+        getDisplayMetrics();
+        initStatusBarHeight();
+        initBinding();
+        initCmd();
 
         mVideoGridContainer = findViewById(R.id.live_video_grid_layout);
-        mVideoGridContainer.setStatsManager(statsManager());
 
-        rtcEngine().setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        startBroadcast();
+        getViewModel().startBroadcast();
     }
 
-    private void initUserIcon() {
-        Bitmap origin = BitmapFactory.decodeResource(getResources(), R.drawable.fake_user_icon);
-        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), origin);
-        drawable.setCircular(true);
-        ImageView iconView = findViewById(R.id.live_name_board_icon);
-        iconView.setImageDrawable(drawable);
-    }
-
-    private void initData() {
-        mVideoDimension = vn.gomisellers.apps.utils.Constants.VIDEO_DIMENSIONS[
-                config().getVideoDimenIndex()];
+    private void initCmd() {
+        getViewModel().getCmd().observe(this, new Observer<LiveMainEvent>() {
+            @Override
+            public void onChanged(LiveMainEvent event) {
+                switch (event.getCode()) {
+                    case LiveMainEvent.RENDER_REMOTE_USER:
+                        renderRemoteUser((int) event.getData());
+                        break;
+                    case LiveMainEvent.USER_OFFLINE:
+                        removeRemoteUser((int) event.getData());
+                        break;
+                    case LiveMainEvent.FINISH:
+                        finish();
+                        break;
+                    case LiveMainEvent.ADD_USER:
+                        addUser();
+                        break;
+                    case LiveMainEvent.REMOVE_USER:
+                        removeUser();
+                        break;
+                }
+            }
+        });
     }
 
     @Override
-    protected void onGlobalLayoutCompleted() {
+    protected void initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_live_room);
+        viewModel = ViewModelProviders.of(this).get(LiveMainViewModel.class);
+        getBinding().setViewModel(getViewModel());
+        binding.setLifecycleOwner(this);
+    }
+
+    private void onGlobalLayoutCompleted() {
         RelativeLayout topLayout = findViewById(R.id.live_room_top_layout);
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) topLayout.getLayoutParams();
@@ -85,168 +80,49 @@ public class LiveActivity extends RtcBaseActivity {
         topLayout.setPadding(0, mStatusBarHeight, 0, 0);
     }
 
-    private void startBroadcast() {
-        rtcEngine().setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        SurfaceView surface = prepareRtcVideo(0, true);
-        mVideoGridContainer.addUserVideoSurface(0, surface, true);
-        mMuteAudioBtn.setActivated(true);
-    }
-
-    private void stopBroadcast() {
-        rtcEngine().setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
-        removeRtcVideo(0, true);
-        mVideoGridContainer.removeUserVideo(0, true);
-        mMuteAudioBtn.setActivated(false);
-    }
-
-    @Override
-    public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-        // Do nothing at the moment
-    }
-
-    @Override
-    public void onUserJoined(int uid, int elapsed) {
-        // Do nothing at the moment
-    }
-
-    @Override
-    public void onUserOffline(final int uid, int reason) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                removeRemoteUser(uid);
-            }
-        });
-    }
-
-    @Override
-    public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                renderRemoteUser(uid);
-            }
-        });
-    }
-
     private void renderRemoteUser(int uid) {
-        SurfaceView surface = prepareRtcVideo(uid, false);
+        SurfaceView surface = getViewModel().prepareRtcVideo(uid, false);
         mVideoGridContainer.addUserVideoSurface(uid, surface, false);
     }
 
     private void removeRemoteUser(int uid) {
-        removeRtcVideo(uid, false);
+        getViewModel().removeRtcVideo(uid, false);
         mVideoGridContainer.removeUserVideo(uid, false);
     }
 
     @Override
-    public void onLocalVideoStats(IRtcEngineEventHandler.LocalVideoStats stats) {
-        if (!statsManager().isEnabled()) return;
-
-        LocalStatsData data = (LocalStatsData) statsManager().getStatsData(0);
-        if (data == null) return;
-
-        data.setWidth(mVideoDimension.width);
-        data.setHeight(mVideoDimension.height);
-        data.setFramerate(stats.sentFrameRate);
+    protected void onDestroy() {
+        super.onDestroy();
+        getViewModel().stopBroadcast();
     }
 
-    @Override
-    public void onRtcStats(IRtcEngineEventHandler.RtcStats stats) {
-        if (!statsManager().isEnabled()) return;
-
-        LocalStatsData data = (LocalStatsData) statsManager().getStatsData(0);
-        if (data == null) return;
-
-        data.setLastMileDelay(stats.lastmileDelay);
-        data.setVideoSendBitrate(stats.txVideoKBitRate);
-        data.setVideoRecvBitrate(stats.rxVideoKBitRate);
-        data.setAudioSendBitrate(stats.txAudioKBitRate);
-        data.setAudioRecvBitrate(stats.rxAudioKBitRate);
-        data.setCpuApp(stats.cpuAppUsage);
-        data.setCpuTotal(stats.cpuAppUsage);
-        data.setSendLoss(stats.txPacketLossRate);
-        data.setRecvLoss(stats.rxPacketLossRate);
+    private void addUser() {
+        SurfaceView surface = getViewModel().prepareRtcVideo(0, true);
+        mVideoGridContainer.addUserVideoSurface(0, surface, true);
     }
 
-    @Override
-    public void onNetworkQuality(int uid, int txQuality, int rxQuality) {
-        if (!statsManager().isEnabled()) return;
-
-        StatsData data = statsManager().getStatsData(uid);
-        if (data == null) return;
-
-        data.setSendQuality(statsManager().qualityToString(txQuality));
-        data.setRecvQuality(statsManager().qualityToString(rxQuality));
+    private void removeUser() {
+        getViewModel().removeRtcVideo(0, true);
+        mVideoGridContainer.removeUserVideo(0, true);
     }
 
-    @Override
-    public void onRemoteVideoStats(IRtcEngineEventHandler.RemoteVideoStats stats) {
-        if (!statsManager().isEnabled()) return;
-
-        RemoteStatsData data = (RemoteStatsData) statsManager().getStatsData(stats.uid);
-        if (data == null) return;
-
-        data.setWidth(stats.width);
-        data.setHeight(stats.height);
-        data.setFramerate(stats.rendererOutputFrameRate);
-        data.setVideoDelay(stats.delay);
+    private void setGlobalLayoutListener() {
+        final View layout = findViewById(Window.ID_ANDROID_CONTENT);
+        ViewTreeObserver observer = layout.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                onGlobalLayoutCompleted();
+            }
+        });
     }
 
-    @Override
-    public void onRemoteAudioStats(IRtcEngineEventHandler.RemoteAudioStats stats) {
-        if (!statsManager().isEnabled()) return;
-
-        RemoteStatsData data = (RemoteStatsData) statsManager().getStatsData(stats.uid);
-        if (data == null) return;
-
-        data.setAudioNetDelay(stats.networkTransportDelay);
-        data.setAudioNetJitter(stats.jitterBufferDelay);
-        data.setAudioLoss(stats.audioLossRate);
-        data.setAudioQuality(statsManager().qualityToString(stats.quality));
+    private void getDisplayMetrics() {
+        getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        statsManager().clearAllData();
-    }
-
-    public void onLeaveClicked(View view) {
-        finish();
-    }
-
-    public void onSwitchCameraClicked(View view) {
-        rtcEngine().switchCamera();
-    }
-
-    public void onBeautyClicked(View view) {
-        view.setActivated(!view.isActivated());
-        rtcEngine().setBeautyEffectOptions(view.isActivated(),
-                vn.gomisellers.apps.utils.Constants.DEFAULT_BEAUTY_OPTIONS);
-    }
-
-    public void onMoreClicked(View view) {
-        // Do nothing at the moment
-    }
-
-    public void onPushStreamClicked(View view) {
-        // Do nothing at the moment
-    }
-
-    public void onMuteAudioClicked(View view) {
-        if (!mMuteVideoBtn.isActivated()) return;
-
-        rtcEngine().muteLocalAudioStream(view.isActivated());
-        view.setActivated(!view.isActivated());
-    }
-
-    public void onMuteVideoClicked(View view) {
-        if (view.isActivated()) {
-            stopBroadcast();
-        } else {
-            startBroadcast();
-        }
-        view.setActivated(!view.isActivated());
+    private void initStatusBarHeight() {
+        mStatusBarHeight = WindowUtil.getSystemStatusBarHeight(this);
     }
 }

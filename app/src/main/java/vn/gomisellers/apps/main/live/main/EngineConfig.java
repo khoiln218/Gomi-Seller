@@ -1,7 +1,7 @@
-package vn.gomisellers.apps.event;
+package vn.gomisellers.apps.main.live.main;
 
 
-import vn.gomisellers.apps.utils.Constants;
+import vn.gomisellers.apps.utils.LiveConstants;
 
 public class EngineConfig {
     // private static final int DEFAULT_UID = 0;
@@ -9,7 +9,7 @@ public class EngineConfig {
 
     private String mChannelName;
     private boolean mShowVideoStats;
-    private int mDimenIndex = Constants.DEFAULT_PROFILE_IDX;
+    private int mDimenIndex = LiveConstants.DEFAULT_PROFILE_IDX;
     private int mMirrorLocalIndex;
     private int mMirrorRemoteIndex;
     private int mMirrorEncodeIndex;

@@ -1,5 +1,6 @@
 package vn.gomisellers.apps.data.source.local.prefs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -14,6 +15,7 @@ public class AppPreferences {
     private static final String PREFS_NAME = "EAPPS";
 
 
+    @SuppressLint("CommitPrefEdits")
     public AppPreferences(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, PRIVATE_MODE);
         editor = prefs.edit();
@@ -84,10 +86,6 @@ public class AppPreferences {
 
     public String getSellerUrl() {
         return prefs.getString(SELLER_URL, null);
-    }
-
-    public String getReferralCode() {
-        return prefs.getString(REFERRAL_CODE, null);
     }
 
     public String getShopId() {
