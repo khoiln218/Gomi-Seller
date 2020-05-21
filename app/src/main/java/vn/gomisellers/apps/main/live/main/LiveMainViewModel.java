@@ -1,7 +1,10 @@
 package vn.gomisellers.apps.main.live.main;
 
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -18,11 +21,12 @@ import vn.gomisellers.apps.data.source.model.data.stats.StatsData;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
 import vn.gomisellers.apps.event.EventHandler;
 import vn.gomisellers.apps.utils.LiveConstants;
+import vn.gomisellers.apps.utils.LogUtils;
 
 /**
  * Created by KHOI LE on 5/21/2020.
  */
-public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements EventHandler {
+public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements EventHandler, TextView.OnEditorActionListener {
 
     public MutableLiveData<StatsManager> statsManagerMLD;
     public MutableLiveData<String> channelName;
@@ -116,6 +120,10 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         statsManager().clearAllData();
         removeRtcEventHandler();
         rtcEngine().leaveChannel();
+    }
+
+    public void afterTextChanged() {
+
     }
 
     public void onLeaveClicked() {
@@ -255,5 +263,18 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         data.setAudioNetJitter(stats.jitterBufferDelay);
         data.setAudioLoss(stats.audioLossRate);
         data.setAudioQuality(statsManager().qualityToString(stats.quality));
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEND && !TextUtils.isEmpty(v.getText())) {
+            sendMessage(v.getText().toString());
+            v.setText("");
+        }
+        return false;
+    }
+
+    private void sendMessage(String msg) {
+        LogUtils.d("TAG", "sendMessage: " + msg);
     }
 }

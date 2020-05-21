@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/bottom_container"
-            android:layout_marginBottom="75dp" />
+            android:layout_marginBottom="@dimen/live_chat_box" />
 
         <RelativeLayout
             android:id="@+id/bottom_container"
@@ -124,11 +124,13 @@
                 android:layout_height="@dimen/live_bottom_btn_size"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/live_bottom_btn_margin"
+                android:afterTextChanged="@{(s)->viewModel.afterTextChanged()}"
                 android:background="@drawable/rounded_bg_full_transparent"
-                android:hint="Bạn đang nghĩ gì..."
+                android:hint="@string/hint_chat"
+                android:imeOptions="actionSend"
+                android:inputType="textShortMessage"
                 android:paddingHorizontal="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/btn_more"
+                android:setOnEditorActionListener="@{viewModel}"
                 android:textColorHint="@android:color/white" />
 
             <ImageView

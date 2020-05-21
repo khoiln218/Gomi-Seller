@@ -51,4 +51,5 @@
     <dimen name="live_bottom_btn_size">44dp</dimen>
     <dimen name="live_bottom_btn_margin">12dp</dimen>
     <dimen name="live_name_board_radius">36dp</dimen>
+    <dimen name="live_chat_box">62dp</dimen>
 </resources>
