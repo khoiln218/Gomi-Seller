@@ -14,9 +14,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import vn.gomisellers.apps.BaseActivity;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.databinding.ActivityLiveRoomBinding;
+import vn.gomisellers.apps.main.live.message.MessageBean;
 import vn.gomisellers.apps.utils.Utils;
 import vn.gomisellers.apps.utils.WindowUtil;
 
@@ -38,6 +43,7 @@ public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRo
 
         mVideoGridContainer = findViewById(R.id.live_video_grid_layout);
 
+        EventBus.getDefault().register(this);
         getViewModel().startBroadcast();
     }
 
@@ -64,6 +70,13 @@ public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRo
                 }
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(final LiveMainEvent event) {
+        if (event.getCode() == LiveMainEvent.RECEIVE_MESSAGE) {
+            getViewModel().updateChatBox((MessageBean) event.getData());
+        }
     }
 
     @Override
@@ -102,6 +115,7 @@ public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRo
     protected void onDestroy() {
         super.onDestroy();
         getViewModel().stopBroadcast();
+        EventBus.getDefault().unregister(this);
     }
 
     private void addUser() {

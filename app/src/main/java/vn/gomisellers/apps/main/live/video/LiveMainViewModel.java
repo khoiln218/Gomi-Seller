@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,14 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtm.ErrorInfo;
+import io.agora.rtm.ResultCallback;
+import io.agora.rtm.RtmChannel;
+import io.agora.rtm.RtmChannelAttribute;
+import io.agora.rtm.RtmChannelListener;
+import io.agora.rtm.RtmChannelMember;
+import io.agora.rtm.RtmClient;
+import io.agora.rtm.RtmMessage;
 import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
@@ -23,14 +33,16 @@ import vn.gomisellers.apps.data.source.model.data.stats.RemoteStatsData;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsData;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
 import vn.gomisellers.apps.event.EventHandler;
+import vn.gomisellers.apps.main.live.message.ChatManager;
 import vn.gomisellers.apps.main.live.message.MessageAdapter;
 import vn.gomisellers.apps.main.live.message.MessageBean;
 import vn.gomisellers.apps.utils.LiveConstants;
+import vn.gomisellers.apps.utils.LogUtils;
 
 /**
  * Created by KHOI LE on 5/21/2020.
  */
-public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements EventHandler, TextView.OnEditorActionListener {
+public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements EventHandler, RtmChannelListener, TextView.OnEditorActionListener {
 
     public MutableLiveData<StatsManager> statsManagerMLD;
     public MutableLiveData<String> channelName;
@@ -41,7 +53,11 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
     private List<MessageBean> mMessageBeanList;
     private MessageAdapter mMessageAdapter;
 
+    private RtmClient mRtmClient;
+    private RtmChannel mRtmChannel;
+
     private VideoEncoderConfiguration.VideoDimensions mVideoDimension;
+    private int mChannelMemberCount;
 
     public LiveMainViewModel() {
         statsManagerMLD = new MutableLiveData<>();
@@ -58,6 +74,44 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         config().setChannelName(EappsApplication.getPreferences().getWebAddress());
         channelName.setValue(config().getChannelName());
         avatar.setValue(EappsApplication.getPreferences().getAvatar());
+        mRtmClient = chatManager().getRtmClient();
+    }
+
+    private void createAndJoinChannel() {
+        mRtmChannel = mRtmClient.createChannel(config().getChannelName(), this);
+        if (mRtmChannel == null) {
+            showToast(EappsApplication.getInstance().getString(R.string.join_channel_failed));
+            return;
+        }
+
+        mRtmChannel.join(new ResultCallback<Void>() {
+            @Override
+            public void onSuccess(Void responseInfo) {
+                LogUtils.i("TAG", "join channel success");
+            }
+
+            @Override
+            public void onFailure(ErrorInfo errorInfo) {
+                LogUtils.e("TAG", "join channel failed");
+            }
+        });
+    }
+
+    private void leaveChannel() {
+        if (mRtmChannel != null) {
+            mRtmChannel.leave(new ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+
+                @Override
+                public void onFailure(ErrorInfo errorInfo) {
+
+                }
+            });
+            mRtmChannel = null;
+        }
     }
 
     private void configVideo() {
@@ -72,16 +126,7 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
     }
 
     private void joinChannel() {
-        // Initialize token, extra info here before joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. One token is only valid for the channel name and uid that
-        // you use to generate this token.
-        String token = EappsApplication.getInstance().getString(R.string.agora_access_token);
-        if (TextUtils.isEmpty(token) || TextUtils.equals(token, "#YOUR ACCESS TOKEN#")) {
-            token = null; // default, no token
-        }
-        rtcEngine().joinChannel(token, config().getChannelName(), "", 0);
+        rtcEngine().joinChannel(null, config().getChannelName(), "", 0);
     }
 
     private void initData() {
@@ -127,6 +172,7 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         registerRtcEventHandler();
         configVideo();
         joinChannel();
+        createAndJoinChannel();
         initData();
     }
 
@@ -136,6 +182,7 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         statsManager().clearAllData();
         removeRtcEventHandler();
         rtcEngine().leaveChannel();
+        leaveChannel();
     }
 
     public void afterTextChanged() {
@@ -158,6 +205,10 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
 
     private RtcEngine rtcEngine() {
         return application().rtcEngine();
+    }
+
+    private ChatManager chatManager() {
+        return application().getChatManager();
     }
 
     private EngineConfig config() {
@@ -291,9 +342,64 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
     }
 
     private void sendMessage(String msg) {
+        sendChannelMessage(msg);
         MessageBean messageBean = new MessageBean(EappsApplication.getPreferences().getUserName(), msg, true);
+        updateChatBox(messageBean);
+    }
+
+    void updateChatBox(MessageBean messageBean) {
+        LogUtils.d("TAG", "updateChatBox: " + messageBean.getMessage());
         mMessageBeanList.add(messageBean);
-        mMessageAdapter.notifyItemRangeChanged(mMessageBeanList.size(), 1);
+        mMessageAdapter.notifyDataSetChanged();
         msgCount.setValue(mMessageBeanList.size());
+    }
+
+    private void sendChannelMessage(String content) {
+        RtmMessage message = mRtmClient.createMessage();
+        message.setText(content);
+        mRtmChannel.sendMessage(message, new ResultCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+
+            @Override
+            public void onFailure(ErrorInfo errorInfo) {
+                LogUtils.d("TAG", "onFailure: " + errorInfo.toString());
+            }
+        });
+    }
+
+    @Override
+    public void onMemberCountUpdated(int i) {
+
+    }
+
+    @Override
+    public void onAttributesUpdated(List<RtmChannelAttribute> list) {
+
+    }
+
+    @Override
+    public void onMessageReceived(RtmMessage message, RtmChannelMember fromMember) {
+        LogUtils.d("TAG", "onMessageReceived - " + fromMember.getUserId() + ": " + message.getText());
+        String account = fromMember.getUserId();
+        String msg = message.getText();
+        MessageBean messageBean = new MessageBean(account, msg, false);
+        LiveMainEvent<MessageBean> event = new LiveMainEvent<>(LiveMainEvent.RECEIVE_MESSAGE);
+        event.setData(messageBean);
+        EventBus.getDefault().post(event);
+    }
+
+    @Override
+    public void onMemberJoined(RtmChannelMember rtmChannelMember) {
+        mChannelMemberCount++;
+        LogUtils.d("TAG", "onMemberJoined: " + mChannelMemberCount);
+    }
+
+    @Override
+    public void onMemberLeft(RtmChannelMember rtmChannelMember) {
+        mChannelMemberCount--;
+        LogUtils.d("TAG", "onMemberLeft: " + mChannelMemberCount);
     }
 }

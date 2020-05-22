@@ -13,8 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Objects;
+import org.greenrobot.eventbus.ThreadMode;
 
 import vn.gomisellers.apps.BaseFragment;
 import vn.gomisellers.apps.R;
@@ -51,15 +50,10 @@ public class LiveFragment extends BaseFragment<LiveViewModel, LiveFragmentBindin
         EventBus.getDefault().register(this);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(final LiveEvent event) {
         if (event.getCode() == LiveEvent.LOGIN_FAILS) {
-            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ToastUtils.showToast(event.getMessage());
-                }
-            });
+            ToastUtils.showToast(event.getMessage());
         }
     }
 
