@@ -5,7 +5,6 @@ import org.greenrobot.eventbus.EventBus;
 import io.agora.rtm.ErrorInfo;
 import io.agora.rtm.ResultCallback;
 import io.agora.rtm.RtmClient;
-import io.agora.rtm.RtmStatusCode;
 import vn.gomisellers.apps.BaseViewModel;
 import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.main.MainEvent;
@@ -19,6 +18,7 @@ public class LiveViewModel extends BaseViewModel<LiveEvent> {
     }
 
     public void startBroadcast() {
+        mRtmClient.logout(null);
         mRtmClient.login(null, EappsApplication.getPreferences().getUserName(), new ResultCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -27,11 +27,7 @@ public class LiveViewModel extends BaseViewModel<LiveEvent> {
 
             @Override
             public void onFailure(final ErrorInfo errorInfo) {
-                if (errorInfo.getErrorCode() == RtmStatusCode.LoginError.LOGIN_ERR_ALREADY_LOGIN) {
-                    EventBus.getDefault().post(new MainEvent<>(MainEvent.REQUEST_PERMISSION_LIVE));
-                } else {
-                    EventBus.getDefault().post(new LiveEvent(LiveEvent.LOGIN_FAILS, errorInfo.toString()));
-                }
+                EventBus.getDefault().post(new LiveEvent(LiveEvent.LOGIN_FAILS, errorInfo.toString()));
             }
         });
     }
