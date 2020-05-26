@@ -5,11 +5,20 @@ public class MessageBean {
     private String message;
     private int background;
     private boolean beSelf;
+    private boolean isWelcome;
+
+    public MessageBean(String account, String message, boolean beSelf, boolean isWelcome) {
+        this.account = account;
+        this.message = message;
+        this.beSelf = beSelf;
+        this.isWelcome = isWelcome;
+    }
 
     public MessageBean(String account, String message, boolean beSelf) {
         this.account = account;
         this.message = message;
         this.beSelf = beSelf;
+        isWelcome = false;
     }
 
     public String getAccount() {
@@ -42,5 +51,13 @@ public class MessageBean {
 
     public void setBackground(int background) {
         this.background = background;
+    }
+
+    public boolean isWelcome() {
+        return isWelcome;
+    }
+
+    public void setWelcome(boolean welcome) {
+        isWelcome = welcome;
     }
 }

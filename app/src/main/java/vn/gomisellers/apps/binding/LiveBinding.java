@@ -2,9 +2,12 @@ package vn.gomisellers.apps.binding;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,12 +24,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.data.source.model.data.stats.StatsManager;
-import vn.gomisellers.apps.main.live.video.VideoGridContainer;
 import vn.gomisellers.apps.main.live.message.MessageAdapter;
 import vn.gomisellers.apps.main.live.message.MessageBean;
+import vn.gomisellers.apps.main.live.video.VideoGridContainer;
 import vn.gomisellers.apps.utils.Utils;
+import vn.gomisellers.apps.widgets.CenteredImageSpan;
 
 /**
  * Created by KHOI LE on 5/21/2020.
@@ -62,13 +68,25 @@ public class LiveBinding {
 
     @BindingAdapter("setMsg")
     public static void setMsg(TextView textView, MessageBean msgBean) {
-        SpannableString spannableString = new SpannableString(msgBean.getAccount() + ": " + msgBean.getMessage());
-        spannableString.setSpan(new ForegroundColorSpan(msgBean.isBeSelf() ? Color.DKGRAY : Color.GRAY), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new RelativeSizeSpan(.9f), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), msgBean.getAccount().length() + 2, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new RelativeSizeSpan(.95f), msgBean.getAccount().length() + 2, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        textView.setText(spannableString);
+        if (msgBean.isWelcome()) {
+            SpannableString spannableString = new SpannableString("  " + msgBean.getMessage());
+            spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new RelativeSizeSpan(.95f), 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            Drawable icon = ContextCompat.getDrawable(EappsApplication.getInstance().getAppContext(), R.drawable.ic_welcome);
+            icon.setBounds(0, 0, 48, 48);
+            ImageSpan image = new CenteredImageSpan(icon, ImageSpan.ALIGN_BASELINE);
+            spannableString.setSpan(image, 0, 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            textView.setText(spannableString);
+        } else {
+            SpannableString spannableString = new SpannableString(msgBean.getAccount() + ": " + msgBean.getMessage());
+            spannableString.setSpan(new ForegroundColorSpan(msgBean.isBeSelf() ? Color.DKGRAY : Color.GRAY), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new RelativeSizeSpan(.9f), 0, msgBean.getAccount().length() + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), msgBean.getAccount().length() + 2, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new RelativeSizeSpan(.95f), msgBean.getAccount().length() + 2, spannableString.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            textView.setText(spannableString);
+        }
     }
 
     @BindingAdapter("initUserIcon")

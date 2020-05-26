@@ -143,6 +143,7 @@
     <string name="order_payment_method">Phương thức thanh toán:</string>
     <string name="order_customer">Khách hàng:</string>
     <string name="order_address">Địa chỉ giao hàng:</string>
-    <string name="hint_chat">Bạn đang nghĩ gì...</string>
+    <string name="hint_chat">Bạn đang nghĩ gì…</string>
     <string name="join_channel_failed">Không thể tham gia phòng tán</string>
+    <string name="msg_welcome">Chào mừng đến với Gomi Live! Chúc bạn có khoảng thời gian thoải mái.</string>
 </resources>

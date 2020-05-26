@@ -87,7 +87,7 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         mRtmChannel.join(new ResultCallback<Void>() {
             @Override
             public void onSuccess(Void responseInfo) {
-                LogUtils.i("TAG", "join channel success");
+                sendMessageWelcome();
             }
 
             @Override
@@ -345,6 +345,14 @@ public class LiveMainViewModel extends BaseViewModel<LiveMainEvent> implements E
         sendChannelMessage(msg);
         MessageBean messageBean = new MessageBean(EappsApplication.getPreferences().getUserName(), msg, true);
         updateChatBox(messageBean);
+    }
+
+    private void sendMessageWelcome() {
+        String msg = EappsApplication.getInstance().getString(R.string.msg_welcome);
+        MessageBean messageBean = new MessageBean(EappsApplication.getPreferences().getUserName(), msg, true, true);
+        LiveMainEvent<MessageBean> event = new LiveMainEvent<>(LiveMainEvent.RECEIVE_MESSAGE);
+        event.setData(messageBean);
+        EventBus.getDefault().post(event);
     }
 
     void updateChatBox(MessageBean messageBean) {
