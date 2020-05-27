@@ -34,7 +34,7 @@ public class LiveActivity extends BaseActivity<LiveMainViewModel, ActivityLiveRo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowUtil.hideWindowStatusBar(getWindow());
+//        WindowUtil.hideWindowStatusBar(getWindow());
         setGlobalLayoutListener();
         getDisplayMetrics();
         initStatusBarHeight();
