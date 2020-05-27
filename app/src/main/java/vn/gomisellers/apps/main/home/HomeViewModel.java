@@ -144,11 +144,7 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
                 if (result.getCode() == ResultCode.CODE_OK) {
                     mShop = result.getResult();
                     updateShopInformation();
-                    if (categoryList == null) {
-                        requestMegaCategory();
-                    } else {
-                        loaded();
-                    }
+                    onRefresh();
                 } else {
                     loaded();
                     ToastUtils.showToast(result.getMessage());
