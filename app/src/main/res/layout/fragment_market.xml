@@ -11,22 +11,30 @@
             type="vn.gomisellers.apps.main.market.MarketViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:refreshing="@{viewModel.refreshing}"
+        app:setOnRefreshListener="@{()->viewModel.onRefresh()}">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:setCollectionAdapter="@{viewModel.marketListAdapter}" />
+            android:layout_height="match_parent">
 
-        <include
-            layout="@layout/layout_empty"
-            android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
-            app:msg="@{viewModel.errorMessage}" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:setCollectionAdapter="@{viewModel.marketListAdapter}" />
 
-        <include
-            layout="@layout/layout_progress"
-            android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
-    </RelativeLayout>
+            <include
+                layout="@layout/layout_empty"
+                android:visibility="@{viewModel.errorMessage!=null &amp;&amp; !viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}"
+                app:msg="@{viewModel.errorMessage}" />
+
+            <include
+                layout="@layout/layout_progress"
+                android:visibility="@{viewModel.isProgressing ? View.VISIBLE : View.GONE, default=gone}" />
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

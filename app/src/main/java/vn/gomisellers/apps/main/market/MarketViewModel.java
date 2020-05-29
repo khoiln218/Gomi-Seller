@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import vn.gomisellers.apps.event.ProductHandler;
 /**
  * Created by KHOI LE on 3/23/2020.
  */
-public class MarketViewModel extends BaseViewModel<MarketEvent> implements ProductHandler, CategoryHandler, CollectionHandler {
+public class MarketViewModel extends BaseViewModel<MarketEvent> implements ProductHandler, CategoryHandler, CollectionHandler, SwipeRefreshLayout.OnRefreshListener {
 
     private ProductRepository mProductRepository;
     public MutableLiveData<MarketListAdapter> marketListAdapter;
@@ -46,6 +47,19 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
         marketListAdapter.setValue(adapter);
     }
 
+    @Override
+    public void onRefresh() {
+        for (Collection collection : collections) {
+            if (collection.getType() == MarketListAdapter.CollectionType.NEW_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.RECOMEND_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.SEEN_PRODUCT)
+                collection.getData().clear();
+        }
+        updateCollection();
+
+        requestCollections();
+    }
+
     void requestPickProduct(Product product) {
         showProgressing();
         ToggleProductRequest request = new ToggleProductRequest();
@@ -54,7 +68,7 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
         mProductRepository.select(request, new ResultListener<ResponseData<Product>>() {
             @Override
             public void onLoaded(ResponseData<Product> result) {
-                hideProgressing();
+                loaded();
                 if (result.getCode() == ResultCode.CODE_OK)
                     productChange(result.getResult());
                 else
@@ -63,7 +77,7 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
 
             @Override
             public void onDataNotAvailable(String error) {
-                hideProgressing();
+                loaded();
                 updateFail(error);
             }
         });
@@ -92,14 +106,12 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
         }
     }
 
-    void requestCollections() {
-        showProgressing();
-        refresh();
-        final IntroduceRequest request = new IntroduceRequest();
+    private void requestCollections() {
+        IntroduceRequest request = new IntroduceRequest();
         mProductRepository.introduce(request, new ResultListener<ResponseData<Introduce>>() {
             @Override
             public void onLoaded(ResponseData<Introduce> result) {
-                hideProgressing();
+                loaded();
                 if (result.getCode() == ResultCode.CODE_OK) {
                     List<Collection> collectionList = new ArrayList<>();
 
@@ -139,7 +151,7 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
 
             @Override
             public void onDataNotAvailable(String error) {
-                hideProgressing();
+                loaded();
                 checkConnection(error);
             }
         });
@@ -148,11 +160,6 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
     private void updateCollection() {
         setErrorMessage(collections.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.not_result));
         adapter.setCollections(collections);
-    }
-
-    private void refresh() {
-        collections.clear();
-        updateCollection();
     }
 
     @Override
@@ -182,5 +189,9 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
         collection.getData().clear();
         event.setData(collection);
         getCmd().call(event);
+    }
+
+    void showLoading() {
+        showProgressing();
     }
 }

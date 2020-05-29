@@ -84,6 +84,7 @@ public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarket
     @Override
     public void onResume() {
         super.onResume();
-        getViewModel().requestCollections();
+        getViewModel().showLoading();
+        getViewModel().onRefresh();
     }
 }
