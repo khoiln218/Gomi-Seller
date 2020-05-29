@@ -51,7 +51,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
             case CollectionType.MEGA_CATEGORY:
                 return CategoryHolder.getInstance(parent);
             case CollectionType.NEW_PRODUCT:
-            case CollectionType.RECOMEND_PRODUCT:
+            case CollectionType.RECOMMEND_PRODUCT:
             case CollectionType.SEEN_PRODUCT:
                 return ProductHolder.getInstance(parent);
             default:
@@ -72,7 +72,7 @@ public class MarketListAdapter extends RecyclerView.Adapter {
             case CollectionType.NEW_PRODUCT:
                 ((ProductHolder) holder).bind(collection, newProductAdapter, collectionHandler);
                 break;
-            case CollectionType.RECOMEND_PRODUCT:
+            case CollectionType.RECOMMEND_PRODUCT:
                 ((ProductHolder) holder).bind(collection, recommendProductAdapter, collectionHandler);
                 break;
             case CollectionType.SEEN_PRODUCT:
@@ -107,6 +107,6 @@ public class MarketListAdapter extends RecyclerView.Adapter {
         int BANNER = -1;
         int VIEW_LOADING = 0;
         int NEW_PRODUCT = 1;
-        int RECOMEND_PRODUCT = 2;
+        int RECOMMEND_PRODUCT = 2;
     }
 }

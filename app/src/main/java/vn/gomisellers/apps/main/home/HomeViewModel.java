@@ -78,6 +78,8 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
     public void onLoadMore() {
         if (page >= totalPage) return;
         page++;
+
+        products.add(null);
         requestProduct();
     }
 
@@ -235,8 +237,9 @@ public class HomeViewModel extends BaseViewModel<HomeEvent> implements ProductHa
                 if (result.getCode() == ResultCode.CODE_OK) {
                     products.addAll(result.getResult());
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
+                    products.remove(null);
                     updateProductList();
-                    checkEmpty(products);
+                    checkProductEmpty(products);
                 } else {
                     setErrorMessage(result.getMessage());
                 }

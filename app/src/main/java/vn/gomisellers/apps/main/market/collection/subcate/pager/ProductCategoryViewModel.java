@@ -145,7 +145,7 @@ public class ProductCategoryViewModel extends BaseViewModel<ProductCategoryEvent
                     totalPage = result.getResult().size() > 0 ? result.getResult().get(0).getTotalPage() : 0;
                     products.remove(null);
                     updateProductList();
-                    checkEmpty(products);
+                    checkProductEmpty(products);
                 } else {
                     setErrorMessage(result.getMessage());
                 }

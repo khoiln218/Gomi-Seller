@@ -4,6 +4,13 @@
 
     <data>
 
+        <variable
+            name="description"
+            type="String" />
+
+        <variable
+            name="productDetailHandler"
+            type="vn.gomisellers.apps.event.ProductDetailHandler" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -38,6 +45,8 @@
 
                 <WebView
                     android:id="@+id/web_view"
+                    initWebView="@{null}"
+                    loadData="@{description}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -61,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-1dp"
                 android:background="@null"
+                android:onClick="@{(v)->productDetailHandler.onViewDescription(description)}"
                 android:text="@string/view_detail"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearance"

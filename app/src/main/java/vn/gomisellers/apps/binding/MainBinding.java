@@ -3,6 +3,7 @@ package vn.gomisellers.apps.binding;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.List;
 import java.util.Locale;
 
+import vn.gomisellers.apps.EappsApplication;
 import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.adapter.AttributeAdapter;
 import vn.gomisellers.apps.adapter.CategoryItemAdapter;
@@ -43,6 +45,20 @@ import vn.gomisellers.apps.widgets.slider.SliderView;
  */
 public class MainBinding {
     private static final int INTRODUCE_ROW = 2;
+
+    @BindingAdapter("loadData")
+    public static void loadData(WebView webView, String description) {
+        String data = EappsApplication.getInstance().getString(R.string.html).replace("{body_content}", description)
+                .replace("{width}", String.valueOf(Utils.getScreenWidth()));
+        webView.loadData(data, "text/html", "UTF-8");
+    }
+
+    @BindingAdapter("initWebView")
+    public static void initWebView(WebView webView, Void _v) {
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+    }
 
     @BindingAdapter("initLayout")
     public static void initLayout(View view, Void _v) {

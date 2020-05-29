@@ -16,7 +16,6 @@ import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.databinding.FragmentMarketBinding;
 import vn.gomisellers.apps.event.OnSelectedListener;
 import vn.gomisellers.apps.utils.Intents;
-import vn.gomisellers.apps.utils.ToastUtils;
 import vn.gomisellers.apps.widgets.dialog.SelectProductDialogFragment;
 
 public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarketBinding> {
@@ -45,9 +44,6 @@ public class MarketFragment extends BaseFragment<MarketViewModel, FragmentMarket
             @Override
             public void onChanged(MarketEvent event) {
                 switch (event.getCode()) {
-                    case MarketEvent.SELECT_ERROR:
-                        ToastUtils.showToast(event.getMessage());
-                        break;
                     case MarketEvent.ON_PICK:
                         showDialogPickProduct((Product) event.getData());
                         break;

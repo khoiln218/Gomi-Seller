@@ -51,7 +51,7 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
     public void onRefresh() {
         for (Collection collection : collections) {
             if (collection.getType() == MarketListAdapter.CollectionType.NEW_PRODUCT
-                    || collection.getType() == MarketListAdapter.CollectionType.RECOMEND_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.RECOMMEND_PRODUCT
                     || collection.getType() == MarketListAdapter.CollectionType.SEEN_PRODUCT)
                 collection.getData().clear();
         }
@@ -72,25 +72,21 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
                 if (result.getCode() == ResultCode.CODE_OK)
                     productChange(result.getResult());
                 else
-                    updateFail(result.getMessage());
+                    showToast(result.getMessage());
             }
 
             @Override
             public void onDataNotAvailable(String error) {
                 loaded();
-                updateFail(error);
+                showToast(error);
             }
         });
-    }
-
-    private void updateFail(String message) {
-        getCmd().call(new MarketEvent(MarketEvent.SELECT_ERROR, message));
     }
 
     private void productChange(Product product) {
         for (Collection collection : collections) {
             if (collection.getType() == MarketListAdapter.CollectionType.NEW_PRODUCT
-                    || collection.getType() == MarketListAdapter.CollectionType.RECOMEND_PRODUCT
+                    || collection.getType() == MarketListAdapter.CollectionType.RECOMMEND_PRODUCT
                     || collection.getType() == MarketListAdapter.CollectionType.SEEN_PRODUCT)
                 updateCollection(collection, product);
         }
@@ -143,6 +139,7 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
 
                     //update collection
                     collections = collectionList;
+                    checkEmpty();
                     updateCollection();
                 } else {
                     setErrorMessage(result.getMessage());
@@ -157,8 +154,11 @@ public class MarketViewModel extends BaseViewModel<MarketEvent> implements Produ
         });
     }
 
-    private void updateCollection() {
+    private void checkEmpty() {
         setErrorMessage(collections.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.not_result));
+    }
+
+    private void updateCollection() {
         adapter.setCollections(collections);
     }
 

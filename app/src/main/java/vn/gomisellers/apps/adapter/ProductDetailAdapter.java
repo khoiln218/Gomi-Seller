@@ -1,13 +1,8 @@
 package vn.gomisellers.apps.adapter;
 
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.gomisellers.apps.EappsApplication;
-import vn.gomisellers.apps.R;
 import vn.gomisellers.apps.data.source.model.data.Attribute;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.databinding.HolderProductDescriptionBinding;
@@ -26,7 +19,6 @@ import vn.gomisellers.apps.databinding.LayoutSummaryBinding;
 import vn.gomisellers.apps.event.ProductDetailHandler;
 import vn.gomisellers.apps.event.ProductHandler;
 import vn.gomisellers.apps.utils.Strings;
-import vn.gomisellers.apps.utils.Utils;
 
 /**
  * Created by KHOI LE on 3/27/2020.
@@ -99,7 +91,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
     }
 
     static class SummaryHolder extends RecyclerView.ViewHolder {
-        LayoutSummaryBinding binding;
+        private LayoutSummaryBinding binding;
 
         public static SummaryHolder getInstance(ViewGroup viewGroup) {
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -120,7 +112,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
     }
 
     static class DescriptionHolder extends RecyclerView.ViewHolder {
-        HolderProductDescriptionBinding binding;
+        private HolderProductDescriptionBinding binding;
 
         public static DescriptionHolder getInstance(ViewGroup viewGroup) {
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -131,67 +123,12 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
         private DescriptionHolder(HolderProductDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            initWebView();
-        }
-
-        private void initWebView() {
-            binding.webView.getSettings().setLoadWithOverviewMode(true);
-            binding.webView.setVerticalScrollBarEnabled(false);
-            binding.webView.setHorizontalScrollBarEnabled(false);
-            binding.webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    return false;
-                }
-
-                @Override
-                public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    super.onPageStarted(view, url, favicon);
-//                    binding.progressBar.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-//                    final WebView contentView = view;
-//
-//                    contentView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//                        @Override
-//                        public boolean onPreDraw() {
-//                            int measuredHeight = contentView.getMeasuredHeight();
-//                            int height = (int) (Utils.getScreenWidth() * 1.5f);
-//
-//                            if (measuredHeight < height) {
-//                                height = measuredHeight;
-//                                binding.btnViewDetail.setVisibility(View.GONE);
-//                            }
-//
-//                            ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
-//                            params.height = height;
-//                            binding.webContainer.setLayoutParams(params);
-//                            binding.progressBar.setVisibility(View.GONE);
-//                            contentView.getViewTreeObserver().removeOnPreDrawListener(this);
-//                            return false;
-//                        }
-//                    });
-                }
-            });
         }
 
         public void bind(final String description, final ProductDetailHandler productDetailHandler) {
-            final String data = EappsApplication.getInstance().getString(R.string.html).replace("{body_content}", description)
-                    .replace("{width}", String.valueOf(Utils.getScreenWidth()));
-            binding.webView.loadData(data, "text/html", "UTF-8");
-            binding.btnViewDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    ViewGroup.LayoutParams params = binding.webContainer.getLayoutParams();
-//                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    binding.webContainer.setLayoutParams(params);
-//                    binding.btnViewDetail.setVisibility(View.GONE);
-                    productDetailHandler.onViewDescription(description);
-                }
-            });
+            binding.setDescription(description);
+            binding.setProductDetailHandler(productDetailHandler);
+            binding.executePendingBindings();
         }
     }
 
@@ -226,5 +163,12 @@ public class ProductDetailAdapter extends RecyclerView.Adapter {
         NoResultHolder(LayoutNoResultBinding binding) {
             super(binding.getRoot());
         }
+    }
+
+    interface PanelType {
+        int NOT_FOUND = 0;
+        int SUMMARY = 1;
+        int ATTRIBUTE = 2;
+        int DESCRIPTION = 3;
     }
 }

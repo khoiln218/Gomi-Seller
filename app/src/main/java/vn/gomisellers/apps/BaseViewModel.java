@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.data.source.model.data.Order;
 import vn.gomisellers.apps.data.source.model.data.Product;
 import vn.gomisellers.apps.event.BaseEvent;
 import vn.gomisellers.apps.event.MultableLiveEvent;
-import vn.gomisellers.apps.data.source.model.data.Notification;
 import vn.gomisellers.apps.utils.ConnectionHelper;
 import vn.gomisellers.apps.utils.ToastUtils;
 
@@ -35,7 +35,7 @@ public class BaseViewModel<E extends BaseEvent> extends ViewModel {
         errorMessage.setValue(error);
     }
 
-    protected void checkEmpty(List<Product> products) {
+    protected void checkProductEmpty(List<Product> products) {
         setErrorMessage(products.size() > 0 ? null : EappsApplication.getInstance().getString(R.string.empty));
     }
 
